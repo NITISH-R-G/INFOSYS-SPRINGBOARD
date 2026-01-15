@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCR & Gemini AI</title>
+    <!-- Inter as a fallback for specific SF look on Windows -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons (High quality SF Symbol alternatives) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        :root {
+            /* Liquid Gradient Backgrounds */
+            --bg-gradient-light: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            /* Or vivid: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%) */
+            --bg-gradient-dark: linear-gradient(to top, #09203f 0%, #537895 100%);
+
+            /* Glass Vars */
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            --glass-blur: blur(20px);
+
+            --text-main: #000000;
+            --text-muted: #6e6e73;
+            /* Apple Gray */
+
+            --primary-glass: #007AFF;
+            /* Apple Blue */
+            --primary-hover: #0062cc;
+
+            --input-bg: rgba(255, 255, 255, 0.5);
+            --radius-lg: 18px;
+            --radius-md: 12px;
+        }
+
+        body.dark-mode {
+            --glass-bg: rgba(30, 30, 30, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+
+            --text-main: #ffffff;
+            --text-muted: #86868b;
+
+            --primary-glass: #0A84FF;
+            /* Apple Dark Mode Blue */
+            --primary-hover: #409CFF;
+
+            --input-bg: rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            /* Apple System Font Stack */
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", "Segoe UI", system-ui, sans-serif;
+            background: var(--bg-gradient-light);
+            background-size: 200% 200%;
+            animation: gradientBG 20s ease infinite;
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+            padding: 2rem;
+            transition: color 0.3s;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body.dark-mode {
+            background: var(--bg-gradient-dark);
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 28px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(200, 200, 200, 0.5);
+            /* Glassy gray */
+            backdrop-filter: blur(4px);
+            transition: .4s;
+            border-radius: 34px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Sun/Moon Icons inside slider */
+        .slider-icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            transition: opacity 0.3s;
+            color: white;
+        }
+
+        .icon-sun {
+            left: 7px;
+            opacity: 0;
+            color: #f59e0b;
+        }
+
+        .icon-moon {
+            right: 7px;
+            opacity: 1;
+            color: #f1f5f9;
+        }
+
+        input:checked+.slider {
+            background-color: rgba(0, 0, 0, 0.6);
+            /* Dark mode active bg */
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(24px);
+            background-color: #3b82f6;
+            /* Apple Blue for knob */
+        }
+
+        input:checked+.slider .icon-sun {
+            opacity: 1;
+        }
+
+        input:checked+.slider .icon-moon {
+            opacity: 0;
+        }
+
+        .header-controls {
+            position: absolute;
+            top: 2rem;
+            right: 2.5rem;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Hide old theme button styles if any conflict */
+        .theme-toggle {
+            display: none;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            /* Tighter Apple-like constraint */
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            height: calc(100vh - 5rem);
+        }
+
+        /* Glass Panel */
+        .panel {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--glass-shadow);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .panel-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--glass-border);
+            font-weight: 600;
+            font-size: 1.05rem;
+            /* SF convention: Slightly smaller headers */
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            /* background: rgba(255, 255, 255, 0.05); */
+            letter-spacing: -0.01em;
+        }
+
+        .panel-header i {
+            font-size: 1.2rem;
+        }
+
+        .panel-body {
+            padding: 1.5rem;
+            flex: 1;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* Upload Area */
+        .upload-area {
+            height: 100%;
+            border: 2px dashed rgba(150, 150, 150, 0.3);
+            border-radius: var(--radius-md);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: all 0.2s ease-out;
+            background: rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            padding: 2rem;
+            color: var(--text-muted);
+        }
+
+        .upload-area:hover,
+        .upload-area.dragover {
+            border-color: var(--primary-glass);
+            background: rgba(0, 122, 255, 0.05);
+            transform: scale(0.99);
+        }
+
+        .upload-icon {
+            font-size: 64px;
+            opacity: 0.6;
+            margin-bottom: 1rem;
+            color: var(--primary-glass);
+        }
+
+        .upload-text {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            color: var(--text-main);
+        }
+
+        .result-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            height: 100%;
+        }
+
+        label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            display: block;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+
+        textarea,
+        input[type="text"] {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid transparent;
+            /* Cleaner look */
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            background: var(--input-bg);
+            color: var(--text-main);
+            outline: none;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+            box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        textarea {
+            height: 180px;
+            resize: none;
+            line-height: 1.5;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.3);
+        }
+
+        body.dark-mode input[type="text"]:focus,
+        body.dark-mode textarea:focus {
+            background: rgba(50, 50, 50, 0.8);
+        }
+
+        .chat-box {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        button.primary-btn {
+            background: var(--primary-glass);
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            height: 44px;
+            /* SF Standard Height */
+            border-radius: 10px;
+            /* Slightly squarer than pill */
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+        }
+
+        button.secondary-btn {
+            background: rgba(255, 255, 255, 0.5);
+            color: var(--text-main);
+            border: 1px solid var(--glass-border);
+            padding: 0 1.5rem;
+            height: 44px;
+            border-radius: 10px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        button.secondary-btn:hover {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        body.dark-mode button.secondary-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        body.dark-mode button.secondary-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        button.primary-btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        button.primary-btn:active {
+            transform: scale(0.98);
+        }
+
+        pre {
+            background: rgba(0, 0, 0, 0.03);
+            color: var(--text-main);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            font-family: 'SF Mono', 'Menlo', 'Monaco', 'Courier New', monospace;
+            font-size: 0.85rem;
+            max-height: 280px;
+            overflow: auto;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark-mode pre {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .badge {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-weight: 600;
+            /* Apple-style rounded rect badge */
+            background: rgba(0, 122, 255, 0.1);
+            color: var(--primary-glass);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .spinner {
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        /* Apple ease */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header-controls">
+        <label class="switch">
+            <input type="checkbox" id="themeSwitch">
+            <span class="slider">
+                <i class="ph-fill ph-sun slider-icon icon-sun"></i>
+                <i class="ph-fill ph-moon slider-icon icon-moon"></i>
+            </span>
+        </label>
+    </div>
+
+    <div class="main-container">
+
+        <!-- LEFT PANEL: UPLOAD -->
+        <div class="panel">
+            <div class="panel-header">
+                <i class="ph ph-file-arrow-up"></i>
+                Upload
+            </div>
+            <div class="panel-body">
+                <div class="upload-area" id="dropZone" onclick="document.getElementById('fileInput').click()">
+                    <i class="upload-icon ph-thin ph-cloud-arrow-up"></i>
+                    <div class="upload-text">Drag & Drop</div>
+                    <div class="upload-subtext">Images (PNG, JPG)</div>
+                    <input type="file" id="fileInput" accept="image/*">
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL: RESULTS -->
+        <div class="panel">
+            <div class="panel-header">
+                <i class="ph ph-sparkle"></i>
+                AI Analysis
+            </div>
+            <div class="panel-body">
+                <div class="result-section">
+                    <!-- Extracted Text Area -->
+                    <div>
+                        <label>Extracted Context</label>
+                        <textarea id="context" placeholder="Text content will appear here..." readonly></textarea>
+                    </div>
+
+                    <!-- Chat Area -->
+                    <div class="chat-box">
+                        <label>Ask Gemini</label>
+
+                        <div class="input-group">
+                            <input type="text" id="question" placeholder="Ask something...">
+                            <button onclick="askQuestion()" id="btnAsk" class="primary-btn">
+                                <span class="spinner hidden" id="spinAsk"></span>
+                                Analyze
+                            </button>
+                        </div>
+
+                        <button onclick="extractClauses()" id="btnExtract" class="secondary-btn" style="width: 100%;">
+                            <i class="ph ph-file-search"></i>
+                            <span class="spinner hidden" id="spinExtract"></span>
+                            Scan for Critical Clauses
+                        </button>
+
+                        <div id="resultCard" class="hidden fade-in" style="margin-top: 0.5rem;">
+                            <div
+                                style="font-size: 0.8rem; font-weight: 600; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; color: var(--text-muted);">
+                                <span>Result</span>
+                                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                    <span id="confidenceBadge" class="badge" style="display: none;">
+                                        <i class="ph-bold ph-check-circle"></i>
+                                        <span id="accText">--%</span>
+                                    </span>
+                                    <span style="font-size: 0.7rem; opacity: 0.8;" id="modelTag">Gemini Flash</span>
+                                </div>
+                            </div>
+                            <pre id="resultCode"></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const themeSwitch = document.getElementById('themeSwitch');
+
+        // --- Theme Logic ---
+        function toggleTheme(e) {
+            const isDark = e.target.checked;
+            if (isDark) {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Init Theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeSwitch.checked = true;
+        } else {
+            document.body.classList.remove('dark-mode');
+            themeSwitch.checked = false;
+        }
+
+        themeSwitch.addEventListener('change', toggleTheme);
+
+
+        // --- File & API Logic ---
+
+        // Drag & Drop Events
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length) {
+                handleFile(fileInput.files[0]);
+            }
+        });
+
+        async function handleFile(file) {
+            // Visual feedback during upload
+            const originalContent = dropZone.innerHTML;
+            dropZone.innerHTML = `
+            <div class="spinner" style="width: 48px; height: 48px; border-width: 4px; border-color: var(--primary-glass); border-top-color: transparent;"></div>
+        `;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/ocr', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+
+                if (data.detail) throw new Error(data.detail);
+
+                document.getElementById('context').value = data.text;
+
+                // Restore drop zone
+                dropZone.innerHTML = originalContent;
+
+                // Focus question input
+                document.getElementById('question').focus();
+
+            } catch (e) {
+                alert("Error: " + e.message);
+                dropZone.innerHTML = originalContent;
+            }
+        }
+
+        async function askQuestion() {
+            const context = document.getElementById('context').value;
+            const question = document.getElementById('question').value;
+
+            if (!context) return alert("Please upload a document first.");
+            if (!question) return alert("Please enter a question.");
+
+            setLoading('btnAsk', 'spinAsk', true);
+            document.getElementById('resultCard').classList.add('hidden');
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ context, question })
+                });
+                const data = await response.json();
+
+                let displayData = data;
+                let accuracy = null;
+
+                try {
+                    if (data.answer) {
+                        const parsed = JSON.parse(data.answer);
+                        displayData = parsed;
+                        if (parsed.confidence_score !== undefined) {
+                            accuracy = parsed.confidence_score;
+                        }
+                    }
+                } catch (e) { }
+
+                // Update Badge
+                const badge = document.getElementById('confidenceBadge');
+                const accText = document.getElementById('accText');
+
+                if (accuracy !== null) {
+                    accText.textContent = `${accuracy}% Match`;
+
+                    // Reset styles
+                    badge.style.background = ''; badge.style.color = '';
+
+                    if (accuracy > 80) {
+                        badge.style.background = 'rgba(52, 199, 89, 0.15)'; // Apple Green
+                        badge.style.color = '#248a3d';
+                    } else if (accuracy > 50) {
+                        badge.style.background = 'rgba(255, 149, 0, 0.15)'; // Apple Orange
+                        badge.style.color = '#b36b00';
+                    } else {
+                        badge.style.background = 'rgba(255, 59, 48, 0.15)'; // Apple Red
+                        badge.style.color = '#c92a1d';
+                    }
+
+                    badge.style.display = 'flex';
+                } else {
+                    badge.style.display = 'none';
+                }
+
+                document.getElementById('resultCode').textContent = JSON.stringify(displayData, null, 2);
+                document.getElementById('resultCard').classList.remove('hidden');
+            } catch (e) {
+                alert("Error: " + e.message);
+            } finally {
+                setLoading('btnAsk', 'spinAsk', false);
+            }
+        }
+
+        async function extractClauses() {
+            const context = document.getElementById('context').value;
+            if (!context) return alert("Please upload a document first.");
+
+            setLoading('btnExtract', 'spinExtract', true);
+            document.getElementById('resultCard').classList.add('hidden');
+
+            const prompt = `Identify and extract the following critical clauses from the text: 
+            1. Interest Rates
+            2. Mileage Limits
+            3. Penalties
+            4. Early Termination Conditions
+            
+            Format the output as a clean JSON object where keys are the specific clause names and values are the extracted details. If not found, set value to "Not specified". Do not use markdown formatting.`;
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ context, question: prompt })
+                });
+                const data = await response.json();
+
+                let displayData = data;
+                let accuracy = null;
+
+                try {
+                    if (data.answer) {
+                        displayData = JSON.parse(data.answer);
+                        if (displayData.confidence_score !== undefined) {
+                            accuracy = displayData.confidence_score;
+                            delete displayData.confidence_score; // Remove from view for cleaner list
+                        }
+                    }
+                } catch (e) { }
+
+                // Update Badge
+                const badge = document.getElementById('confidenceBadge');
+                const accText = document.getElementById('accText');
+
+                if (accuracy !== null) {
+                    accText.textContent = `${accuracy}% Match`;
+                    badge.style.background = accuracy > 80 ? 'rgba(52, 199, 89, 0.15)' : 'rgba(255, 149, 0, 0.15)';
+                    badge.style.color = accuracy > 80 ? '#248a3d' : '#b36b00';
+                    badge.style.display = 'flex';
+                } else {
+                    badge.style.display = 'none';
+                }
+
+                document.getElementById('resultCode').textContent = JSON.stringify(displayData, null, 2);
+                document.getElementById('resultCard').classList.remove('hidden');
+
+            } catch (e) {
+                alert("Error: " + e.message);
+            } finally {
+                setLoading('btnExtract', 'spinExtract', false);
+            }
+        }
+
+        function setLoading(btnId, spinId, isLoading) {
+            const btn = document.getElementById(btnId);
+            const spin = document.getElementById(spinId);
+            btn.disabled = isLoading;
+            if (isLoading) spin.classList.remove('hidden');
+            else spin.classList.add('hidden');
+        }
+    </script>
+
+</body>
+
+</html>

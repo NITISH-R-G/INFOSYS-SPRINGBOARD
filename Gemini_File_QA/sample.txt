@@ -1,0 +1,4 @@
+The quick brown fox jumps over the lazy dog.
+Gemini is a family of multimodal AI models developed by Google using the Transformer architecture.
+It was announced on December 6, 2023.
+This is a test file for the File Q&A tool.
