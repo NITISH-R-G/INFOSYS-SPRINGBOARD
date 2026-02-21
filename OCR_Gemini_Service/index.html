@@ -459,6 +459,48 @@
                 transform: translateY(0);
             }
         }
+
+        /* Fairness Meter */
+        .meter-container {
+            margin-top: 0.25rem;
+            background: rgba(0, 0, 0, 0.1);
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .meter-fill {
+            height: 100%;
+            width: 0%;
+            background: #34c759;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s;
+        }
+
+        /* Red Flags Box */
+        .red-flags-box {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(255, 59, 48, 0.08);
+            border: 1px solid rgba(255, 59, 48, 0.2);
+            border-radius: 12px;
+            color: #c92a1d;
+            font-size: 0.9rem;
+        }
+
+        .red-flags-title {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .red-flag-item {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.25rem;
+            opacity: 0.9;
+        }
     </style>
 </head>
 
@@ -536,7 +578,31 @@
                                     <span style="font-size: 0.7rem; opacity: 0.8;" id="modelTag">Gemini Flash</span>
                                 </div>
                             </div>
+
+                            <!-- Fairness Score UI -->
+                            <div id="fairnessSection" class="hidden" style="margin-bottom: 1rem;">
+                                <div
+                                    style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.25rem;">
+                                    <span>Fairness Score</span>
+                                    <span id="fairnessValue">--/100</span>
+                                </div>
+                                <div class="meter-container">
+                                    <div id="fairnessFill" class="meter-fill"></div>
+                                </div>
+                                <div id="fairnessReason"
+                                    style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem; padding-left: 2px;">
+                                </div>
+                            </div>
+
                             <pre id="resultCode"></pre>
+
+                            <!-- Red Flags UI -->
+                            <div id="redFlagsBox" class="red-flags-box hidden">
+                                <div class="red-flags-title">
+                                    <i class="ph-fill ph-warning-circle"></i> Red Flags Detected
+                                </div>
+                                <div id="redFlagsList"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -705,15 +771,26 @@
             if (!context) return alert("Please upload a document first.");
 
             setLoading('btnExtract', 'spinExtract', true);
-            document.getElementById('resultCard').classList.add('hidden');
 
-            const prompt = `Identify and extract the following critical clauses from the text: 
-            1. Interest Rates
-            2. Mileage Limits
-            3. Penalties
-            4. Early Termination Conditions
+            // Hide previous results
+            document.getElementById('resultCard').classList.add('hidden');
+            document.getElementById('fairnessSection').classList.add('hidden');
+            document.getElementById('redFlagsBox').classList.add('hidden');
+
+            const prompt = `Analyze this contract text and extract specific data.
+            1. Extract these critical clauses: Interest Rates, Mileage Limits, Penalties, Early Termination Conditions.
+            2. Evaluate the "Fairness Score" (0-100), where 100 is perfectly fair/standard and 0 is exploitative.
+            3. Provide a short "Fairness Explanation".
+            4. List any "Red Flags" (risky/hidden terms).
             
-            Format the output as a clean JSON object where keys are the specific clause names and values are the extracted details. If not found, set value to "Not specified". Do not use markdown formatting.`;
+            Format output as JSON:
+            {
+               "clauses": { "Interest Rates": "...", ... },
+               "fairness_score": 85,
+               "fairness_explanation": "...",
+               "red_flags": ["Flag 1", "Flag 2"]
+            }
+            Do not use markdown.`;
 
             try {
                 const response = await fetch('http://127.0.0.1:8000/chat', {
@@ -724,32 +801,46 @@
                 const data = await response.json();
 
                 let displayData = data;
-                let accuracy = null;
+                let parsed = null;
 
                 try {
                     if (data.answer) {
-                        displayData = JSON.parse(data.answer);
-                        if (displayData.confidence_score !== undefined) {
-                            accuracy = displayData.confidence_score;
-                            delete displayData.confidence_score; // Remove from view for cleaner list
-                        }
+                        parsed = JSON.parse(data.answer);
+                        displayData = parsed;
                     }
                 } catch (e) { }
 
-                // Update Badge
-                const badge = document.getElementById('confidenceBadge');
-                const accText = document.getElementById('accText');
+                // -- Render Fairness Score --
+                if (parsed && parsed.fairness_score !== undefined) {
+                    const score = parsed.fairness_score;
+                    document.getElementById('fairnessValue').textContent = `${score}/100`;
+                    document.getElementById('fairnessReason').textContent = parsed.fairness_explanation || "";
 
-                if (accuracy !== null) {
-                    accText.textContent = `${accuracy}% Match`;
-                    badge.style.background = accuracy > 80 ? 'rgba(52, 199, 89, 0.15)' : 'rgba(255, 149, 0, 0.15)';
-                    badge.style.color = accuracy > 80 ? '#248a3d' : '#b36b00';
-                    badge.style.display = 'flex';
-                } else {
-                    badge.style.display = 'none';
+                    const fill = document.getElementById('fairnessFill');
+                    fill.style.width = `${score}%`;
+
+                    // Color Logic
+                    if (score >= 80) fill.style.background = '#34c759'; // Green
+                    else if (score >= 50) fill.style.background = '#ff9500'; // Orange
+                    else fill.style.background = '#ff3b30'; // Red
+
+                    document.getElementById('fairnessSection').classList.remove('hidden');
                 }
 
-                document.getElementById('resultCode').textContent = JSON.stringify(displayData, null, 2);
+                // -- Render Red Flags --
+                if (parsed && parsed.red_flags && parsed.red_flags.length > 0) {
+                    const list = document.getElementById('redFlagsList');
+                    list.innerHTML = parsed.red_flags.map(flag =>
+                        `<div class="red-flag-item"><i class="ph-bold ph-x-circle"></i> ${flag}</div>`
+                    ).join('');
+                    document.getElementById('redFlagsBox').classList.remove('hidden');
+                }
+
+                // -- Render Main Content --
+                // Prefer showing just clauses if available, else full parsed object
+                const contentToShow = parsed && parsed.clauses ? parsed.clauses : displayData;
+                document.getElementById('resultCode').textContent = JSON.stringify(contentToShow, null, 2);
+
                 document.getElementById('resultCard').classList.remove('hidden');
 
             } catch (e) {

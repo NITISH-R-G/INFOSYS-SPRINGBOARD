@@ -1,0 +1,995 @@
+/* ==================== INTELLIGENCE COMPONENTS ==================== */
+/* Clean, calm, contextual styling for all intelligence panels */
+
+/* ==================== VEHICLE PANEL (LEFT) ==================== */
+.vehicle-panel-clean {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.car-identity-compact {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.car-icon-minimal {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.car-name-block h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+    color: white;
+}
+
+.car-trim-label {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Score Ring Compact - Apple Style */
+.score-ring-compact {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: rgba(44, 44, 46, 0.4);
+    /* Apple Secondary System Fill */
+    border-radius: 20px;
+    /* Apple Squircleish */
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+}
+
+.ring-visual {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.4s ease;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.ring-visual.good {
+    border-color: #32d74b;
+}
+
+.ring-visual.fair {
+    border-color: #ff9f0a;
+}
+
+.ring-visual.poor {
+    border-color: #ff453a;
+}
+
+.ring-visual.neutral {
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.ring-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+}
+
+.ring-context {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.ring-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+}
+
+.ring-subtitle {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.section-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    margin: 4px 0;
+}
+
+/* Metric Sections */
+.metric-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.section-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.4);
+    margin: 0;
+}
+
+.metric-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.metric-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 8px;
+}
+
+.metric-label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.metric-value {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-good {
+    color: #32d74b;
+}
+
+.status-neutral {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.status-warning {
+    color: #ff9f0a;
+}
+
+.status-poor {
+    color: #ff453a;
+}
+
+/* ==================== INSIGHTS PANEL (RIGHT) ==================== */
+.insights-panel-clean {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.panel-header-compact {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.panel-header-compact h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+    color: white;
+}
+
+.insight-count {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Empty State */
+.empty-state-calm {
+    text-align: center;
+    padding: 32px 16px;
+}
+
+.empty-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(50, 215, 75, 0.15);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #32d74b;
+    margin-bottom: 12px;
+}
+
+.empty-state-calm h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    margin: 0 0 8px;
+}
+
+.empty-state-calm p {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Insight List */
+.insight-list-clean {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.insight-item-clean {
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.insight-item-clean:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.insight-item-clean.active {
+    border-color: rgba(10, 132, 255, 0.5);
+    background: rgba(10, 132, 255, 0.1);
+}
+
+.insight-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.severity-dot-clean {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.severity-dot-clean.high {
+    background: #ff453a;
+}
+
+.severity-dot-clean.medium {
+    background: #ff9f0a;
+}
+
+.severity-dot-clean.low {
+    background: #32d74b;
+}
+
+.insight-title-clean {
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+}
+
+.insight-desc-clean {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Pulse Animation */
+@keyframes pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(10, 132, 255, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 0 8px rgba(10, 132, 255, 0);
+    }
+}
+
+.insight-item-clean.pulse {
+    animation: pulse 2s ease-in-out 1;
+}
+
+/* ==================== ALTERNATIVES STRIP ==================== */
+.alt-strip-collapsed {
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(30, 30, 30, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    z-index: 80;
+    transition: all 0.3s;
+}
+
+.alt-strip-collapsed:hover {
+    background: rgba(40, 40, 40, 0.9);
+}
+
+.alt-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+}
+
+.alt-count {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.expand-chevron {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Expanded Strip */
+.alt-strip-expanded {
+    position: absolute;
+    top: 96px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 700px;
+    background: rgba(20, 20, 20, 0.95);
+    backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    z-index: 85;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+.alt-strip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.header-left h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+    margin: 0;
+}
+
+.location-label {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.collapse-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+/* ==================== KEY TERMS PANEL ==================== */
+.key-terms-panel {
+    padding: 20px 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.terms-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.term-chip {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.term-chip:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.term-label {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.term-value-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.term-value {
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+}
+
+.conf-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.conf-high {
+    background: #32d74b;
+    box-shadow: 0 0 5px rgba(50, 215, 75, 0.4);
+}
+
+.conf-medium {
+    background: #ff9f0a;
+}
+
+.conf-low {
+    background: #ff453a;
+}
+
+/* ==================== GLASS UI RENDERING FIX ==================== */
+/* 
+   This layer sits BEHIND the panels but ABOVE the PDF.
+   It provides the blur surface so text inside panels doesn't need to blur,
+   preventing artifacts over white backgrounds.
+*/
+.glass-backdrop-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    /* Let clicks pass through to PDF */
+    z-index: 40;
+    /* Below panels (50), Above PDF (1) */
+}
+
+/* Ensure text legibility over white backgrounds using adaptive contrast */
+.pdf-layer {
+    background-color: #f0f0f0;
+    /* Neutral backing for PDF */
+}
+
+/* Cards Scroll */
+.alt-cards-scroll {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.alt-cards-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.alt-card-clean {
+    min-width: 140px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.alt-card-clean.current {
+    border-color: rgba(10, 132, 255, 0.4);
+    background: rgba(10, 132, 255, 0.1);
+}
+
+.car-tag {
+    position: absolute;
+    top: -8px;
+    right: 8px;
+    background: #0a84ff;
+    color: white;
+    font-size: 9px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 6px;
+}
+
+.car-header h5 {
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    margin: 0 0 2px;
+}
+
+.car-trim {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.car-price-block {
+    margin: 10px 0 6px;
+}
+
+.price-main {
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+}
+
+.price-period {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.car-diff .save {
+    color: #32d74b;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.car-diff .extra {
+    color: #ff9f0a;
+    font-size: 11px;
+}
+
+.car-meta {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.distance {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.reason {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.alt-strip-footer {
+    padding: 8px 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.confidence-note {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* ==================== NEGOTIATION SHEET ==================== */
+.negotiation-sheet-clean {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 600px;
+    background: rgba(20, 20, 20, 0.95);
+    backdrop-filter: blur(50px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: none;
+    border-radius: 20px 20px 0 0;
+    z-index: 100;
+    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.negotiation-sheet-clean.collapsed {
+    transform: translateX(-50%) translateY(calc(100% - 56px));
+}
+
+.negotiation-sheet-clean.open {
+    transform: translateX(-50%) translateY(0);
+}
+
+.sheet-handle-clean {
+    padding: 12px 20px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.handle-bar {
+    width: 36px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    margin: 0 auto 10px;
+}
+
+.handle-content {
+    text-align: center;
+}
+
+.handle-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+    display: block;
+}
+
+.handle-hint {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.sheet-content-clean {
+    padding: 16px 20px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.active-clause-context {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+}
+
+.context-label {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.context-clause {
+    font-size: 12px;
+    color: white;
+    margin: 4px 0 0;
+}
+
+.suggestion-prompt p {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+}
+
+.ai-suggestions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.suggestion-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
+    align-items: flex-start;
+}
+
+.suggestion-icon {
+    font-size: 16px;
+}
+
+.suggestion-text p {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.suggestion-action {
+    background: rgba(10, 132, 255, 0.2);
+    color: #0a84ff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.leverage-card {
+    background: rgba(50, 215, 75, 0.1);
+    border: 1px solid rgba(50, 215, 75, 0.2);
+    padding: 12px;
+    border-radius: 10px;
+}
+
+.leverage-label {
+    font-size: 10px;
+    color: #32d74b;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.leverage-card p {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 6px 0 0;
+}
+
+.sheet-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.action-btn-secondary {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.action-btn-primary {
+    flex: 1;
+    background: #0a84ff;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* ==================== SCENARIO FAB ==================== */
+.glass-fab {
+    position: fixed;
+    bottom: 80px;
+    right: 24px;
+    height: 48px;
+    padding: 0 20px;
+    border-radius: 24px;
+    background: #0a84ff;
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 8px 24px rgba(10, 132, 255, 0.4);
+    cursor: pointer;
+    z-index: 90;
+    transition: transform 0.2s;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.glass-fab:hover {
+    transform: scale(1.05);
+}
+
+/* ==================== DEAL INTELLIGENCE BAR ==================== */
+.glass-pill-top {
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(30, 30, 30, 0.7);
+    backdrop-filter: blur(30px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 100px;
+    padding: 8px 20px;
+    z-index: 85;
+    display: none;
+    /* Hidden when alternatives strip is active */
+}
+
+/* ==================== DETAILED ANALYSIS PANEL ==================== */
+.detailed-analysis-panel {
+    padding: 20px 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.panel-main-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    margin: 0 0 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.6;
+}
+
+.analysis-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.analysis-section {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.analysis-section:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.analysis-section.expanded {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.analysis-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+}
+
+.risk-badge {
+    background: rgba(255, 69, 58, 0.2);
+    color: #ff453a;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 100px;
+    border: 1px solid rgba(255, 69, 58, 0.3);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.field-count {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.chevron {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.4);
+    transition: transform 0.3s;
+}
+
+.analysis-section.expanded .chevron {
+    transform: rotate(180deg);
+}
+
+.analysis-section-content {
+    padding: 0 16px 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    animation: slideDown 0.3s ease-out;
+}
+
+.section-risks {
+    background: rgba(255, 69, 58, 0.1);
+    border: 1px solid rgba(255, 69, 58, 0.2);
+    border-radius: 8px;
+    margin: 16px 0;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.risk-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.risk-icon {
+    font-size: 14px;
+}
+
+.risk-clause {
+    font-size: 12px;
+    color: white;
+    font-style: italic;
+    margin-bottom: 2px;
+    opacity: 0.9;
+}
+
+.risk-reason {
+    font-size: 11px;
+    color: #ff453a;
+    font-weight: 500;
+}
+
+.section-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.field-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.field-row:last-child {
+    border-bottom: none;
+}
+
+.field-label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.field-value {
+    font-size: 12px;
+    color: white;
+    text-align: right;
+    max-width: 60%;
+}
+
+.value-present {
+    color: white;
+    font-weight: 500;
+}
+
+.value-missing {
+    color: rgba(255, 255, 255, 0.2);
+    font-style: italic;
+    font-size: 11px;
+}

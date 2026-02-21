@@ -1,0 +1,269 @@
+/* ==================== APPLE HIG NEGOTIATE PAGE ==================== */
+/* Chat interface with system materials */
+
+.negotiate-layout {
+    display: grid;
+    grid-template-columns: 1.8fr 1fr;
+    gap: var(--space-lg);
+    animation: fadeIn var(--duration-slow) var(--ease-system);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==================== CHAT SECTION ==================== */
+.chat-section {
+    display: flex;
+    flex-direction: column;
+    height: 560px;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+}
+
+.chat-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-lg);
+    border-bottom: 1px solid var(--separator);
+}
+
+.chat-header i {
+    font-size: 1.5rem;
+    color: var(--accent-blue);
+}
+
+.chat-header h2 {
+    font-size: var(--text-body);
+    font-weight: var(--weight-semibold);
+}
+
+/* ==================== CHAT MESSAGES ==================== */
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: var(--fill-tertiary);
+    border-radius: 3px;
+}
+
+/* ==================== CHAT WELCOME ==================== */
+.chat-welcome {
+    text-align: center;
+    padding: var(--space-xl) var(--space-md);
+}
+
+.chat-welcome h3 {
+    font-size: var(--text-title3);
+    font-weight: var(--weight-medium);
+    color: var(--label-secondary);
+    margin-bottom: var(--space-lg);
+}
+
+.quick-questions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    justify-content: center;
+}
+
+.quick-questions button {
+    padding: 10px 16px;
+    background: var(--fill-quaternary);
+    border: none;
+    border-radius: var(--radius-md);
+    color: var(--label-primary);
+    font-family: var(--font-system);
+    font-size: var(--text-subhead);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-gentle);
+}
+
+.quick-questions button:hover {
+    background: var(--fill-secondary);
+}
+
+/* ==================== CHAT MESSAGE ==================== */
+.chat-message {
+    max-width: 80%;
+    padding: var(--space-md);
+    border-radius: var(--radius-lg);
+    font-size: var(--text-body);
+    line-height: 1.5;
+    animation: messageIn var(--duration-normal) var(--ease-system);
+}
+
+@keyframes messageIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.chat-message.user {
+    align-self: flex-end;
+    background: var(--accent-blue);
+    color: white;
+    border-bottom-right-radius: var(--radius-xs);
+}
+
+.chat-message.assistant {
+    align-self: flex-start;
+    background: var(--fill-secondary);
+    color: var(--label-primary);
+    border-bottom-left-radius: var(--radius-xs);
+}
+
+.typing {
+    display: inline-block;
+    animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* ==================== CHAT INPUT ==================== */
+.chat-input-form {
+    display: flex;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    border-top: 1px solid var(--separator);
+    background: var(--fill-quaternary);
+}
+
+.chat-input-form input {
+    flex: 1;
+    padding: var(--space-md);
+    background: var(--material-regular);
+    backdrop-filter: var(--blur-thin);
+    -webkit-backdrop-filter: var(--blur-thin);
+    border: none;
+    border-radius: var(--radius-md);
+    color: var(--label-primary);
+    font-family: var(--font-system);
+    font-size: var(--text-body);
+    transition: all var(--duration-fast) var(--ease-gentle);
+}
+
+.chat-input-form input::placeholder {
+    color: var(--label-tertiary);
+}
+
+.chat-input-form input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.12);
+}
+
+.chat-input-form button {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    flex-shrink: 0;
+}
+
+/* ==================== TIPS SECTION ==================== */
+.tips-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.tips-card {
+    padding: var(--space-lg);
+    border-radius: var(--radius-xl);
+}
+
+.tips-card h3 {
+    font-size: var(--text-body);
+    font-weight: var(--weight-semibold);
+    margin-bottom: var(--space-md);
+    color: var(--label-primary);
+}
+
+.tips-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.tips-card li {
+    font-size: var(--text-subhead);
+    color: var(--label-secondary);
+    line-height: 1.5;
+    padding-left: var(--space-md);
+    position: relative;
+}
+
+.tips-card li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 4px;
+    height: 4px;
+    background: var(--accent-blue);
+    border-radius: 50%;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 900px) {
+    .negotiate-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .chat-section {
+        height: 480px;
+    }
+}
+
+@media (max-width: 600px) {
+    .chat-section {
+        height: 420px;
+    }
+
+    .chat-message {
+        max-width: 90%;
+    }
+}

@@ -1,0 +1,239 @@
+/* ==================== APPLE HIG UPLOAD PAGE ==================== */
+/* Progressive disclosure with generous spacing */
+
+.upload-page-header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+    animation: fadeIn var(--duration-slow) var(--ease-system);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.upload-page-header h1 {
+    font-size: var(--text-largeTitle);
+    font-weight: var(--weight-semibold);
+    margin-bottom: var(--space-sm);
+}
+
+/* ==================== UPLOAD GRID ==================== */
+.upload-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: var(--space-lg);
+    animation: fadeIn var(--duration-slow) 0.1s var(--ease-system) backwards;
+}
+
+/* ==================== UPLOAD SECTION ==================== */
+.upload-section {
+    padding: var(--space-xl);
+    border-radius: var(--radius-xl);
+}
+
+.upload-area {
+    padding: var(--space-3xl) var(--space-xl);
+    background: var(--fill-quaternary);
+    border: 2px dashed var(--separator);
+    border-radius: var(--radius-xl);
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease-system);
+}
+
+.upload-area:hover,
+.upload-area.dragover {
+    background: var(--semantic-info);
+    border-color: var(--accent-blue);
+}
+
+.upload-icon {
+    font-size: 3rem;
+    color: var(--accent-blue);
+    margin-bottom: var(--space-md);
+    transition: transform var(--duration-normal) var(--ease-spring);
+}
+
+.upload-area:hover .upload-icon {
+    transform: scale(1.05) translateY(-4px);
+}
+
+.upload-text {
+    font-size: var(--text-title3);
+    font-weight: var(--weight-medium);
+    color: var(--label-primary);
+    margin-bottom: var(--space-xs);
+}
+
+.upload-subtext {
+    font-size: var(--text-subhead);
+    color: var(--label-secondary);
+    margin-bottom: var(--space-md);
+}
+
+.upload-formats {
+    font-size: var(--text-caption);
+    color: var(--label-tertiary);
+    padding: 6px 12px;
+    background: var(--fill-quaternary);
+    border-radius: var(--radius-sm);
+    display: inline-block;
+}
+
+/* Selected File */
+.selected-file {
+    margin-top: var(--space-lg);
+    padding: var(--space-md);
+    background: var(--semantic-success);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    animation: fadeIn var(--duration-normal) var(--ease-system);
+}
+
+.selected-file .file-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-green);
+    border-radius: var(--radius-md);
+    font-size: 1.25rem;
+    color: white;
+    flex-shrink: 0;
+}
+
+.selected-file .file-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.selected-file .file-name {
+    display: block;
+    font-weight: var(--weight-medium);
+    color: var(--label-primary);
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.selected-file .file-size {
+    font-size: var(--text-caption);
+    color: var(--label-secondary);
+}
+
+/* Upload Error */
+.upload-error {
+    margin-top: var(--space-md);
+    padding: var(--space-md);
+    background: var(--semantic-error);
+    border-radius: var(--radius-md);
+    color: var(--accent-red);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--text-subhead);
+}
+
+/* Upload Actions */
+.upload-actions {
+    margin-top: var(--space-lg);
+    display: flex;
+    justify-content: center;
+}
+
+/* Upload Success */
+.upload-success {
+    margin-top: var(--space-md);
+    padding: var(--space-md);
+    background: var(--semantic-success);
+    border-radius: var(--radius-md);
+    color: var(--accent-green);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--text-subhead);
+}
+
+/* ==================== INFO SECTION ==================== */
+.info-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.info-card {
+    padding: var(--space-lg);
+    border-radius: var(--radius-xl);
+}
+
+.info-card h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--text-body);
+    font-weight: var(--weight-semibold);
+    margin-bottom: var(--space-md);
+    color: var(--label-primary);
+}
+
+.info-card h3 i {
+    color: var(--accent-blue);
+}
+
+.info-card p {
+    font-size: var(--text-subhead);
+    line-height: 1.5;
+}
+
+.info-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.info-list li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--text-subhead);
+    color: var(--label-secondary);
+}
+
+.info-list li i {
+    color: var(--accent-green);
+    font-size: 1rem;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 900px) {
+    .upload-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .upload-section {
+        padding: var(--space-lg);
+    }
+
+    .upload-area {
+        padding: var(--space-2xl) var(--space-lg);
+    }
+
+    .upload-icon {
+        font-size: 2.5rem;
+    }
+}

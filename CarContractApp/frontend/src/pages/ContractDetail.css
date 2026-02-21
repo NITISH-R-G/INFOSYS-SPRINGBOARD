@@ -1,0 +1,609 @@
+/* ==================== APPLE DARK GLASS IMMERSIVE UI ==================== */
+
+:root {
+    /* APPLE DARK SYSTEM COLORS */
+    --bg-primary: #000000;
+    /* Pure Black Deep background */
+    --bg-secondary: #1C1C1E;
+    /* Dark Graphite (Surface) */
+    --ax-blue: #0A84FF;
+    /* iOS System Blue */
+    --ax-green: #30D158;
+    /* iOS System Green */
+    --ax-orange: #FF9F0A;
+    /* iOS System Orange */
+    --ax-red: #FF453A;
+    /* iOS System Red */
+    --text-primary: #FFFFFF;
+    --text-secondary: rgba(235, 235, 245, 0.6);
+    /* iOS Secondary Label */
+    --text-tertiary: rgba(235, 235, 245, 0.3);
+
+    /* GLASS PHYSICS (VISION OS STYLE) */
+    --glass-material: rgba(30, 30, 30, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+    --blur-strength: blur(40px) saturate(180%);
+
+    /* ANIMATION */
+    --spring-ease: cubic-bezier(0.25, 0.8, 0.25, 1);
+    /* iOS fluid spring */
+}
+
+/* GLOBAL TYPOGRAPHY RESET */
+body {
+    background: var(--bg-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: var(--text-primary);
+    margin: 0;
+    overflow: hidden;
+}
+
+.immersive-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at 50% 30%, #2C2C2E 0%, #000000 70%);
+    /* Subtle spotlight effect */
+    overflow: hidden;
+    z-index: 0;
+}
+
+/* ==================== BACKGROUND PDF LAYER ==================== */
+.pdf-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Vignette Overlay handled in PDFViewer via CSS to enable clicks */
+}
+
+.empty-pdf-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.glass-message {
+    background: var(--glass-material);
+    backdrop-filter: var(--blur-strength);
+    -webkit-backdrop-filter: var(--blur-strength);
+    padding: 32px 48px;
+    border-radius: 24px;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    text-align: center;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* ==================== FLOATING TOP BAR ==================== */
+.glass-topbar {
+    position: absolute;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    min-width: 600px;
+    max-width: 1200px;
+    height: 72px;
+    z-index: 100;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    gap: 32px;
+
+    background: rgba(200, 200, 200, 0.25);
+    /* Translucent White on Black */
+    backdrop-filter: var(--blur-strength);
+    -webkit-backdrop-filter: var(--blur-strength);
+    border-radius: 100px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    /* Subtle white border */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s var(--ease-gentle);
+}
+
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.glass-icon-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    /* Visible on dark glass */
+    color: #ffffff;
+    /* White icon */
+    transition: all 0.2s;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-icon-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+.contract-title {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.contract-title h1 {
+    font-size: 16px;
+    margin: 0;
+    font-weight: 600;
+    color: #ffffff;
+    /* White text */
+}
+
+.meta-badge {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.topbar-right {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-glass-primary {
+    background: #0A84FF;
+    /* Apple Blue Dark Mode */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 15px rgba(10, 132, 255, 0.4);
+    transition: transform 0.2s var(--spring-ease);
+    cursor: pointer;
+}
+
+.btn-glass-primary:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+.btn-glass-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.btn-glass-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ==================== FLOATING SIDE PANELS (Glass on Black) ==================== */
+.glass-panel-left,
+.glass-panel-right {
+    position: absolute;
+    top: 110px;
+    bottom: 100px;
+    width: 280px;
+    /* Reduced from 340px for less visual competition */
+    z-index: 50;
+
+    /* DEEPER GLASS: More blur, less opacity */
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(60px) saturate(200%);
+    -webkit-backdrop-filter: blur(60px) saturate(200%);
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.6),
+        inset 0 0 30px rgba(255, 255, 255, 0.02);
+    border-radius: 20px;
+
+    /* Variable Overrides for Content */
+    --label-primary: #ffffff;
+    --label-secondary: rgba(255, 255, 255, 0.7);
+    --label-tertiary: rgba(255, 255, 255, 0.5);
+    color: white;
+
+    transition: transform 0.4s var(--spring-ease), opacity 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.glass-panel-left {
+    left: 16px;
+    /* Closer to edge */
+}
+
+.glass-panel-left.closed {
+    transform: translateX(-320px);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.glass-panel-right {
+    right: 16px;
+    /* Closer to edge */
+}
+
+.glass-panel-right.closed {
+    transform: translateX(320px);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Panel Toggle Buttons */
+.panel-toggle {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 64px;
+
+    background: rgba(30, 30, 30, 0.6);
+    /* Dark toggle on outside */
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    color: white;
+    transition: all 0.2s;
+    z-index: 60;
+}
+
+.glass-panel-left .panel-toggle {
+    right: -32px;
+    border-radius: 0 12px 12px 0;
+}
+
+.glass-panel-right .panel-toggle {
+    left: -32px;
+    border-radius: 12px 0 0 12px;
+}
+
+.panel-toggle:hover {
+    width: 36px;
+    background: rgba(50, 50, 50, 0.8);
+    color: var(--accent-blue);
+}
+
+/* Panel Content */
+.panel-content {
+    padding: 24px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.scrollable::-webkit-scrollbar {
+    width: 4px;
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+/* ==================== LEFT PANEL CONTENT ==================== */
+.score-section {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.score-ring {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 0 auto 16px;
+    border: 8px solid rgba(255, 255, 255, 0.05);
+    /* Track */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: transparent;
+    /* Clean background for ring */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.score-ring.excellent {
+    border-color: var(--accent-green);
+    box-shadow: 0 0 30px rgba(52, 199, 89, 0.2);
+}
+
+.score-ring.good {
+    border-color: var(--accent-teal);
+}
+
+.score-ring.fair {
+    border-color: var(--accent-orange);
+}
+
+.score-ring.poor {
+    border-color: var(--accent-red);
+}
+
+/* ==================== ADAPTIVE CONTRAST TEXT ==================== */
+/* 
+   "Etched" effect ensures readability on both Dark (App BG) 
+   and Light (PDF) backgrounds without global opacity increase.
+*/
+.text-etch {
+    color: white;
+    text-shadow:
+        0 1px 1px rgba(0, 0, 0, 0.1),
+        /* Gentle cut */
+        0 0 5px rgba(0, 0, 0, 0.1),
+        /* Soft ambient glow */
+        0 1px 10px rgba(0, 0, 0, 0.4);
+    /* Deep scrim for white backgrounds */
+}
+
+/* Local Scrim for heavy text blocks */
+.scrim-backdrop {
+    position: relative;
+    z-index: 1;
+}
+
+.scrim-backdrop::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background: radial-gradient(closest-side,
+            rgba(0, 0, 0, 0.15) 0%,
+            viewport 100%);
+    z-index: -1;
+    border-radius: 20px;
+    filter: blur(10px);
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Score Ring - Text Isolation */
+.score-val {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1;
+    color: white;
+    /* Stronger contrast for the big number */
+    text-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.2),
+        0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.score-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--label-tertiary);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.divider {
+    height: 1px;
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.2) 50%,
+            rgba(255, 255, 255, 0) 100%);
+    margin: 20px 0;
+}
+
+.terms-grid h3 {
+    font-size: 13px;
+    text-transform: uppercase;
+    color: var(--label-secondary);
+    margin-bottom: 16px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.term-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 14px;
+    color: var(--label-primary);
+    /* Subtler shadow for body text */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+/* Subtle row hover gradient */
+.term-row:hover {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+}
+
+/* ==================== RIGHT PANEL CONTENT ==================== */
+.flag-list-view h3 {
+    font-size: 13px;
+    text-transform: uppercase;
+    color: var(--label-secondary);
+    margin-bottom: 16px;
+    padding-left: 8px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.flag-item-glass {
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--label-primary);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    /* Readability */
+
+    /* Variable Blur behind items for extra separation */
+    backdrop-filter: blur(10px);
+}
+
+.flag-item-glass:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.2);
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.flag-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    box-shadow: 0 0 5px currentColor;
+    /* Glow */
+}
+
+.risk-high .flag-dot {
+    background: var(--accent-red);
+    color: var(--accent-red);
+}
+
+.risk-medium .flag-dot {
+    background: var(--accent-orange);
+    color: var(--accent-orange);
+}
+
+.risk-low .flag-dot {
+    background: var(--accent-yellow);
+    color: var(--accent-yellow);
+}
+
+/* Detail View */
+.flag-detail-view {
+    animation: fadeIn 0.3s ease;
+}
+
+.flag-header {
+    margin-bottom: 24px;
+}
+
+.risk-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.risk-high .risk-indicator {
+    background: var(--accent-red);
+    box-shadow: 0 2px 10px rgba(255, 59, 48, 0.3);
+}
+
+.risk-medium .risk-indicator {
+    background: var(--accent-orange);
+}
+
+.flag-header h2 {
+    font-size: 20px;
+    line-height: 1.3;
+    color: var(--label-primary);
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    /* Stronger contrast for headers */
+}
+
+.glass-card {
+    background: rgba(0, 0, 0, 0.2);
+    /* Slighly darker tint for text container */
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02);
+}
+
+.glass-card label {
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--label-tertiary);
+    margin-bottom: 6px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.glass-card p {
+    color: var(--label-primary);
+    line-height: 1.5;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    /* High legibility */
+}
+
+.glass-card.highlight {
+    background: rgba(255, 200, 100, 0.1);
+    border-color: rgba(255, 200, 100, 0.3);
+    box-shadow: 0 0 15px rgba(255, 200, 100, 0.05);
+}
+
+/* ==================== LOADING ==================== */
+.loading-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+    /* Ensure loading state is also black */
+}
+
+.glass-loader {
+    background: rgba(25, 25, 25, 0.8);
+    /* Dark glass */
+    backdrop-filter: blur(20px);
+    padding: 30px;
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 0 50px rgba(255, 255, 255, 0.05);
+    /* Glow */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+}

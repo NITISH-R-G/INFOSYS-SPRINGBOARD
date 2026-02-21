@@ -7,6 +7,9 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 from pydantic import BaseModel
 from pathlib import Path
 import io
+from api.vehicle_api import VehicleAPIClient
+from api.scoring import FairnessScorer
+from typing import Optional
 
 # 1. Configuration
 # Load environment variables explicitly from .env in the same directory
@@ -14,7 +17,20 @@ env_path = Path(__file__).parent / '.env'
 load_dotenv(dotenv_path=env_path)
 
 # Set Tesseract Path
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+if not os.path.exists(tesseract_cmd):
+    # Try common paths
+    common_paths = [
+        r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe",
+        os.path.expandvars(r"%LOCALAPPDATA%\Programs\Tesseract-OCR\tesseract.exe"),
+        os.path.expandvars(r"%LOCALAPPDATA%\Tesseract-OCR\tesseract.exe"),
+    ]
+    for path in common_paths:
+        if os.path.exists(path):
+            tesseract_cmd = path
+            break
+
+pytesseract.pytesseract.tesseract_cmd = tesseract_cmd
 
 # Configure Gemini
 api_key = os.getenv("GEMINI_API_KEY")
@@ -40,6 +56,18 @@ app.add_middleware(
 class ChatRequest(BaseModel):
     context: str
     question: str
+
+class ValuationRequest(BaseModel):
+    vin: str
+
+class FairnessRequest(BaseModel):
+    contract_price: float
+    market_average: float
+    apr: Optional[float] = None
+    fees: Optional[float] = 0.0
+
+vehicle_client = VehicleAPIClient()
+fairness_scorer = FairnessScorer()
 
 @app.get("/")
 def home():
@@ -84,7 +112,41 @@ async def chat_endpoint(request: ChatRequest):
         
         response = model.generate_content(prompt)
         
-        return {"answer": response.text}
+        # Clean up potential markdown formatting from Gemini
+        clean_text = response.text.strip()
+        if clean_text.startswith("```"):
+            import re
+            clean_text = re.sub(r'^```\w*\n?', '', clean_text)
+            clean_text = re.sub(r'\n?```$', '', clean_text)
+            
+        return {"answer": clean_text}
+    except Exception as e:
+         raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/valuation")
+async def get_vehicle_valuation(request: ValuationRequest):
+    """
+    Accepts a VIN and returns aggregated market valuation metrics.
+    """
+    try:
+        valuation = await vehicle_client.get_valuation(request.vin)
+        return valuation
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/fairness")
+async def calculate_fairness(request: FairnessRequest):
+    """
+    Accepts contract specifics and computes a fairness score (0-100) and applied penalties.
+    """
+    try:
+        score_evaluation = fairness_scorer.evaluate_contract(
+            contract_price=request.contract_price,
+            market_average=request.market_average,
+            apr=request.apr,
+            fees=request.fees
+        )
+        return score_evaluation
     except Exception as e:
          raise HTTPException(status_code=500, detail=str(e))
 

@@ -1,0 +1,196 @@
+/* ==================== APPLE HIG NAVBAR ==================== */
+/* Floating glass bar with translucent materials */
+
+.navbar {
+    position: fixed;
+    top: var(--space-md);
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - var(--space-xl) * 2);
+    max-width: 1080px;
+    background: var(--material-regular);
+    backdrop-filter: var(--blur-regular);
+    -webkit-backdrop-filter: var(--blur-regular);
+    border-radius: var(--radius-xl);
+    padding: 0 var(--space-lg);
+    z-index: 1000;
+    transition: all var(--duration-normal) var(--ease-system);
+}
+
+.navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    text-decoration: none;
+    color: var(--label-primary);
+    font-weight: var(--weight-semibold);
+    font-size: var(--text-body);
+    transition: opacity var(--duration-fast) var(--ease-gentle);
+}
+
+.navbar-brand:hover {
+    opacity: 0.7;
+}
+
+.navbar-brand i {
+    font-size: 1.25rem;
+    color: var(--accent-blue);
+}
+
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    color: var(--label-secondary);
+    font-size: var(--text-subhead);
+    font-weight: var(--weight-medium);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: all var(--duration-fast) var(--ease-gentle);
+}
+
+.nav-link i {
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+.nav-link:hover {
+    color: var(--label-primary);
+    background: var(--fill-quaternary);
+}
+
+.nav-link.active {
+    color: var(--accent-blue);
+    background: var(--semantic-info);
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+/* Theme Switch - System-native feel */
+.theme-switch {
+    position: relative;
+    width: 52px;
+    height: 32px;
+    cursor: pointer;
+}
+
+.theme-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.theme-switch .slider {
+    position: absolute;
+    inset: 0;
+    background: var(--fill-secondary);
+    border-radius: 16px;
+    transition: all var(--duration-normal) var(--ease-system);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 6px;
+}
+
+.theme-switch .slider i {
+    font-size: 0.875rem;
+    transition: opacity var(--duration-fast) var(--ease-gentle);
+}
+
+.theme-switch .icon-sun {
+    color: var(--accent-orange);
+    opacity: 0.4;
+}
+
+.theme-switch .icon-moon {
+    color: var(--accent-teal);
+    opacity: 1;
+}
+
+.theme-switch input:checked+.slider .icon-sun {
+    opacity: 1;
+}
+
+.theme-switch input:checked+.slider .icon-moon {
+    opacity: 0.4;
+}
+
+.theme-switch .slider::before {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background: white;
+    border-radius: 12px;
+    left: 4px;
+    transition: transform var(--duration-normal) var(--ease-spring);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.theme-switch input:checked+.slider::before {
+    transform: translateX(20px);
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 768px) {
+    .navbar {
+        width: calc(100% - var(--space-lg) * 2);
+        top: var(--space-sm);
+        padding: 0 var(--space-md);
+    }
+
+    .navbar-container {
+        height: 52px;
+    }
+
+    .navbar-links {
+        position: absolute;
+        top: calc(100% + var(--space-sm));
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        padding: var(--space-md);
+        background: var(--material-regular);
+        backdrop-filter: var(--blur-regular);
+        -webkit-backdrop-filter: var(--blur-regular);
+        border-radius: var(--radius-lg);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-8px);
+        transition: all var(--duration-normal) var(--ease-system);
+    }
+
+    .navbar-links.open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .nav-link {
+        width: 100%;
+        padding: 12px var(--space-md);
+        justify-content: flex-start;
+    }
+
+    .navbar-brand span {
+        display: none;
+    }
+}

@@ -1,0 +1,317 @@
+/* ==================== APPLE HIG DASHBOARD ==================== */
+/* Layout-driven hierarchy with system materials */
+
+/* Dashboard Header */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-xl);
+    animation: fadeIn var(--duration-slow) var(--ease-system);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dashboard-header h1 {
+    font-size: var(--text-largeTitle);
+    font-weight: var(--weight-semibold);
+    color: var(--label-primary);
+}
+
+/* ==================== STATS GRID ==================== */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+}
+
+.stat-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+    border-radius: var(--radius-xl);
+    transition: transform var(--duration-normal) var(--ease-system);
+    animation: fadeIn var(--duration-slow) var(--ease-system) backwards;
+}
+
+.stat-card:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+.stat-card:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.stat-card:nth-child(3) {
+    animation-delay: 0.15s;
+}
+
+.stat-card:nth-child(4) {
+    animation-delay: 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.stat-icon.blue {
+    background: var(--semantic-info);
+    color: var(--accent-blue);
+}
+
+.stat-icon.green {
+    background: var(--semantic-success);
+    color: var(--accent-green);
+}
+
+.stat-icon.orange {
+    background: var(--semantic-warning);
+    color: var(--accent-orange);
+}
+
+.stat-icon.purple {
+    background: rgba(175, 82, 222, 0.12);
+    color: var(--accent-purple);
+}
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-value {
+    font-size: var(--text-title2);
+    font-weight: var(--weight-semibold);
+    color: var(--label-primary);
+    line-height: 1.2;
+}
+
+.stat-label {
+    font-size: var(--text-caption);
+    color: var(--label-secondary);
+    margin-top: 2px;
+}
+
+/* ==================== SECTION HEADER ==================== */
+.section-header {
+    margin-bottom: var(--space-md);
+}
+
+.section-header h2 {
+    font-size: var(--text-title3);
+    font-weight: var(--weight-semibold);
+    color: var(--label-primary);
+}
+
+/* ==================== LOADING & ERROR ==================== */
+.loading-box,
+.error-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    padding: var(--space-2xl);
+    border-radius: var(--radius-xl);
+    font-size: var(--text-body);
+    color: var(--label-secondary);
+}
+
+.error-box {
+    background: var(--semantic-error);
+    color: var(--accent-red);
+}
+
+/* ==================== EMPTY STATE ==================== */
+.empty-state {
+    text-align: center;
+    padding: var(--space-3xl) var(--space-xl);
+    border-radius: var(--radius-xl);
+}
+
+.empty-state i {
+    font-size: 3rem;
+    color: var(--label-quaternary);
+    margin-bottom: var(--space-md);
+}
+
+.empty-state h3 {
+    font-size: var(--text-title3);
+    margin-bottom: var(--space-sm);
+    color: var(--label-primary);
+}
+
+.empty-state p {
+    margin-bottom: var(--space-lg);
+}
+
+/* ==================== CONTRACTS LIST ==================== */
+.contracts-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.contract-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-lg);
+    transition: all var(--duration-normal) var(--ease-system);
+}
+
+.contract-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.contract-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--semantic-info);
+    border-radius: var(--radius-md);
+    font-size: 1.25rem;
+    color: var(--accent-blue);
+    flex-shrink: 0;
+}
+
+.contract-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.contract-info h3 {
+    font-size: var(--text-body);
+    font-weight: var(--weight-medium);
+    color: var(--label-primary);
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.contract-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+}
+
+.contract-date,
+.contract-type {
+    font-size: var(--text-caption);
+    color: var(--label-tertiary);
+}
+
+.contract-type {
+    padding: 2px 8px;
+    background: var(--fill-quaternary);
+    border-radius: var(--radius-xs);
+    font-weight: var(--weight-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+/* Score Circle - System Status Indicator */
+.contract-score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.score-circle {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: var(--text-subhead);
+    font-weight: var(--weight-semibold);
+    color: white;
+}
+
+.score-circle.excellent {
+    background: var(--accent-green);
+}
+
+.score-circle.good {
+    background: var(--accent-teal);
+}
+
+.score-circle.fair {
+    background: var(--accent-orange);
+}
+
+.score-circle.poor {
+    background: var(--accent-red);
+}
+
+.score-label {
+    font-size: var(--text-caption2);
+    color: var(--label-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.contract-actions {
+    display: flex;
+    gap: var(--space-sm);
+    flex-shrink: 0;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 1024px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-md);
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .contract-card {
+        flex-wrap: wrap;
+        gap: var(--space-md);
+    }
+
+    .contract-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}

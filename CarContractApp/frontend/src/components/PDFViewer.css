@@ -1,0 +1,285 @@
+/* PDF Viewer Container */
+.pdf-immersive-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    background: transparent;
+    /* Clean bg */
+}
+
+/* PDF Canvas Area - The "Stage" */
+.pdf-canvas-area {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    padding: 120px 0 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 60px;
+    /* More breathing room between pages */
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+
+    /* Vignette Overlay Effect */
+    background: radial-gradient(circle at center, transparent 30%, rgba(0, 0, 0, 0.6) 100%);
+}
+
+/* Page Wrapper - The Object */
+.pdf-page-wrapper {
+    position: relative;
+    z-index: 10;
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.pdf-page {
+    border-radius: 4px;
+    /* Crisp paper corners, slightly softened */
+    overflow: hidden;
+}
+
+.shadow-depth {
+    /* Floating Effect */
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.1),
+        /* Close shadow */
+        0 40px 80px rgba(0, 0, 0, 0.5);
+    /* Deep ambient shadow */
+}
+
+/* Highlights Layer */
+.highlights-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    /* Let clicks pass through if needed, but we capture them on children */
+    z-index: 20;
+}
+
+/* Translucent Underline Highlights */
+.pdf-highlight {
+    position: absolute;
+    cursor: pointer;
+    z-index: 25;
+    pointer-events: auto;
+    transition: all 0.2s;
+
+    /* Underline Style */
+    background: linear-gradient(to bottom, transparent 60%, var(--highlight-color) 100%);
+    border-bottom: 2px solid var(--highlight-border);
+    mix-blend-mode: multiply;
+    /* Blends nicely with text */
+    opacity: 0.7;
+}
+
+.pdf-highlight:hover {
+    opacity: 1;
+    transform: scaleY(1.1);
+    background: var(--highlight-color);
+    /* Fill on hover */
+}
+
+.pdf-highlight.active {
+    box-shadow: 0 0 0 2px var(--accent-blue, #0A84FF);
+    background: var(--highlight-color);
+    opacity: 0.9;
+}
+
+/* Colors */
+.highlight-high {
+    --highlight-color: rgba(255, 59, 48, 0.2);
+    --highlight-border: #FF3B30;
+}
+
+.highlight-medium {
+    --highlight-color: rgba(255, 149, 0, 0.2);
+    --highlight-border: #FF9500;
+}
+
+.highlight-low {
+    --highlight-color: rgba(255, 214, 10, 0.2);
+    --highlight-border: #FFD60A;
+}
+
+
+/* Floating Glass Toolbar */
+.pdf-floating-toolbar {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    background: rgba(30, 30, 30, 0.7);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 8px 16px;
+    border-radius: 100px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    z-index: 80;
+    color: white;
+}
+
+.toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.page-indicator,
+.zoom-val {
+    font-size: 13px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.toolbar-divider {
+    width: 1px;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.tool-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.tool-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Floating Glass Sheet (Popover) */
+.floating-glass-sheet {
+    position: fixed;
+    /* Fixed to viewport usually, or absolute to container */
+    transform: translate(-50%, -100%);
+    /* Center horizontally, anchor bottom */
+    width: 300px;
+
+    background: rgba(40, 40, 40, 0.95);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 20px;
+
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    z-index: 200;
+    /* Above everything */
+    color: white;
+    animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -90%) scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -100%) scale(1);
+    }
+}
+
+.floating-glass-sheet::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 16px;
+    background: rgba(40, 40, 40, 0.95);
+    backdrop-filter: blur(40px);
+    border-right: 1px solid rgba(255, 255, 255, 0.15);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    transform: translateX(-50%) rotate(45deg);
+}
+
+.sheet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.risk-badge {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: white;
+}
+
+.risk-badge.high {
+    background: #FF3B30;
+}
+
+.risk-badge.medium {
+    background: #FF9500;
+}
+
+.risk-badge.low {
+    background: #FFD60A;
+    color: black;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 20px;
+    line-height: 1;
+    padding: 0;
+    cursor: pointer;
+}
+
+.floating-glass-sheet h4 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    line-height: 1.3;
+}
+
+.sheet-desc {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+.action-btn {
+    width: 100%;
+    background: var(--accent-blue, #0A84FF);
+    border: none;
+    padding: 10px;
+    border-radius: 12px;
+    color: white;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.action-btn:hover {
+    transform: scale(1.02);
+}

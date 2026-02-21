@@ -1,0 +1,495 @@
+/* ==================== APPLE HIG DESIGN SYSTEM ==================== */
+/* Following iOS 17+, macOS Sonoma, and visionOS system materials */
+
+/* ==================== CSS Custom Properties ==================== */
+:root {
+  /* System Materials - Light Mode */
+  --material-ultra-thin: rgba(255, 255, 255, 0.45);
+  --material-thin: rgba(255, 255, 255, 0.6);
+  --material-regular: rgba(255, 255, 255, 0.75);
+  --material-thick: rgba(255, 255, 255, 0.85);
+
+  /* System Materials - Dark Mode (will be applied via class) */
+  --material-ultra-thin-dark: rgba(28, 28, 30, 0.65);
+  --material-thin-dark: rgba(28, 28, 30, 0.75);
+  --material-regular-dark: rgba(28, 28, 30, 0.82);
+  --material-thick-dark: rgba(28, 28, 30, 0.92);
+
+  /* System Canvas */
+  --canvas-light: #f2f2f7;
+  --canvas-dark: #000000;
+  --canvas-elevated-light: #ffffff;
+  --canvas-elevated-dark: #1c1c1e;
+
+  /* System Labels */
+  --label-primary: rgba(0, 0, 0, 0.85);
+  --label-secondary: rgba(60, 60, 67, 0.6);
+  --label-tertiary: rgba(60, 60, 67, 0.3);
+  --label-quaternary: rgba(60, 60, 67, 0.18);
+
+  /* System Fills */
+  --fill-primary: rgba(120, 120, 128, 0.2);
+  --fill-secondary: rgba(120, 120, 128, 0.16);
+  --fill-tertiary: rgba(120, 120, 128, 0.12);
+  --fill-quaternary: rgba(120, 120, 128, 0.08);
+
+  /* Separator */
+  --separator: rgba(60, 60, 67, 0.12);
+  --separator-opaque: #c6c6c8;
+
+  /* System Accent - Restrained */
+  --accent-blue: #007AFF;
+  --accent-green: #34C759;
+  --accent-orange: #FF9500;
+  --accent-red: #FF3B30;
+  --accent-teal: #5AC8FA;
+  --accent-purple: #AF52DE;
+
+  /* Semantic Colors - Subtle */
+  --semantic-success: rgba(52, 199, 89, 0.12);
+  --semantic-warning: rgba(255, 149, 0, 0.12);
+  --semantic-error: rgba(255, 59, 48, 0.12);
+  --semantic-info: rgba(0, 122, 255, 0.12);
+
+  /* Blur Effects */
+  --blur-ultra-thin: blur(20px) saturate(180%);
+  --blur-thin: blur(30px) saturate(180%);
+  --blur-regular: blur(40px) saturate(190%);
+  --blur-thick: blur(60px) saturate(200%);
+
+  /* Continuous Corners (Super-ellipse) */
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+  --radius-2xl: 36px;
+
+  /* System Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+
+  /* System Motion - Slow, Smooth, Intentional */
+  --ease-system: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-gentle: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-instant: 0.1s;
+  --duration-fast: 0.2s;
+  --duration-normal: 0.35s;
+  --duration-slow: 0.5s;
+  --duration-slower: 0.7s;
+
+  /* Typography - SF Pro Scale */
+  --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
+  --font-rounded: -apple-system, BlinkMacSystemFont, "SF Pro Rounded", "SF Pro Display", system-ui, sans-serif;
+  --font-mono: "SF Mono", ui-monospace, monospace;
+
+  /* Font Weights - Reduced */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+
+  /* Font Sizes */
+  --text-caption2: 0.6875rem;
+  /* 11px */
+  --text-caption: 0.75rem;
+  /* 12px */
+  --text-footnote: 0.8125rem;
+  /* 13px */
+  --text-subhead: 0.9375rem;
+  /* 15px */
+  --text-body: 1rem;
+  /* 16px */
+  --text-title3: 1.25rem;
+  /* 20px */
+  --text-title2: 1.375rem;
+  /* 22px */
+  --text-title1: 1.75rem;
+  /* 28px */
+  --text-largeTitle: 2.125rem;
+  /* 34px */
+}
+
+/* Dark Mode */
+.dark-mode {
+  --material-ultra-thin: var(--material-ultra-thin-dark);
+  --material-thin: var(--material-thin-dark);
+  --material-regular: var(--material-regular-dark);
+  --material-thick: var(--material-thick-dark);
+
+  --label-primary: rgba(255, 255, 255, 0.85);
+  --label-secondary: rgba(235, 235, 245, 0.6);
+  --label-tertiary: rgba(235, 235, 245, 0.3);
+  --label-quaternary: rgba(235, 235, 245, 0.18);
+
+  --fill-primary: rgba(120, 120, 128, 0.36);
+  --fill-secondary: rgba(120, 120, 128, 0.32);
+  --fill-tertiary: rgba(120, 120, 128, 0.24);
+  --fill-quaternary: rgba(120, 120, 128, 0.18);
+
+  --separator: rgba(84, 84, 88, 0.65);
+  --separator-opaque: #38383a;
+}
+
+/* ==================== Reset & Base ==================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-system);
+  background: var(--canvas-light);
+  color: var(--label-primary);
+  line-height: 1.47;
+  letter-spacing: -0.022em;
+  min-height: 100vh;
+  transition: background var(--duration-slow) var(--ease-gentle),
+    color var(--duration-slow) var(--ease-gentle);
+}
+
+.dark-mode body,
+body.dark-mode {
+  background: var(--canvas-dark);
+}
+
+/* ==================== Typography ==================== */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: var(--weight-semibold);
+  letter-spacing: -0.022em;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: var(--text-largeTitle);
+  font-weight: var(--weight-semibold);
+  letter-spacing: -0.026em;
+}
+
+h2 {
+  font-size: var(--text-title1);
+  letter-spacing: -0.024em;
+}
+
+h3 {
+  font-size: var(--text-title2);
+}
+
+h4 {
+  font-size: var(--text-title3);
+}
+
+p {
+  color: var(--label-secondary);
+  line-height: 1.53;
+}
+
+a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  transition: opacity var(--duration-fast) var(--ease-gentle);
+}
+
+a:hover {
+  opacity: 0.7;
+}
+
+.text-muted {
+  color: var(--label-secondary);
+}
+
+.text-tertiary {
+  color: var(--label-tertiary);
+}
+
+/* ==================== Layout ==================== */
+.app {
+  min-height: 100vh;
+  position: relative;
+}
+
+.main-content {
+  padding-top: 88px;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+.page {
+  padding: var(--space-xl) 0 var(--space-3xl);
+}
+
+/* ==================== SYSTEM MATERIALS ==================== */
+.glass-panel {
+  background: var(--material-regular);
+  backdrop-filter: var(--blur-regular);
+  -webkit-backdrop-filter: var(--blur-regular);
+  border-radius: var(--radius-xl);
+  transition: all var(--duration-normal) var(--ease-system);
+}
+
+.glass-panel:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.glass-panel-static {
+  background: var(--material-regular);
+  backdrop-filter: var(--blur-regular);
+  -webkit-backdrop-filter: var(--blur-regular);
+  border-radius: var(--radius-xl);
+}
+
+.glass-thin {
+  background: var(--material-thin);
+  backdrop-filter: var(--blur-thin);
+  -webkit-backdrop-filter: var(--blur-thin);
+}
+
+.glass-ultra-thin {
+  background: var(--material-ultra-thin);
+  backdrop-filter: var(--blur-ultra-thin);
+  -webkit-backdrop-filter: var(--blur-ultra-thin);
+}
+
+/* ==================== BUTTONS ==================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font-system);
+  font-size: var(--text-subhead);
+  font-weight: var(--weight-medium);
+  letter-spacing: -0.01em;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-system);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background: var(--accent-blue);
+  color: white;
+}
+
+.btn-primary:hover {
+  opacity: 0.85;
+}
+
+.btn-secondary {
+  background: var(--fill-secondary);
+  color: var(--label-primary);
+  backdrop-filter: var(--blur-thin);
+  -webkit-backdrop-filter: var(--blur-thin);
+}
+
+.btn-secondary:hover {
+  background: var(--fill-primary);
+}
+
+.btn-success {
+  background: var(--accent-green);
+  color: white;
+}
+
+.btn-danger {
+  background: var(--accent-red);
+  color: white;
+}
+
+.btn-lg {
+  padding: var(--space-md) var(--space-lg);
+  font-size: var(--text-body);
+  border-radius: var(--radius-lg);
+}
+
+.btn-icon {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: var(--radius-md);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ==================== FORM ELEMENTS ==================== */
+.form-input {
+  width: 100%;
+  padding: var(--space-md);
+  background: var(--fill-tertiary);
+  border: none;
+  border-radius: var(--radius-md);
+  color: var(--label-primary);
+  font-family: var(--font-system);
+  font-size: var(--text-body);
+  transition: all var(--duration-fast) var(--ease-gentle);
+}
+
+.form-input:focus {
+  outline: none;
+  background: var(--fill-secondary);
+  box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.15);
+}
+
+.form-input::placeholder {
+  color: var(--label-tertiary);
+}
+
+/* ==================== BADGES ==================== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  font-size: var(--text-caption);
+  font-weight: var(--weight-medium);
+  border-radius: var(--radius-xs);
+  letter-spacing: 0;
+}
+
+.badge-success {
+  background: var(--semantic-success);
+  color: var(--accent-green);
+}
+
+.badge-warning {
+  background: var(--semantic-warning);
+  color: var(--accent-orange);
+}
+
+.badge-danger {
+  background: var(--semantic-error);
+  color: var(--accent-red);
+}
+
+.badge-info {
+  background: var(--semantic-info);
+  color: var(--accent-blue);
+}
+
+/* ==================== SPINNER ==================== */
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--fill-secondary);
+  border-top-color: var(--accent-blue);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==================== ACCESSIBILITY ==================== */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast text on materials */
+@supports (backdrop-filter: blur(40px)) {
+
+  .glass-panel,
+  .glass-panel-static {
+    color: var(--label-primary);
+  }
+}
+
+/* Fallback when backdrop-filter not supported */
+@supports not (backdrop-filter: blur(40px)) {
+
+  .glass-panel,
+  .glass-panel-static {
+    background: var(--canvas-elevated-light);
+  }
+
+  .dark-mode .glass-panel,
+  .dark-mode .glass-panel-static {
+    background: var(--canvas-elevated-dark);
+  }
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 768px) {
+  :root {
+    --text-largeTitle: 1.75rem;
+    --text-title1: 1.5rem;
+  }
+
+  .container {
+    padding: 0 var(--space-md);
+  }
+
+  .page {
+    padding: var(--space-lg) 0;
+  }
+}
+
+/* ==================== SCROLLBAR ==================== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--fill-tertiary);
+  border-radius: var(--radius-xs);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--fill-secondary);
+}
+
+/* ==================== SELECTION ==================== */
+::selection {
+  background: rgba(0, 122, 255, 0.2);
+}
