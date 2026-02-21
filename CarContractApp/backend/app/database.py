@@ -35,6 +35,7 @@ class User(Base):
     email = Column(String(255), unique=True, index=True, nullable=False)
     full_name = Column(String(255))
     hashed_password = Column(String(255), nullable=False)
+    role = Column(String(50), default="buyer")  # buyer, dealer, admin
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -42,6 +43,8 @@ class User(Base):
     # Relationships
     contracts = relationship("Contract", back_populates="user")
     negotiations = relationship("Negotiation", back_populates="user")
+    conversations_as_buyer = relationship("Conversation", foreign_keys="[Conversation.buyer_id]", back_populates="buyer")
+    conversations_as_dealer = relationship("Conversation", foreign_keys="[Conversation.dealer_id]", back_populates="dealer")
 
 
 class Vehicle(Base):
@@ -196,6 +199,51 @@ class Negotiation(Base):
     
     # Relationships
     user = relationship("User", back_populates="negotiations")
+
+
+# ==================== Messaging Models ====================
+
+class Conversation(Base):
+    """Human-to-Human conversation thread between a Buyer and a Dealer"""
+    __tablename__ = "conversations"
+
+    id = Column(Integer, primary_key=True, index=True)
+    buyer_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    dealer_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    contract_id = Column(Integer, ForeignKey("contracts.id"), nullable=True)  # Optional reference to a specific contract
+    
+    # Topic/Subject
+    subject = Column(String(255), nullable=True)
+    
+    # Timestamps
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    # Relationships
+    buyer = relationship("User", foreign_keys=[buyer_id], back_populates="conversations_as_buyer")
+    dealer = relationship("User", foreign_keys=[dealer_id], back_populates="conversations_as_dealer")
+    messages = relationship("Message", back_populates="conversation", order_by="Message.created_at")
+    contract = relationship("Contract", foreign_keys=[contract_id])
+
+
+class Message(Base):
+    """Individual human message inside a Conversation"""
+    __tablename__ = "messages"
+
+    id = Column(Integer, primary_key=True, index=True)
+    conversation_id = Column(Integer, ForeignKey("conversations.id"), nullable=False)
+    sender_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    
+    # Content
+    content = Column(Text, nullable=False)
+    is_read = Column(Boolean, default=False)
+    
+    # Timestamps
+    created_at = Column(DateTime, default=datetime.utcnow)
+    
+    # Relationships
+    conversation = relationship("Conversation", back_populates="messages")
+    sender = relationship("User", foreign_keys=[sender_id])
 
 
 class AuditLog(Base):

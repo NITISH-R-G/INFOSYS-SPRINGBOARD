@@ -16,7 +16,8 @@ import 'dart:io';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:provider/provider.dart';
-import 'services/auth_service.dart';
+import 'providers/auth_provider.dart';
+import 'providers/chat_provider.dart';
 
 void main() async {
   if (Platform.isWindows || Platform.isLinux) {
@@ -31,12 +32,12 @@ void main() async {
     ),
   );
 
-  final authService = AuthService();
-  await authService.init();
-
   runApp(
-    ChangeNotifierProvider.value(
-      value: authService,
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => ChatProvider()),
+      ],
       child: const ContractAIApp(),
     ),
   );

@@ -3,7 +3,7 @@ import 'dart:ui';
 import '../theme/app_theme.dart';
 import '../animations/animations.dart';
 import 'package:provider/provider.dart';
-import '../services/auth_service.dart';
+import '../providers/auth_provider.dart';
 
 /// ============================================================
 /// LANDING SCREEN
@@ -396,13 +396,15 @@ class _LandingScreenState extends State<LandingScreen>
                 // Primary CTA (Client Auth)
                 GlowRippleButton(
                   onTap: () async {
-                    final auth = Provider.of<AuthService>(
+                    final auth = Provider.of<AuthProvider>(
                       context,
                       listen: false,
                     );
-                    if (!auth.isLoggedIn ||
-                        auth.currentUser?.role.name != 'client') {
-                      await auth.loginAsClient('Demo User');
+                    if (!auth.isAuthenticated || auth.role != 'buyer') {
+                      await auth.login(
+                        'buyer@demo.com',
+                        'password123',
+                      ); // Demo fallback
                     }
                     if (context.mounted) {
                       Navigator.pushNamed(context, '/dashboard');
@@ -446,13 +448,15 @@ class _LandingScreenState extends State<LandingScreen>
                 // Secondary CTA (Dealer Auth)
                 PhysicsTapButton(
                   onTap: () async {
-                    final auth = Provider.of<AuthService>(
+                    final auth = Provider.of<AuthProvider>(
                       context,
                       listen: false,
                     );
-                    if (!auth.isLoggedIn ||
-                        auth.currentUser?.role.name != 'dealer') {
-                      await auth.loginAsDealer('Demo Dealer');
+                    if (!auth.isAuthenticated || auth.role != 'dealer') {
+                      await auth.login(
+                        'dealer@demo.com',
+                        'password123',
+                      ); // Demo fallback
                     }
                     if (context.mounted) {
                       Navigator.pushNamed(context, '/dealer/dashboard');

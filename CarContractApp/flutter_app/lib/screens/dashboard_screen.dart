@@ -5,7 +5,7 @@ import '../services/api_service.dart';
 import '../models/contract.dart';
 import '../animations/animations.dart';
 import 'package:provider/provider.dart';
-import '../services/auth_service.dart';
+import '../providers/auth_provider.dart';
 
 /// ============================================================
 /// DASHBOARD SCREEN
@@ -180,7 +180,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                               IconButton(
                                 icon: const Icon(Icons.logout),
                                 onPressed: () {
-                                  Provider.of<AuthService>(
+                                  Provider.of<AuthProvider>(
                                     context,
                                     listen: false,
                                   ).logout();

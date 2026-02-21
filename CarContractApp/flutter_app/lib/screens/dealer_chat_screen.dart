@@ -1,6 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../providers/chat_provider.dart';
+import '../providers/auth_provider.dart';
 import '../theme/app_theme.dart';
 import '../animations/animations.dart';
 
@@ -16,30 +20,59 @@ class _DealerChatScreenState extends State<DealerChatScreen> {
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
-  // Mocking the thread data
-  final List<Map<String, dynamic>> _messages = [
-    {
-      'role': 'dealer',
-      'id': 'dealer-123',
-      'content':
-          'Hello, thanks for reviewing the latest lease offer. Let me know if you have any questions regarding the terms or pricing.',
-      'timestamp': DateTime.now().subtract(const Duration(hours: 2)),
-    },
-    {
-      'role': 'user',
-      'id': 'user-456',
-      'content':
-          'I noticed a \$500 disposition fee. I assume this is standard, but considering my credit score, could we waive it?',
-      'timestamp': DateTime.now().subtract(const Duration(minutes: 45)),
-    },
-    {
-      'role': 'dealer',
-      'id': 'dealer-123',
-      'content':
-          'The disposition fee is standard across all our regional leases, unfortunately. However, I can lower the capitalized cost by \$300 to help offset it. Does that work for you?',
-      'timestamp': DateTime.now().subtract(const Duration(minutes: 10)),
-    },
-  ];
+  int? _conversationId;
+  bool _initializing = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _initChat();
+  }
+
+  Future<void> _initChat() async {
+    final chatProv = Provider.of<ChatProvider>(context, listen: false);
+    final authProv = Provider.of<AuthProvider>(context, listen: false);
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('auth_token');
+
+    if (token == null) {
+      setState(() => _initializing = false);
+      return;
+    }
+
+    await chatProv.fetchConversations(token);
+
+    // Find conversation by contractId or generic
+    final match = chatProv.conversations.firstWhere(
+      (c) => c['contract_id']?.toString() == widget.contractId,
+      orElse: () => null,
+    );
+
+    if (match != null) {
+      _conversationId = match['id'];
+      await chatProv.fetchMessages(token, _conversationId!);
+    } else {
+      // If we are a buyer, try to create one. For a dealer, it might just be empty list if no conv exists.
+      if (authProv.role == 'buyer') {
+        // Need a dealer ID. We'd usually look this up. Using 2 as a mock dealer_id.
+        // In real app, contract would have dealer_id or user selects dealer.
+        try {
+          final success = await chatProv.createConversation(
+            token,
+            2,
+            contractId: int.tryParse(widget.contractId ?? ''),
+            subject: "Contract Inquiry",
+          );
+          if (success && chatProv.conversations.isNotEmpty) {
+            _conversationId = chatProv.conversations.first['id'];
+            await chatProv.fetchMessages(token, _conversationId!);
+          }
+        } catch (_) {}
+      }
+    }
+    setState(() => _initializing = false);
+    _scrollToBottom();
+  }
 
   @override
   void dispose() {
@@ -48,35 +81,19 @@ class _DealerChatScreenState extends State<DealerChatScreen> {
     super.dispose();
   }
 
-  void _sendMessage() {
+  Future<void> _sendMessage() async {
     final text = _messageController.text.trim();
-    if (text.isEmpty) return;
+    if (text.isEmpty || _conversationId == null) return;
 
-    setState(() {
-      _messages.add({
-        'role': 'user',
-        'id': 'user-456',
-        'content': text,
-        'timestamp': DateTime.now(),
-      });
-    });
-    _messageController.clear();
-    _scrollToBottom();
+    final chatProv = Provider.of<ChatProvider>(context, listen: false);
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('auth_token');
 
-    // Simulate dealer typing and responding
-    Future.delayed(const Duration(seconds: 2), () {
-      if (!mounted) return;
-      setState(() {
-        _messages.add({
-          'role': 'dealer',
-          'id': 'dealer-123',
-          'content':
-              'I understand. Let me review that request with my sales manager and I will get back to you shortly.',
-          'timestamp': DateTime.now(),
-        });
-      });
+    if (token != null) {
+      _messageController.clear();
+      await chatProv.sendMessage(token, _conversationId!, text);
       _scrollToBottom();
-    });
+    }
   }
 
   void _scrollToBottom() {
@@ -99,12 +116,29 @@ class _DealerChatScreenState extends State<DealerChatScreen> {
           Column(
             children: [
               Expanded(
-                child: ListView.builder(
-                  controller: _scrollController,
-                  padding: const EdgeInsets.fromLTRB(16, 120, 16, 20),
-                  itemCount: _messages.length,
-                  itemBuilder: (context, index) {
-                    return _buildMessageBubble(_messages[index], index);
+                child: Consumer2<ChatProvider, AuthProvider>(
+                  builder: (context, chatProv, authProv, child) {
+                    if (_initializing || chatProv.isLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if (_conversationId == null) {
+                      return const Center(
+                        child: Text("Conversation could not be loaded."),
+                      );
+                    }
+                    final messages = chatProv.currentMessages;
+                    return ListView.builder(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.fromLTRB(16, 120, 16, 20),
+                      itemCount: messages.length,
+                      itemBuilder: (context, index) {
+                        return _buildMessageBubble(
+                          messages[index],
+                          authProv.userId,
+                          index,
+                        );
+                      },
+                    );
                   },
                 ),
               ),
@@ -173,11 +207,19 @@ class _DealerChatScreenState extends State<DealerChatScreen> {
     );
   }
 
-  Widget _buildMessageBubble(Map<String, dynamic> message, int index) {
-    final isUser = message['role'] == 'user';
-    final timestamp = DateFormat(
-      'h:mm a',
-    ).format(message['timestamp'] as DateTime);
+  Widget _buildMessageBubble(
+    dynamic message,
+    String? currentUserId,
+    int index,
+  ) {
+    final isUser = message['sender_id'].toString() == currentUserId;
+    DateTime timestampDt;
+    try {
+      timestampDt = DateTime.parse(message['created_at']);
+    } catch (_) {
+      timestampDt = DateTime.now();
+    }
+    final timestamp = DateFormat('h:mm a').format(timestampDt.toLocal());
 
     return AnimatedEntrance(
       delay: const Duration(milliseconds: 50),

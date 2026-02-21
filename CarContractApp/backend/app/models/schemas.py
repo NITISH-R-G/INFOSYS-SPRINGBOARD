@@ -13,6 +13,7 @@ class UserCreate(BaseModel):
     email: EmailStr
     full_name: str = Field(..., min_length=2, max_length=255)
     password: str = Field(..., min_length=8)
+    role: str = Field(default="buyer", pattern="^(buyer|dealer|admin)$")
 
 
 class UserLogin(BaseModel):
@@ -26,6 +27,7 @@ class UserResponse(BaseModel):
     id: int
     email: str
     full_name: str
+    role: str
     is_active: bool
     created_at: datetime
     
@@ -43,6 +45,42 @@ class TokenData(BaseModel):
     """Token payload data"""
     email: Optional[str] = None
     user_id: Optional[int] = None
+    role: Optional[str] = None
+
+
+# ==================== Messaging Schemas ====================
+
+class ConversationCreate(BaseModel):
+    dealer_id: int
+    contract_id: Optional[int] = None
+    subject: Optional[str] = None
+
+class MessageCreate(BaseModel):
+    content: str
+
+class MessageResponse(BaseModel):
+    id: int
+    conversation_id: int
+    sender_id: int
+    content: str
+    is_read: bool
+    created_at: datetime
+    
+    class Config:
+        from_attributes = True
+
+class ConversationResponse(BaseModel):
+    id: int
+    buyer_id: int
+    dealer_id: int
+    contract_id: Optional[int] = None
+    subject: Optional[str] = None
+    created_at: datetime
+    updated_at: datetime
+    messages: Optional[List[MessageResponse]] = None
+    
+    class Config:
+        from_attributes = True
 
 
 # ==================== Contract Schemas ====================

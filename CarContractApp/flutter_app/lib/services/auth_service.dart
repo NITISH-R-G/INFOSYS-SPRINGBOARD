@@ -1,83 +1,70 @@
-import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uuid/uuid.dart';
-import '../models/app_user.dart';
-import '../models/user_role.dart';
-import '../data/database_helper.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-class AuthService extends ChangeNotifier {
-  AppUser? _currentUser;
-  final DatabaseHelper _dbHelper = DatabaseHelper();
-  final _uuid = const Uuid();
+class AuthService {
+  // Update with actual backend URL
+  final String _baseUrl = 'http://127.0.0.1:8000/api/auth';
 
-  AppUser? get currentUser => _currentUser;
-  bool get isLoggedIn => _currentUser != null;
-
-  Future<void> init() async {
-    // Check for persisted session
-    final prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getString('current_user_id');
-
-    if (userId != null) {
-      final db = await _dbHelper.database;
-      final List<Map<String, dynamic>> maps = await db.query(
-        'users',
-        where: 'id = ?',
-        whereArgs: [userId],
+  Future<Map<String, dynamic>?> login(String email, String password) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$_baseUrl/login'),
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: {'username': email, 'password': password},
       );
 
-      if (maps.isNotEmpty) {
-        _currentUser = AppUser.fromMap(maps.first);
-        notifyListeners();
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception('Failed to login: ${response.body}');
       }
+    } catch (e) {
+      throw Exception('Login error: $e');
     }
   }
 
-  Future<void> loginAsClient(String name) async {
-    await _loginOrRegister(name, UserRole.client);
-  }
-
-  Future<void> loginAsDealer(String name) async {
-    await _loginOrRegister(name, UserRole.dealer);
-  }
-
-  Future<void> _loginOrRegister(String name, UserRole role) async {
-    final db = await _dbHelper.database;
-    final email = '${name.toLowerCase().replaceAll(' ', '.')}@example.com';
-
-    // Check if user exists (simplistic "login" by name/email for prototype)
-    final List<Map<String, dynamic>> maps = await db.query(
-      'users',
-      where: 'email = ?',
-      whereArgs: [email],
-    );
-
-    if (maps.isNotEmpty) {
-      _currentUser = AppUser.fromMap(maps.first);
-    } else {
-      // Register new user
-      final newUser = AppUser(
-        id: _uuid.v4(),
-        email: email,
-        name: name,
-        role: role,
+  Future<bool> register(
+    String email,
+    String password,
+    String fullName,
+    String role,
+  ) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$_baseUrl/signup'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'email': email,
+          'password': password,
+          'full_name': fullName,
+          'role': role,
+        }),
       );
 
-      await db.insert('users', newUser.toMap());
-      _currentUser = newUser;
+      if (response.statusCode == 201) {
+        return true;
+      } else {
+        throw Exception('Failed to register: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Registration error: $e');
     }
-
-    // Persist session
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('current_user_id', _currentUser!.id);
-
-    notifyListeners();
   }
 
-  Future<void> logout() async {
-    _currentUser = null;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('current_user_id');
-    notifyListeners();
+  Future<Map<String, dynamic>> getCurrentUser(String token) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$_baseUrl/me'),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception('Failed to get user: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Get user error: $e');
+    }
   }
 }

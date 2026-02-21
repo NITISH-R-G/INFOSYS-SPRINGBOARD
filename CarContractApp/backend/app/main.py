@@ -8,7 +8,7 @@ from contextlib import asynccontextmanager
 
 from .config import settings
 from .database import init_db
-from .routers import contracts, vehicles, negotiations, files
+from .routers import contracts, vehicles, negotiations, files, auth, messaging
 
 
 @asynccontextmanager
@@ -58,10 +58,12 @@ app.add_middleware(
 )
 
 # Include routers
+app.include_router(auth.router)
 app.include_router(contracts.router)
 app.include_router(vehicles.router)
 app.include_router(negotiations.router)
 app.include_router(files.router)
+app.include_router(messaging.router)
 
 
 @app.get("/", tags=["Health"])

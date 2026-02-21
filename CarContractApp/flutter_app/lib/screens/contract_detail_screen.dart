@@ -16,7 +16,7 @@ import '../models/fairness_model.dart';
 import 'negotiation_screen.dart';
 import 'dealer_chat_screen.dart';
 import 'package:provider/provider.dart';
-import '../services/auth_service.dart';
+import '../providers/auth_provider.dart';
 
 class ContractDetailScreen extends StatefulWidget {
   final String contractId;
@@ -163,9 +163,8 @@ class _ContractDetailScreenState extends State<ContractDetailScreen>
 
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context, listen: false);
-    final isDealer =
-        authService.currentUser?.role.toString().contains('dealer') == true;
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final isDealer = authProvider.role?.toString().contains('dealer') == true;
 
     return Scaffold(
       floatingActionButton: Column(

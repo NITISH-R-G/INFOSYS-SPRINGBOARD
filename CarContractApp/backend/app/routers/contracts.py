@@ -11,7 +11,8 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, status
 from sqlalchemy.orm import Session
 
-from ..database import get_db, Contract, Vehicle
+from ..database import get_db, Contract, Vehicle, User
+from ..services.auth_service import get_current_active_user
 from ..config import settings
 from ..models.schemas import (
     ContractUploadResponse, ContractResponse, ContractAnalysisResult,
@@ -38,7 +39,8 @@ def _ensure_upload_dir():
 @router.post("/upload", response_model=ContractUploadResponse)
 async def upload_contract(
     file: UploadFile = File(...),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
 ):
     """
     Upload a contract document (PDF or image)
@@ -82,7 +84,7 @@ async def upload_contract(
     
     # Create database record
     db_contract = Contract(
-        user_id=DEFAULT_USER_ID,
+        user_id=current_user.id,
         filename=file.filename,
         file_path=file_path,
         file_type=file_type,
@@ -106,7 +108,8 @@ async def upload_contract(
 @router.post("/{contract_id}/analyze", response_model=ContractResponse)
 async def analyze_contract(
     contract_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
 ):
     """
     Analyze an uploaded contract using AI
@@ -115,7 +118,8 @@ async def analyze_contract(
     """
     # Get contract
     contract = db.query(Contract).filter(
-        Contract.id == contract_id
+        Contract.id == contract_id,
+        Contract.user_id == current_user.id
     ).first()
     
     if not contract:
@@ -275,13 +279,15 @@ async def analyze_contract(
 @router.get("/{contract_id}", response_model=ContractResponse)
 async def get_contract(
     contract_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
 ):
     """
     Get a contract by ID with analysis results
     """
     contract = db.query(Contract).filter(
-        Contract.id == contract_id
+        Contract.id == contract_id,
+        Contract.user_id == current_user.id
     ).first()
     
     if not contract:
@@ -297,12 +303,15 @@ async def get_contract(
 async def list_contracts(
     skip: int = 0,
     limit: int = 20,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
 ):
     """
     List all contracts
     """
-    contracts = db.query(Contract).order_by(
+    contracts = db.query(Contract).filter(
+        Contract.user_id == current_user.id
+    ).order_by(
         Contract.created_at.desc()
     ).offset(skip).limit(limit).all()
     
@@ -312,13 +321,15 @@ async def list_contracts(
 @router.delete("/{contract_id}")
 async def delete_contract(
     contract_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
 ):
     """
     Delete a contract
     """
     contract = db.query(Contract).filter(
-        Contract.id == contract_id
+        Contract.id == contract_id,
+        Contract.user_id == current_user.id
     ).first()
     
     if not contract:
@@ -370,14 +381,16 @@ async def analyze_text(
 @router.post("/compare", response_model=ContractCompareResponse)
 async def compare_contracts(
     request: ContractCompareRequest,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
 ):
     """
     Compare multiple contracts side-by-side
     """
     # Fetch all contracts
     contracts = db.query(Contract).filter(
-        Contract.id.in_(request.contract_ids)
+        Contract.id.in_(request.contract_ids),
+        Contract.user_id == current_user.id
     ).all()
     
     if len(contracts) != len(request.contract_ids):

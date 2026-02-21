@@ -4,7 +4,7 @@ import '../widgets/glass_card.dart';
 import '../services/api_service.dart';
 import '../models/contract.dart';
 import 'package:provider/provider.dart';
-import '../services/auth_service.dart';
+import '../providers/auth_provider.dart';
 
 class DealerDashboardScreen extends StatefulWidget {
   const DealerDashboardScreen({super.key});
@@ -48,7 +48,7 @@ class _DealerDashboardScreenState extends State<DealerDashboardScreen> {
         leading: IconButton(
           icon: const Icon(Icons.logout),
           onPressed: () {
-            Provider.of<AuthService>(context, listen: false).logout();
+            Provider.of<AuthProvider>(context, listen: false).logout();
             Navigator.pushReplacementNamed(context, '/');
           },
         ),
