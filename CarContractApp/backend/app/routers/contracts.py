@@ -363,7 +363,6 @@ async def analyze_contract(
                         
                         new_score, new_explanation = ScoringEngine.calculate_score(
                             sla=updated_sla,
-                            risks=current_flags,
                             contract_type=contract.contract_type
                         )
                         

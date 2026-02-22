@@ -304,7 +304,7 @@ class _LandingScreenState extends State<LandingScreen>
       ('SLA Extraction', Icons.analytics_outlined),
       ('Fairness Score', Icons.balance),
       ('VIN Lookup', Icons.directions_car),
-      ('AI Negotiation', Icons.chat_bubble_outline),
+      ('Risk Strategy', Icons.analytics_outlined),
     ];
 
     return AnimatedBuilder(

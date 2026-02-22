@@ -3,8 +3,9 @@ Scoring Engine
 Deterministic logical scoring for car contracts
 Includes structured Risk Assessment Framework (Gap 5)
 """
-from ..models.schemas import SLAData, RedFlag
+from ..models.schemas import SLAData, RedFlag, DCFSFeatures
 from typing import List, Tuple, Dict, Any, Optional
+import math
 
 
 # ==================== Automotive Benchmarks ====================
@@ -45,80 +46,114 @@ class AutoBenchmarks:
 class ScoringEngine:
 
     @staticmethod
-    def calculate_score(sla: SLAData, risks: List[RedFlag], contract_type: str = "loan") -> Tuple[int, str]:
+    def calculate_score(sla: SLAData, contract_type: str = "loan", dcfs_features: Optional[DCFSFeatures] = None) -> Tuple[int, str]:
         """
-        Calculate a deterministic fairness score (0-100)
-        Returns: (score, explanation)
+        Calculate the Deterministic Contract Fairness Score (DCFS).
+        Uses geometric product of subscores and logistic compression to prevent ceiling saturation.
         """
-        score = 100
-        penalties = []
+        if not dcfs_features:
+            # Fallback if no DCFS features provided (e.g. legacy tests)
+            return 60, "Neutral Deal (Missing DCFS Features)"
 
-        # 1. APR / Rent Charge Impact (Weight: 30)
+        epsilon = 0.01
+
+        # 1. Obligation Balance Score (OBS)
+        oc = dcfs_features.consumer_obligations_count
+        op = dcfs_features.provider_obligations_count
+        obs = 1.0 - (abs(oc - op) / max((oc + op + epsilon), 1.0))
+
+        # 2. Liability Symmetry Score (LSS)
+        lc = dcfs_features.consumer_liabilities_count
+        lp = dcfs_features.provider_liabilities_count
+        lss = 1.0 - (abs(lc - lp) / max((lc + lp + epsilon), 1.0))
+
+        # 3. Termination Fairness Score (TFS)
+        tc = dcfs_features.consumer_termination_rights_score
+        tp = dcfs_features.provider_termination_rights_score
+        tfs = min(tc / (tp + epsilon), 1.0)
+
+        # 4. Penalty Severity Modifier (PSM)
+        penalty_intensity = dcfs_features.penalty_intensity_score
+        k1 = 0.5  # Decay constant
+        psm = math.exp(-k1 * penalty_intensity)
+
+        # 5. Hidden Risk Modifier (HRM)
+        hidden_risk = dcfs_features.hidden_risk_index
+        k2 = 0.5  # Decay constant
+        hrm = math.exp(-k2 * hidden_risk)
+
+        # 6. Protection Coverage Score (PCS)
+        protections = dcfs_features.protection_clauses_extracted
+        expected = dcfs_features.expected_protections_baseline
+        pcs = min(protections / max(expected, 1), 1.0)
+
+        # Base Economic Modifiers (APR & Fees)
+        # We integrate the objective financial metrics into the HRM and PSM mathematically
+        financial_penalty = 0.0
+        
         if sla.apr is not None:
             diff = sla.apr - AutoBenchmarks.APR_NEW_GOOD
             if diff > 0:
-                points = min(30, int(diff * 5))
-                score -= points
-                penalties.append(f"High APR ({sla.apr}%) reduced score by {points} pts")
-
-        # 2. Hidden Fees Impact (Weight: 20)
-        if sla.documentation_fee and sla.documentation_fee > AutoBenchmarks.DOC_FEE_MAX:
-            score -= 10
-            penalties.append("Excessive documentation fee")
-
-        if contract_type == "lease":
-            if sla.acquisition_fee and sla.acquisition_fee > AutoBenchmarks.ACQUISITION_FEE_MAX:
-                score -= 5
-                penalties.append("High acquisition fee")
-            if sla.disposition_fee and sla.disposition_fee > AutoBenchmarks.DISPOSITION_FEE_MAX:
-                score -= 5
-                penalties.append("High disposition fee")
-
-        # 3. Risk Flag Impact (Weight: 50)
-        risk_counts = {"high": 0, "medium": 0, "low": 0}
-
-        for flag in risks:
-            level = flag.risk_level.lower()
-            if level == "high":
-                score -= 15
-                risk_counts["high"] += 1
-            elif level == "medium":
-                score -= 8
-                risk_counts["medium"] += 1
-            elif level == "low":
-                score -= 2
-                risk_counts["low"] += 1
-
-        if risk_counts["high"] > 0:
-            penalties.append(f"{risk_counts['high']} high-risk clauses detected")
-
-        # 4. Market Value Impact (Price-to-Value)
+                financial_penalty += diff * 0.5  # Adds to penalty intensity
+            elif diff < 0:
+                pcs = min(pcs + abs(diff) * 0.1, 1.0) # Bonus to protection coverage
+                
+        # Market Value Penalty
         if sla.market_value and sla.buyout_price:
             ratio = sla.buyout_price / sla.market_value
-            if ratio > 1.10:
-                overage_pct = int(round((ratio - 1.0) * 100))
-                points = min(25, (overage_pct - 10) * 2)
-                score -= points
-                penalties.append(f"Price is {overage_pct}% above market value")
-            elif ratio < 0.90:
-                score += 5
+            if ratio > 1.05:
+                financial_penalty += (ratio - 1.0) * 10.0 # Adds to penalty severity
 
-        elif sla.market_value and contract_type == "lease" and sla.monthly_payment and sla.term_months:
-            pass  # Complex lease cost vs market — skipped for simplicity
+        # Add the derived financial penalty into the PSM
+        psm = math.exp(-k1 * (penalty_intensity + financial_penalty))
 
-        # Clamp score
-        final_score = max(0, min(100, score))
+        # --- Geometric Composite ---
+        # Weights
+        w_obs = 2.0
+        w_lss = 2.0
+        w_tfs = 1.5
+        w_psm = 2.5
+        w_hrm = 2.5
+        w_pcs = 0.8
+        
+        sum_weights = w_obs + w_lss + w_tfs + w_psm + w_hrm + w_pcs
 
-        # Generate Explanation
-        if final_score >= 90 and not penalties:
-            explanation = "Excellent Deal. Terms are competitive with minimal risks."
-        elif final_score >= 70:
-            base = "Good Deal" if final_score >= 80 else "Fair Deal"
-            explanation = f"{base}. " + "; ".join(penalties[:2]) if penalties else f"{base}. Standard terms."
+        product = (
+            math.pow(max(obs, epsilon), w_obs) *
+            math.pow(max(lss, epsilon), w_lss) *
+            math.pow(max(tfs, epsilon), w_tfs) *
+            math.pow(max(psm, epsilon), w_psm) *
+            math.pow(max(hrm, epsilon), w_hrm) *
+            math.pow(max(pcs, epsilon), w_pcs)
+        )
+        
+        # Weighted geometric mean prevents overwhelming exponential decay
+        raw_fairness = math.pow(product, 1.0 / sum_weights)
+
+        # --- Logistic Compression ---
+        # Maps raw_fairness [0..~1] into a smooth [0..100] scale, anchoring mid-tier
+        a = 6.0
+        b = 0.55
+        
+        final_normalized = 100.0 / (1.0 + math.exp(-a * (raw_fairness - b)))
+        final_score = int(round(max(0.0, min(100.0, final_normalized))))
+
+        # Generate Explanation based on dominating factors
+        explanations = []
+        if final_score >= 80:
+            explanations.append("Excellent Fairness. Symmetric obligations and low penalty risks.")
+        elif final_score >= 60:
+            explanations.append("Standard Contract. Moderate structural fairness.")
         else:
-            explanation = "Poor Deal. " + "; ".join(penalties[:3])
+            explanations.append("High Risk Contract.")
+            if psm < 0.5:
+                explanations.append("Severe penalty or financial intensity detected.")
+            if hrm < 0.5:
+                explanations.append("High ambiguity or hidden risks.")
+            if obs < 0.5 or lss < 0.5:
+                explanations.append("Highly asymmetric liability/obligations favoring the provider.")
 
-        return final_score, explanation
+        return final_score, " ".join(explanations)
 
     # ==================== Structured Risk Assessment (Gap 5) ====================
 

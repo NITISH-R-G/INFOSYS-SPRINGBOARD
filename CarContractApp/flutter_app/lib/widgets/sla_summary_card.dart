@@ -11,10 +11,7 @@ class SlaSummaryCard extends StatelessWidget {
 
   String _formatCurrency(double? value, String currencyCode) {
     if (value == null) return 'N/A';
-    final format = NumberFormat.currency(
-      symbol: currencyCode == 'INR' ? '₹' : '\$',
-      decimalDigits: 0,
-    );
+    final format = NumberFormat.currency(symbol: '₹', decimalDigits: 0);
     return format.format(value);
   }
 

@@ -109,6 +109,25 @@ class ApiService {
     }
   }
 
+  // ==================== Full Stack V1 API ====================
+
+  static Future<Map<String, dynamic>> analyzeContractV1(
+    String contractText,
+  ) async {
+    try {
+      final headers = await _authHeaders();
+      final response = await http.post(
+        Uri.parse('$apiUrl/v1/contract-analysis'),
+        headers: headers,
+        body: jsonEncode({"contract_text": contractText}),
+      );
+      return _handleResponse(response);
+    } catch (e) {
+      if (e is ApiException || e is AuthExpiredException) rethrow;
+      throw ApiException('Error analyzing V1 contract: $e');
+    }
+  }
+
   static Future<List<Map<String, dynamic>>> getContracts() async {
     try {
       final headers = await _authHeaders();
@@ -245,7 +264,7 @@ class ApiService {
     try {
       final headers = await _authHeaders();
       final response = await http.post(
-        Uri.parse('$baseUrl/negotiations/generate-email'),
+        Uri.parse('$baseUrl/negotiate/generate-email'),
         headers: headers,
         body: jsonEncode({
           'contract_id': int.tryParse(contractId) ?? 0,
@@ -265,7 +284,7 @@ class ApiService {
     try {
       final headers = await _authHeaders();
       final response = await http.get(
-        Uri.parse('$baseUrl/negotiations/strategy/$contractId'),
+        Uri.parse('$baseUrl/negotiate/strategy/$contractId'),
         headers: headers,
       );
       return _handleResponse(response);
@@ -279,7 +298,7 @@ class ApiService {
     try {
       final headers = await _authHeaders();
       final response = await http.get(
-        Uri.parse('$baseUrl/negotiations/tips'),
+        Uri.parse('$baseUrl/negotiate/tips'),
         headers: headers,
       );
       final data = _handleResponse(response);

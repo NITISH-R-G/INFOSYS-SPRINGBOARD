@@ -9,7 +9,7 @@ from contextlib import asynccontextmanager
 
 from .config import settings
 from .database import init_db
-from .routers import contracts, vehicles, negotiations, files, auth, messaging, ws, intake, audit, magic_link
+from .routers import contracts, vehicles, negotiations, files, auth, messaging, ws, intake, audit, magic_link, v1_api
 from .exceptions import AppException, app_exception_handler, global_exception_handler
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
@@ -78,6 +78,7 @@ app.include_router(ws.router)
 app.include_router(intake.router)
 app.include_router(audit.router)
 app.include_router(magic_link.router)
+app.include_router(v1_api.router)
 
 
 @app.get("/", tags=["Health"])

@@ -2,9 +2,13 @@
 Price Estimation Service
 Estimates vehicle fair market value using available data sources
 """
-from typing import Optional, Dict, Any
 import httpx
+import asyncio
+from typing import Optional, Dict, Any, List
 from ..config import settings
+from .pricing_adapters import (
+    EdmundsAdapter, TrueCarAdapter, AutoTraderAdapter, OpenDataSoftAdapter
+)
 
 
 class PriceService:
@@ -58,6 +62,10 @@ class PriceService:
     
     def __init__(self):
         self.current_year = 2026  # Current year
+        self.edmunds = EdmundsAdapter()
+        self.truecar = TrueCarAdapter()
+        self.autotrader = AutoTraderAdapter()
+        self.opendata_soft = OpenDataSoftAdapter()
     
     async def estimate_price(
         self,
@@ -273,52 +281,81 @@ class PriceService:
         condition: str = "good"
     ) -> Dict[str, Any]:
         """
-        Generate a structured price recommendation with fair price range.
-        
-        Maps to price_recommendations table fields:
-          fair_price_low, fair_price_high, msrp, basis, methodology
-        
-        Returns:
-            Dict matching PriceRecommendationResponse schema
+        Generate an aggregated price recommendation using external APIs and algorithmic fallback.
         """
-        # Get base estimate
-        estimate = await self.estimate_price(make, model, year, mileage, trim, condition)
+        # 1. Get algorithmic base estimate
+        algo_estimate = await self.estimate_price(make, model, year, mileage, trim, condition)
         
-        # Calculate MSRP estimate (before depreciation)
         base_msrp = self._get_base_value(make, model, trim)
         brand_mult = self.PREMIUM_BRANDS.get(make, 1.0)
         estimated_msrp = round(base_msrp * brand_mult, -2)
         
-        age = max(0, self.current_year - year)
-        depreciation_rate = self._get_depreciation_rate(age)
+        # 2. Run pricing adapters concurrently
+        tasks = [
+            self.edmunds.fetch_price_data(make, model, year),
+            self.truecar.fetch_price_data(make, model, year),
+            self.autotrader.fetch_price_data(make, model, year),
+            self.opendata_soft.fetch_price_data(make, model, year)
+        ]
         
-        # Build methodology explanation
-        factors = [f"Base segment MSRP (${base_msrp:,.0f})"]
-        if make in self.PREMIUM_BRANDS:
-            factors.append(f"Premium brand multiplier ({brand_mult}x)")
-        factors.append(f"Depreciation for {age} year(s) ({depreciation_rate:.0%} retained)")
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+        
+        # 3. Aggregate data points
+        market_averages = [algo_estimate['estimated_value_avg']]
+        data_sources_used = ["Algorithmic"]
+        
+        edmunds_res = results[0]
+        if not isinstance(edmunds_res, Exception) and "estimated_market_value" in edmunds_res:
+            market_averages.append(edmunds_res["estimated_market_value"])
+            data_sources_used.append("Edmunds")
+            
+        truecar_res = results[1]
+        if not isinstance(truecar_res, Exception) and "market_average" in truecar_res:
+            market_averages.append(truecar_res["market_average"])
+            data_sources_used.append("TrueCar")
+            
+        autotrader_res = results[2]
+        if not isinstance(autotrader_res, Exception) and "average_listing_price" in autotrader_res:
+            market_averages.append(autotrader_res["average_listing_price"] * 0.95) # Reduce retail to market
+            data_sources_used.append("AutoTrader")
+            
+        opendata_res = results[3]
+        if not isinstance(opendata_res, Exception) and "msrp" in opendata_res and opendata_res["msrp"] > 0:
+            estimated_msrp = opendata_res["msrp"]
+            data_sources_used.append("OpenDataSoft")
+            
+        # 4. Calculate Final Aggregated Values
+        aggregated_avg = sum(market_averages) / len(market_averages)
+        
+        # Final bounds based on aggregated average
+        condition_mult = self._get_condition_multiplier(condition)
+        fair_low = round((aggregated_avg * 0.92) * condition_mult, -2)
+        fair_high = round((aggregated_avg * 1.08) * condition_mult, -2)
+        
+        # Ensure logical bounds
+        fair_low = max(fair_low, 1000)
+        fair_high = max(fair_high, fair_low + 500)
+        
+        methodology = f"Aggregated from {len(data_sources_used)} sources: {', '.join(data_sources_used)}."
         if mileage is not None:
-            mileage_adj = self._calculate_mileage_adjustment(mileage, age)
-            factors.append(f"Mileage adjustment ({mileage:,} miles: {mileage_adj:.2f}x)")
-        factors.append(f"Condition adjustment ({condition})")
-        
-        methodology = " → ".join(factors) + f" → Fair range: ${estimate['estimated_value_low']:,.0f} – ${estimate['estimated_value_high']:,.0f}"
-        
+             methodology += f" Adjusted for {mileage:,} miles."
+             
         vehicle_summary = f"{year} {make} {model}"
         if trim:
             vehicle_summary += f" {trim}"
         if mileage:
             vehicle_summary += f" ({mileage:,} miles)"
-        
+            
         return {
-            "fair_price_low": estimate["estimated_value_low"],
-            "fair_price_high": estimate["estimated_value_high"],
-            "msrp": estimated_msrp,
-            "estimated_avg": estimate["estimated_value_avg"],
-            "basis": f"Algorithmic estimate based on segment pricing, {age}-year depreciation, brand positioning, and condition assessment",
+            "fair_price_low": float(fair_low),
+            "fair_price_high": float(fair_high),
+            "msrp": float(estimated_msrp),
+            "estimated_avg": float(aggregated_avg * condition_mult),
+            "basis": f"Synthesized pricing utilizing {len(data_sources_used)} external APIs with algorithmic smoothing",
             "methodology": methodology,
-            "confidence": estimate["confidence"],
-            "vehicle_summary": vehicle_summary
+            "confidence": "high" if len(data_sources_used) >= 3 else algo_estimate["confidence"],
+            "vehicle_summary": vehicle_summary,
+            "data_sources": data_sources_used
         }
 
 

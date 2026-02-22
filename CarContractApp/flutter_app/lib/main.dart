@@ -6,7 +6,7 @@ import 'screens/dashboard_screen.dart';
 import 'screens/upload_screen.dart';
 import 'screens/contract_detail_screen.dart';
 import 'screens/vin_lookup_screen.dart';
-import 'screens/negotiation_screen.dart';
+import 'screens/risk_strategy_screen.dart';
 import 'screens/comparison_screen.dart';
 import 'screens/comparison_dashboard_screen.dart';
 import 'screens/dealer_dashboard_screen.dart';
@@ -15,10 +15,12 @@ import 'screens/dealer_chat_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/signup_screen.dart';
 import 'screens/audit_screen.dart';
+import 'screens/macos_dashboard_screen.dart';
 
 import 'package:provider/provider.dart';
 import 'providers/auth_provider.dart';
 import 'providers/chat_provider.dart';
+import 'providers/analysis_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +37,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => ChatProvider()),
+        ChangeNotifierProvider(create: (_) => AnalysisProvider()),
       ],
       child: const ContractAIApp(),
     ),
@@ -58,12 +61,13 @@ class ContractAIApp extends StatelessWidget {
         '/dashboard': (context) => const DashboardScreen(),
         '/upload': (context) => const UploadScreen(),
         '/vin-lookup': (context) => const VinLookupScreen(),
-        '/negotiate': (context) => const NegotiationScreen(),
+        '/negotiate': (context) => const RiskStrategyScreen(),
         '/dealer_chat': (context) => const DealerChatScreen(),
         '/comparison-dashboard': (context) => const ComparisonDashboardScreen(),
         '/dealer/dashboard': (context) => const DealerDashboardScreen(),
         '/dealer/offer-builder': (context) => const OfferBuilderScreen(),
         '/audit': (context) => const AuditScreen(),
+        '/macos-dashboard': (context) => const MacosDashboardScreen(),
       },
       onGenerateRoute: (settings) {
         // Handle dynamic routes like /contract/:id

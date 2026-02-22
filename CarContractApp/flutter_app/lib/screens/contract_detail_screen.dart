@@ -13,7 +13,7 @@ import '../widgets/fair_price_card.dart';
 import '../widgets/fairness_score_card.dart';
 import '../models/valuation_model.dart';
 import '../models/fairness_model.dart';
-import 'negotiation_screen.dart';
+import 'risk_strategy_screen.dart';
 import 'dealer_chat_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
@@ -137,7 +137,7 @@ class _ContractDetailScreenState extends State<ContractDetailScreen>
     if (value == null || value == 'Not Mentioned') return 'N/A';
     // If it's already a formatted string or text formula, return as is
     if (value is String &&
-        (value.contains('\$') ||
+        (value.contains('₹') ||
             value.contains('₹') ||
             value.contains('Formula'))) {
       return value;
@@ -155,10 +155,7 @@ class _ContractDetailScreenState extends State<ContractDetailScreen>
 
     if (val == null) return 'N/A';
 
-    final format = NumberFormat.currency(
-      symbol: currencyCode == 'INR' ? '₹' : '\$',
-      decimalDigits: 0,
-    );
+    final format = NumberFormat.currency(symbol: '₹', decimalDigits: 0);
     return format.format(val);
   }
 
@@ -276,12 +273,12 @@ class _ContractDetailScreenState extends State<ContractDetailScreen>
             ],
           ),
         IconButton(
-          icon: const Icon(Icons.chat_bubble_outline),
+          icon: const Icon(Icons.analytics_outlined),
           onPressed: () => Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  NegotiationScreen(contractId: widget.contractId),
+                  RiskStrategyScreen(contractId: widget.contractId),
             ),
           ),
         ),

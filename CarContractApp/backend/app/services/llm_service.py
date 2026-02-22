@@ -210,6 +210,21 @@ Also include a top-level "missing_sections" list and a "summary" (summarize main
 
 IMPORTANT: Detect the `currency_code` (e.g. INR, USD) from context and add it to the top level.
 
+CRITICAL: You must extract Deterministic Contract Fairness Score (DCFS) features based strictly on the text logic.
+Include a top-level key "dcfs_features" matching this schema:
+{{
+  "consumer_obligations_count": int (count explicit duties of consumer),
+  "provider_obligations_count": int (count explicit duties of provider),
+  "consumer_liabilities_count": int (count scenarios where consumer pays damages/indemnifies),
+  "provider_liabilities_count": int (count scenarios where provider pays damages),
+  "consumer_termination_rights_score": float (0.0 to 1.0 based on ease of consumer exit),
+  "provider_termination_rights_score": float (0.0 to 1.0 based on ease of provider exit),
+  "penalty_intensity_score": float (0.0 to 10.0 based on severity of late fees/acceleration/repossession),
+  "hidden_risk_index": float (0.0 to 10.0 based on ambiguous language, hidden fees, undefined terms),
+  "protection_clauses_extracted": int (count explicit consumer protections)
+}}
+Do NOT generate or hallucinate numbers; strictly map them from semantic observations in the text.
+
 CONTRACT TEXT:
 ---
 {contract_text}
@@ -220,7 +235,7 @@ CONTRACT TEXT:
     def _parse_analysis_response(self, response_text: str) -> ContractAnalysisResult:
         """Parse LLM response and calculate deterministic score"""
         from .scoring_engine import ScoringEngine  # Import here to avoid circular dep
-        from ..models.schemas import DetailedAnalysis, RedFlag, SLAData
+        from ..models.schemas import DetailedAnalysis, RedFlag, SLAData, DCFSFeatures
         
         try:
             # Clean up response
@@ -317,10 +332,23 @@ CONTRACT TEXT:
                     red_flags_objs.append(rf_obj)
                     red_flags_raw.append(rf_obj.model_dump())
             
+            # Map DCFS Features
+            dcfs_raw = data.get("dcfs_features", {})
+            dcfs_features = DCFSFeatures(
+                consumer_obligations_count=int(dcfs_raw.get("consumer_obligations_count", 0)),
+                provider_obligations_count=int(dcfs_raw.get("provider_obligations_count", 0)),
+                consumer_liabilities_count=int(dcfs_raw.get("consumer_liabilities_count", 0)),
+                provider_liabilities_count=int(dcfs_raw.get("provider_liabilities_count", 0)),
+                consumer_termination_rights_score=float(dcfs_raw.get("consumer_termination_rights_score", 0.0)),
+                provider_termination_rights_score=float(dcfs_raw.get("provider_termination_rights_score", 0.0)),
+                penalty_intensity_score=float(dcfs_raw.get("penalty_intensity_score", 0.0)),
+                hidden_risk_index=float(dcfs_raw.get("hidden_risk_index", 0.0)),
+                protection_clauses_extracted=int(dcfs_raw.get("protection_clauses_extracted", 0))
+            )
+            
             # Calculate Deterministic Fairness Score
             fairness_score, fairness_explanation = ScoringEngine.calculate_score(
                 sla=sla_data,
-                risks=red_flags_objs,
                 contract_type=data.get("contract_type", "lease") 
             )
             
@@ -331,7 +359,8 @@ CONTRACT TEXT:
                 red_flags=red_flags_raw,
                 confidence_score=data.get("confidence_score", 50),
                 contract_type=data.get("contract_type", "lease"),
-                detailed_analysis=detailed
+                detailed_analysis=detailed,
+                dcfs_features=dcfs_features
             )
             
         except json.JSONDecodeError as e:

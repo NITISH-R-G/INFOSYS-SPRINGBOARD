@@ -237,10 +237,10 @@ class _ComparisonScreenState extends State<ComparisonScreen> {
 
     switch (term) {
       case 'Monthly Payment':
-        value = '\$${sla?.monthlyPayment?.toStringAsFixed(0) ?? 'N/A'}';
+        value = '₹${sla?.monthlyPayment?.toStringAsFixed(0) ?? 'N/A'}';
         break;
       case 'Down Payment':
-        value = '\$${sla?.downPayment?.toStringAsFixed(0) ?? 'N/A'}';
+        value = '₹${sla?.downPayment?.toStringAsFixed(0) ?? 'N/A'}';
         break;
       case 'APR':
         value = '${sla?.apr?.toStringAsFixed(2) ?? 'N/A'}%';
@@ -252,7 +252,7 @@ class _ComparisonScreenState extends State<ComparisonScreen> {
         value = '${sla?.mileageLimit ?? 'N/A'}';
         break;
       case 'Buyout Price':
-        value = '\$${sla?.buyoutPrice?.toStringAsFixed(0) ?? 'N/A'}';
+        value = '₹${sla?.buyoutPrice?.toStringAsFixed(0) ?? 'N/A'}';
         break;
       case 'Fairness Score':
         final score = contract.analysis?.fairnessScore ?? 0;

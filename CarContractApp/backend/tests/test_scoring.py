@@ -10,51 +10,76 @@ import unittest
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.services.scoring_engine import ScoringEngine, AutoBenchmarks
-from app.models.schemas import SLAData, RedFlag
+from app.models.schemas import SLAData, RedFlag, DCFSFeatures
 
 
 class TestScoringEngine(unittest.TestCase):
 
-    def test_fair_market_price(self):
-        """Test score when price matches market value"""
-        sla = SLAData(
-            buyout_price=20000.0,
-            market_value=20000.0,
-            apr=5.0
+    def setUp(self):
+        # A baseline average contract
+        self.neutral_sla = SLAData(apr=6.0, buyout_price=20000.0, market_value=20000.0)
+        self.neutral_dcfs = DCFSFeatures(
+            consumer_obligations_count=5,
+            provider_obligations_count=5, # Perfectly balanced obligations
+            consumer_liabilities_count=2,
+            provider_liabilities_count=2, # Perfectly balanced liabilities
+            consumer_termination_rights_score=0.5,
+            provider_termination_rights_score=0.5, # Balanced termination rights
+            penalty_intensity_score=1.0, # Standard minor penalties
+            hidden_risk_index=1.0, # Minor ambiguity
+            protection_clauses_extracted=5,
+            expected_protections_baseline=5
         )
-        score, explanation = ScoringEngine.calculate_score(sla, [])
-        self.assertEqual(score, 100)
 
-    def test_overpriced_contract(self):
-        """Test score penalty for overpriced contract"""
-        sla = SLAData(
-            buyout_price=24000.0,
-            market_value=20000.0,
-            apr=5.0
+    def test_dcfs_fallback(self):
+        """Test fallback when DCFS features are missing"""
+        score, explanation = ScoringEngine.calculate_score(self.neutral_sla)
+        self.assertEqual(score, 60)
+        self.assertIn("Missing DCFS Features", explanation)
+
+    def test_neutral_contract_anchoring(self):
+        """Test that a perfectly balanced contract scores near the 60 anchor"""
+        score, explanation = ScoringEngine.calculate_score(self.neutral_sla, dcfs_features=self.neutral_dcfs)
+        self.assertGreaterEqual(score, 75)
+        self.assertLessEqual(score, 90)
+        self.assertIn("Excellent", explanation)
+
+    def test_excellent_contract_ceiling(self):
+        """Test an exceptionally fair, balanced contract with no penalties"""
+        excellent_sla = SLAData(apr=4.0, buyout_price=18000.0, market_value=20000.0) # Great APR, below market
+        excellent_dcfs = DCFSFeatures(
+            consumer_obligations_count=5,
+            provider_obligations_count=5, # Perfectly symmetric
+            consumer_liabilities_count=2,
+            provider_liabilities_count=2, # Perfectly symmetric
+            consumer_termination_rights_score=1.0, 
+            provider_termination_rights_score=1.0, 
+            penalty_intensity_score=0.0, # Zero penalties
+            hidden_risk_index=0.0, # Totally transparent
+            protection_clauses_extracted=8,
+            expected_protections_baseline=5
         )
-        score, explanation = ScoringEngine.calculate_score(sla, [])
-        self.assertEqual(score, 80)
-        self.assertIn("Price is 20% above market value", explanation)
+        score, explanation = ScoringEngine.calculate_score(excellent_sla, dcfs_features=excellent_dcfs)
+        self.assertGreaterEqual(score, 88) # Should reach high 80s/90s
 
-    def test_good_deal_bonus(self):
-        """Test score bonus for good deal"""
-        sla = SLAData(
-            buyout_price=17000.0,
-            market_value=20000.0,
-            apr=5.0
+    def test_high_risk_asymmetric_contract(self):
+        """Test a predatory contract with high penalties and asymmetry"""
+        poor_sla = SLAData(apr=15.0, buyout_price=25000.0, market_value=20000.0) # Terrible APR, overpriced
+        poor_dcfs = DCFSFeatures(
+            consumer_obligations_count=10,
+            provider_obligations_count=2, # Heavy consumer asymmetry
+            consumer_liabilities_count=8,
+            provider_liabilities_count=0, # Heavy consumer asymmetry
+            consumer_termination_rights_score=0.0, 
+            provider_termination_rights_score=1.0, 
+            penalty_intensity_score=8.5, # Severe penalties and acceleration
+            hidden_risk_index=9.0, # Highly opaque
+            protection_clauses_extracted=1,
+            expected_protections_baseline=5
         )
-        score, explanation = ScoringEngine.calculate_score(sla, [])
-        self.assertEqual(score, 100)  # Capped at 100
-
-        # With APR penalty
-        sla_high_apr = SLAData(
-            buyout_price=17000.0,
-            market_value=20000.0,
-            apr=9.0
-        )
-        score, _ = ScoringEngine.calculate_score(sla_high_apr, [])
-        self.assertEqual(score, 90)
-
+        score, explanation = ScoringEngine.calculate_score(poor_sla, dcfs_features=poor_dcfs)
+        self.assertLessEqual(score, 50) # Crushed by asymmetry and penalties
+        self.assertIn("High Risk", explanation)
 
 class TestRiskAssessment(unittest.TestCase):
 

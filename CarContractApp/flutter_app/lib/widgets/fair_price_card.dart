@@ -67,8 +67,8 @@ class FairPriceCard extends StatelessWidget {
             // The Delta
             Text(
               isOverpriced
-                  ? "+\$${priceDelta.toStringAsFixed(0)} above market average"
-                  : "-\$${priceDelta.abs().toStringAsFixed(0)} below market average",
+                  ? "+₹${priceDelta.toStringAsFixed(0)} above market average"
+                  : "-₹${priceDelta.abs().toStringAsFixed(0)} below market average",
               style: TextStyle(
                 color: isOverpriced
                     ? Colors.red.shade700
@@ -81,7 +81,7 @@ class FairPriceCard extends StatelessWidget {
 
             // Visual Timeline/Bar (Simple representation)
             Text(
-              'Fair Range: \$${fairRangeLow.toStringAsFixed(0)} - \$${fairRangeHigh.toStringAsFixed(0)}',
+              'Fair Range: ₹${fairRangeLow.toStringAsFixed(0)} - ₹${fairRangeHigh.toStringAsFixed(0)}',
               style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
             ),
             const SizedBox(height: 8),
@@ -151,7 +151,7 @@ class FairPriceCard extends StatelessWidget {
       children: [
         Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12)),
         Text(
-          '\$${price.toStringAsFixed(2)}',
+          '₹${price.toStringAsFixed(2)}',
           style: TextStyle(
             color: color,
             fontWeight: FontWeight.bold,

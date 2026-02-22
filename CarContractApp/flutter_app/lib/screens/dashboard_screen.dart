@@ -6,6 +6,7 @@ import '../models/contract.dart';
 import '../animations/animations.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
+import 'package:intl/intl.dart';
 
 /// ============================================================
 /// DASHBOARD SCREEN
@@ -183,19 +184,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              IconButton(
-                                icon: const Icon(Icons.logout),
-                                onPressed: () {
-                                  Provider.of<AuthProvider>(
-                                    context,
-                                    listen: false,
-                                  ).logout();
-                                  Navigator.pushReplacementNamed(context, '/');
-                                },
-                                color: AppTheme.textPrimary,
-                              ),
-                              const Spacer(),
                               PhysicsTapButton(
                                 onTap: () =>
                                     Navigator.pushNamed(context, '/vin-lookup'),
@@ -211,6 +201,33 @@ class _DashboardScreenState extends State<DashboardScreen>
                                   child: const Icon(
                                     Icons.search,
                                     color: AppTheme.textPrimary,
+                                    size: 22,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              PhysicsTapButton(
+                                onTap: () {
+                                  Provider.of<AuthProvider>(
+                                    context,
+                                    listen: false,
+                                  ).logout();
+                                  Navigator.pushReplacementNamed(context, '/');
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.accentRed.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                      color: AppTheme.accentRed.withOpacity(
+                                        0.3,
+                                      ),
+                                    ),
+                                  ),
+                                  child: const Icon(
+                                    Icons.logout,
+                                    color: AppTheme.accentRed,
                                     size: 22,
                                   ),
                                 ),
@@ -422,6 +439,17 @@ class _DashboardScreenState extends State<DashboardScreen>
   final Set<String> _selectedIds = {};
   bool _isSelectionMode = false;
 
+  void _enterCompareMode(String id) {
+    setState(() {
+      _isSelectionMode = true;
+      _selectedIds.clear();
+      _selectedIds.add(id);
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Select a second contract to compare')),
+    );
+  }
+
   void _toggleSelection(String id) {
     setState(() {
       if (_selectedIds.contains(id)) {
@@ -430,9 +458,7 @@ class _DashboardScreenState extends State<DashboardScreen>
       } else {
         if (_selectedIds.length < 2) {
           _selectedIds.add(id);
-          _isSelectionMode = true;
         } else {
-          // Max 2 for now
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Select exactly 2 contracts to compare'),
@@ -457,9 +483,170 @@ class _DashboardScreenState extends State<DashboardScreen>
     });
   }
 
-  // ... (Update _buildContractCard to handle selection, long press)
+  void _confirmDelete(Contract contract) async {
+    final bool? confirm = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: AppTheme.surface,
+          title: const Text(
+            'Delete Contract',
+            style: TextStyle(color: AppTheme.textPrimary),
+          ),
+          content: const Text(
+            'Are you sure you want to delete this contract? This action cannot be undone.',
+            style: TextStyle(color: AppTheme.textSecondary),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text(
+                'Delete',
+                style: TextStyle(color: AppTheme.accentRed),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirm == true) {
+      _deleteContract(contract.id);
+    }
+  }
+
+  Future<void> _deleteContract(String contractId) async {
+    try {
+      await ApiService.deleteContract(contractId);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Contract deleted successfully')),
+        );
+        _loadContracts();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to delete contract: $e')),
+        );
+      }
+    }
+  }
+
+  void _showContextualMenu(Contract contract) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: AppTheme.surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+          border: Border.all(color: AppTheme.glassBorder),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppTheme.textMuted.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              contract.title,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: AppTheme.textPrimary,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            _buildMenuOption(
+              icon: Icons.open_in_new,
+              title: 'View Analysis',
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/contract/${contract.id}');
+              },
+            ),
+            const SizedBox(height: 8),
+            _buildMenuOption(
+              icon: Icons.compare_arrows,
+              title: 'Compare with another',
+              onTap: () {
+                Navigator.pop(context);
+                _enterCompareMode(contract.id);
+              },
+            ),
+            const SizedBox(height: 8),
+            _buildMenuOption(
+              icon: Icons.delete_outline,
+              title: 'Delete Contract',
+              isDestructive: true,
+              onTap: () {
+                Navigator.pop(context);
+                _confirmDelete(contract);
+              },
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMenuOption({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+    bool isDestructive = false,
+  }) {
+    final color = isDestructive ? AppTheme.accentRed : AppTheme.textPrimary;
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: isDestructive
+              ? AppTheme.accentRed.withOpacity(0.1)
+              : AppTheme.glassBg,
+        ),
+        child: Row(
+          children: [
+            Icon(icon, color: color),
+            const SizedBox(width: 16),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: color,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget _buildContractCard(Contract contract, int index) {
+    final hasAnalysis = contract.analysis != null;
     final score = contract.analysis?.fairnessScore ?? 0;
     final scoreColor = score >= 80
         ? AppTheme.accentGreen
@@ -468,6 +655,12 @@ class _DashboardScreenState extends State<DashboardScreen>
         : AppTheme.accentRed;
 
     final isSelected = _selectedIds.contains(contract.id);
+
+    // Format timestamp
+    String dateStr = 'Unknown Date';
+    if (contract.createdAt != null) {
+      dateStr = DateFormat('MMM dd, yyyy').format(contract.createdAt!);
+    }
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
@@ -519,130 +712,174 @@ class _DashboardScreenState extends State<DashboardScreen>
           );
         },
         onDismissed: (direction) async {
-          try {
-            await ApiService.deleteContract(contract.id);
-            if (mounted) {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(const SnackBar(content: Text('Contract deleted')));
-              _loadContracts();
-            }
-          } catch (e) {
-            if (mounted) {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text('Failed to delete: $e')));
-              _loadContracts(); // Reload to restore the item
-            }
-          }
+          _deleteContract(contract.id);
         },
-        child: GestureDetector(
-          onLongPress: () => _toggleSelection(contract.id),
-          onTap: _isSelectionMode
-              ? () => _toggleSelection(contract.id)
-              : () => Navigator.pushNamed(context, '/contract/${contract.id}'),
-          child: Stack(
-            children: [
-              LiquidGlassContainer(
-                heroTag: 'contract_${contract.id}',
-                // Remove inner onTap to let GestureDetector handle it
-                // onTap: ... (removed)
-                padding: const EdgeInsets.all(16),
-                borderColor: isSelected ? AppTheme.accentBlue : null,
-                backgroundColor: isSelected
-                    ? AppTheme.accentBlue.withOpacity(0.1)
-                    : null,
-                child: Row(
-                  children: [
-                    // PDF Icon
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            AppTheme.accentRed.withOpacity(0.2),
-                            AppTheme.accentRed.withOpacity(0.1),
-                          ],
-                        ),
-                        borderRadius: BorderRadius.circular(12),
+        child: Hero(
+          tag: 'contract_${contract.id}',
+          child: Container(
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? AppTheme.accentBlue.withOpacity(0.1)
+                  : AppTheme.glassBg,
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(
+                color: isSelected ? AppTheme.accentBlue : AppTheme.glassBorder,
+                width: isSelected ? 2 : 1,
+              ),
+              boxShadow: [
+                if (isSelected)
+                  BoxShadow(
+                    color: AppTheme.accentBlue.withOpacity(0.2),
+                    blurRadius: 10,
+                    spreadRadius: 2,
+                  ),
+              ],
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(24),
+                onLongPress: () {
+                  if (_isSelectionMode) {
+                    _toggleSelection(contract.id);
+                  } else {
+                    _showContextualMenu(contract);
+                  }
+                },
+                onTap: _isSelectionMode
+                    ? () => _toggleSelection(contract.id)
+                    : () => Navigator.pushNamed(
+                        context,
+                        '/contract/${contract.id}',
                       ),
-                      child: const Icon(
-                        Icons.picture_as_pdf,
-                        color: AppTheme.accentRed,
-                        size: 26,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    // Info
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            contract.title,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: AppTheme.textPrimary,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 4),
-                          Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 2,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: AppTheme.glassBg,
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: Text(
-                                  contract.analysis?.contractType
-                                          ?.toUpperCase() ??
-                                      contract.status.toUpperCase(),
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: AppTheme.textMuted,
-                                    letterSpacing: 0.5,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      // Identity: PDF Icon
+                      Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              AppTheme.accentBlue.withOpacity(0.2),
+                              AppTheme.accentBlue.withOpacity(0.1),
                             ],
                           ),
-                        ],
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(
+                          Icons.description_outlined,
+                          color: AppTheme.accentBlue,
+                          size: 26,
+                        ),
                       ),
-                    ),
-                    // Animated Score Ring
-                    if (contract.analysis != null)
-                      _buildAnimatedScoreRing(score, scoreColor),
-                  ],
-                ),
-              ),
-              if (isSelected)
-                Positioned(
-                  right: 8,
-                  top: 8,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: AppTheme.accentBlue,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.check,
-                      size: 16,
-                      color: Colors.white,
-                    ),
+                      const SizedBox(width: 16),
+
+                      // Metadata: Title, timestamp, and status
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              contract.title,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: AppTheme.textPrimary,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 6),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.access_time,
+                                  size: 12,
+                                  color: AppTheme.textMuted,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  dateStr,
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: AppTheme.textMuted,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 6,
+                                    vertical: 2,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: hasAnalysis
+                                        ? AppTheme.accentGreen.withOpacity(0.1)
+                                        : AppTheme.glassBg,
+                                    borderRadius: BorderRadius.circular(6),
+                                    border: Border.all(
+                                      color: hasAnalysis
+                                          ? AppTheme.accentGreen.withOpacity(
+                                              0.3,
+                                            )
+                                          : AppTheme.glassBorder,
+                                    ),
+                                  ),
+                                  child: Text(
+                                    contract.analysis?.contractType
+                                            ?.toUpperCase() ??
+                                        contract.status.toUpperCase(),
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      color: hasAnalysis
+                                          ? AppTheme.accentGreen
+                                          : AppTheme.textMuted,
+                                      letterSpacing: 0.5,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // Score
+                      if (contract.analysis != null)
+                        _buildAnimatedScoreRing(score, scoreColor),
+
+                      // Action Affordance (Chevron or Checkbox in selection mode)
+                      const SizedBox(width: 12),
+                      if (isSelected)
+                        Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: const BoxDecoration(
+                            color: AppTheme.accentBlue,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.check,
+                            size: 16,
+                            color: Colors.white,
+                          ),
+                        )
+                      else
+                        const Icon(
+                          Icons.chevron_right,
+                          color: AppTheme.textMuted,
+                          size: 24,
+                        ),
+                    ],
                   ),
                 ),
-            ],
+              ),
+            ),
           ),
         ),
       ),

@@ -94,7 +94,7 @@ class _OfferBuilderScreenState extends State<OfferBuilderScreen> {
               const SizedBox(height: 16),
               _buildTextField(
                 _priceCtrl,
-                'Sale Price (\$)',
+                'Sale Price (₹)',
                 Icons.attach_money,
                 isNumber: true,
               ),

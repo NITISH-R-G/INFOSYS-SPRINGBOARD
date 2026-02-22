@@ -342,7 +342,7 @@ class _ComparisonDashboardScreenState extends State<ComparisonDashboardScreen>
                     _metricRow(
                       'Monthly',
                       monthly != null
-                          ? '\$${monthly.toStringAsFixed(0)}'
+                          ? '₹${monthly.toStringAsFixed(0)}'
                           : 'N/A',
                       AppTheme.accentBlue,
                       Icons.payments_outlined,
@@ -576,12 +576,12 @@ class _ComparisonDashboardScreenState extends State<ComparisonDashboardScreen>
 
   Widget _buildDetailedTable() {
     final terms = [
-      ('Monthly Payment', (SlaData? s) => s?.monthlyPayment, r'$', ''),
-      ('Down Payment', (SlaData? s) => s?.downPayment, r'$', ''),
+      ('Monthly Payment', (SlaData? s) => s?.monthlyPayment, r'₹', ''),
+      ('Down Payment', (SlaData? s) => s?.downPayment, r'₹', ''),
       ('APR', (SlaData? s) => s?.apr, '', '%'),
       ('Term', (SlaData? s) => s?.termMonths?.toDouble(), '', ' mo'),
       ('Mileage Limit', (SlaData? s) => s?.mileageLimit?.toDouble(), '', ' mi'),
-      ('Buyout Price', (SlaData? s) => s?.buyoutPrice, r'$', ''),
+      ('Buyout Price', (SlaData? s) => s?.buyoutPrice, r'₹', ''),
     ];
 
     return Padding(
@@ -980,7 +980,7 @@ class _BarChartPainter extends CustomPainter {
               valStr = '${(value / 10).toStringAsFixed(1)}%';
               break;
             default:
-              valStr = '\$${(value * 10).toInt()}';
+              valStr = '₹${(value * 10).toInt()}';
           }
           final valLabel = TextPainter(
             text: TextSpan(

@@ -185,7 +185,7 @@ class _VinLookupScreenState extends State<VinLookupScreen> {
                             _vehicleInfo!.fairPriceHigh != null)
                           _buildInfoRow(
                             'Fair Price Range',
-                            '\$${_vehicleInfo!.fairPriceLow!.toStringAsFixed(0)} - \$${_vehicleInfo!.fairPriceHigh!.toStringAsFixed(0)}',
+                            '₹${_vehicleInfo!.fairPriceLow!.toStringAsFixed(0)} - ₹${_vehicleInfo!.fairPriceHigh!.toStringAsFixed(0)}',
                           ),
                         if (_vehicleInfo!.incentives.isNotEmpty) ...[
                           const SizedBox(height: 12),
@@ -308,7 +308,7 @@ class _VinLookupScreenState extends State<VinLookupScreen> {
         children: [
           Text(label, style: const TextStyle(color: AppTheme.textSecondary)),
           Text(
-            '\$${value.toStringAsFixed(2)}',
+            '₹${value.toStringAsFixed(2)}',
             style: const TextStyle(
               color: AppTheme.accentGreen,
               fontWeight: FontWeight.bold,

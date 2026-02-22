@@ -44,9 +44,9 @@ class MarketValueCard extends StatelessWidget {
     }
 
     // Format currency
-    final String priceStr = '\$${contractPrice.toStringAsFixed(0)}';
-    final String valueStr = '\$${estimatedValue.toStringAsFixed(0)}';
-    final String difference = '\$${(contractPrice - estimatedValue).abs().toStringAsFixed(0)}';
+    final String priceStr = '₹${contractPrice.toStringAsFixed(0)}';
+    final String valueStr = '₹${estimatedValue.toStringAsFixed(0)}';
+    final String difference = '₹${(contractPrice - estimatedValue).abs().toStringAsFixed(0)}';
     final String diffPrefix = isOverpriced ? '+' : (isGoodDeal ? '-' : '');
 
     return LiquidGlassContainer(
@@ -250,7 +250,7 @@ class MarketValueCard extends StatelessWidget {
              Padding(
                padding: const EdgeInsets.only(top: 12),
                child: Text(
-                 'Market Range: \$${lowValue!.toStringAsFixed(0)} - \$${highValue!.toStringAsFixed(0)}',
+                 'Market Range: ₹${lowValue!.toStringAsFixed(0)} - ₹${highValue!.toStringAsFixed(0)}',
                  style: const TextStyle(
                    color: AppTheme.textMuted,
                    fontSize: 12,

@@ -213,7 +213,7 @@ class _ManualInputSheetState extends State<ManualInputSheet> {
                               keyboardType: TextInputType.number,
                             ),
                             _buildField(
-                              'Monthly Payment (\$)',
+                              'Monthly Payment (₹)',
                               _monthlyPaymentController,
                               Icons.payments_rounded,
                               keyboardType: TextInputType.number,
@@ -225,7 +225,7 @@ class _ManualInputSheetState extends State<ManualInputSheet> {
                               keyboardType: TextInputType.number,
                             ),
                             _buildField(
-                              'Down Payment (\$)',
+                              'Down Payment (₹)',
                               _downPaymentController,
                               Icons.savings_rounded,
                               keyboardType: TextInputType.number,
@@ -237,7 +237,7 @@ class _ManualInputSheetState extends State<ManualInputSheet> {
                               keyboardType: TextInputType.number,
                             ),
                             _buildField(
-                              'Buyout / Purchase Price (\$)',
+                              'Buyout / Purchase Price (₹)',
                               _buyoutPriceController,
                               Icons.shopping_cart_rounded,
                               keyboardType: TextInputType.number,

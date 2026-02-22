@@ -234,6 +234,21 @@ class RedFlag(BaseModel):
     suggestion: str = Field(..., description="What to verify, negotiate, or be cautious about")
 
 
+class DCFSFeatures(BaseModel):
+    """Deterministic Contract Fairness Score extracted features"""
+    consumer_obligations_count: int = Field(0, description="Number of obligations mapped to the consumer")
+    provider_obligations_count: int = Field(0, description="Number of obligations mapped to the provider")
+    consumer_liabilities_count: int = Field(0, description="Count of liability exposures for the consumer")
+    provider_liabilities_count: int = Field(0, description="Count of liability exposures for the provider")
+    consumer_termination_rights_score: float = Field(0.0, ge=0.0, le=1.0, description="Strength of consumer termination rights (0-1)")
+    provider_termination_rights_score: float = Field(0.0, ge=0.0, le=1.0, description="Strength of provider termination rights (0-1)")
+    penalty_intensity_score: float = Field(0.0, ge=0.0, le=10.0, description="Intensity of late fees, default interest, acceleration clauses (0-10)")
+    hidden_risk_index: float = Field(0.0, ge=0.0, le=10.0, description="Opaque contract traits, ambiguous language, undefined terms (0-10)")
+    protection_clauses_extracted: int = Field(0, description="Number of consumer protective language clauses found")
+    expected_protections_baseline: int = Field(5, description="Expected baseline number of protection clauses")
+
+
+
 class ContractAnalysisResult(BaseModel):
     """Complete contract analysis result"""
     sla_data: SLAData
@@ -244,6 +259,7 @@ class ContractAnalysisResult(BaseModel):
     contract_type: Optional[str] = Field(None, description="lease or loan")
     detailed_analysis: Optional[DetailedAnalysis] = None  # Sprint 9: Nested 12-section analysis
     risk_assessment: Optional[Dict[str, Any]] = None  # Gap 5: Structured risk assessment
+    dcfs_features: Optional[DCFSFeatures] = None  # New: Deterministic mathematical scoring features
 
 
 class ContractUploadResponse(BaseModel):
@@ -272,20 +288,20 @@ class ContractResponse(BaseModel):
     """Full contract response with analysis"""
     id: int
     filename: str
-    contract_type: Optional[str]
+    contract_type: Optional[str] = None
     status: str
-    raw_text: Optional[str]
-    dealer_id: Optional[int]
+    raw_text: Optional[str] = None
+    dealer_id: Optional[int] = None
     dealer: Optional[DealerResponse] = None
-    sla_data: Optional[dict]
+    sla_data: Optional[dict] = None
     detailed_analysis: Optional[DetailedAnalysis] = None  # Sprint 9 addition
     risk_assessment: Optional[dict] = None  # Gap 5: Structured risk report
-    fairness_score: Optional[int]
-    fairness_explanation: Optional[str]
-    red_flags: Optional[List[Union[dict, str]]]
-    confidence_score: Optional[int]
+    fairness_score: Optional[int] = None
+    fairness_explanation: Optional[str] = None
+    red_flags: Optional[List[Union[dict, str]]] = None
+    confidence_score: Optional[int] = None
     created_at: datetime
-    analyzed_at: Optional[datetime]
+    analyzed_at: Optional[datetime] = None
     vehicle: Optional[dict] = None
     vin_lookup: Optional[dict] = None  # Auto-detected VIN lookup results
     
