@@ -71,6 +71,7 @@ dependencies:
   
   # Shared Preferences for session
   shared_preferences: ^2.2.2
+  web_socket_channel: ^3.0.3
 
 dev_dependencies:
   flutter_test:

@@ -263,6 +263,64 @@ class PriceService:
         
         return " ".join(notes)
 
+    async def generate_recommendation(
+        self,
+        make: str,
+        model: str,
+        year: int,
+        mileage: Optional[int] = None,
+        trim: Optional[str] = None,
+        condition: str = "good"
+    ) -> Dict[str, Any]:
+        """
+        Generate a structured price recommendation with fair price range.
+        
+        Maps to price_recommendations table fields:
+          fair_price_low, fair_price_high, msrp, basis, methodology
+        
+        Returns:
+            Dict matching PriceRecommendationResponse schema
+        """
+        # Get base estimate
+        estimate = await self.estimate_price(make, model, year, mileage, trim, condition)
+        
+        # Calculate MSRP estimate (before depreciation)
+        base_msrp = self._get_base_value(make, model, trim)
+        brand_mult = self.PREMIUM_BRANDS.get(make, 1.0)
+        estimated_msrp = round(base_msrp * brand_mult, -2)
+        
+        age = max(0, self.current_year - year)
+        depreciation_rate = self._get_depreciation_rate(age)
+        
+        # Build methodology explanation
+        factors = [f"Base segment MSRP (${base_msrp:,.0f})"]
+        if make in self.PREMIUM_BRANDS:
+            factors.append(f"Premium brand multiplier ({brand_mult}x)")
+        factors.append(f"Depreciation for {age} year(s) ({depreciation_rate:.0%} retained)")
+        if mileage is not None:
+            mileage_adj = self._calculate_mileage_adjustment(mileage, age)
+            factors.append(f"Mileage adjustment ({mileage:,} miles: {mileage_adj:.2f}x)")
+        factors.append(f"Condition adjustment ({condition})")
+        
+        methodology = " → ".join(factors) + f" → Fair range: ${estimate['estimated_value_low']:,.0f} – ${estimate['estimated_value_high']:,.0f}"
+        
+        vehicle_summary = f"{year} {make} {model}"
+        if trim:
+            vehicle_summary += f" {trim}"
+        if mileage:
+            vehicle_summary += f" ({mileage:,} miles)"
+        
+        return {
+            "fair_price_low": estimate["estimated_value_low"],
+            "fair_price_high": estimate["estimated_value_high"],
+            "msrp": estimated_msrp,
+            "estimated_avg": estimate["estimated_value_avg"],
+            "basis": f"Algorithmic estimate based on segment pricing, {age}-year depreciation, brand positioning, and condition assessment",
+            "methodology": methodology,
+            "confidence": estimate["confidence"],
+            "vehicle_summary": vehicle_summary
+        }
+
 
 class PriceException(Exception):
     """Custom exception for pricing errors"""

@@ -7,6 +7,7 @@ import '../providers/chat_provider.dart';
 import '../providers/auth_provider.dart';
 import '../theme/app_theme.dart';
 import '../animations/animations.dart';
+import '../services/api_service.dart';
 
 class DealerChatScreen extends StatefulWidget {
   final String? contractId;
@@ -22,6 +23,8 @@ class _DealerChatScreenState extends State<DealerChatScreen> {
 
   int? _conversationId;
   bool _initializing = true;
+  bool _loadingCopilot = false;
+  List<String> _copilotSuggestions = [];
 
   @override
   void initState() {
@@ -54,12 +57,30 @@ class _DealerChatScreenState extends State<DealerChatScreen> {
     } else {
       // If we are a buyer, try to create one. For a dealer, it might just be empty list if no conv exists.
       if (authProv.role == 'buyer') {
-        // Need a dealer ID. We'd usually look this up. Using 2 as a mock dealer_id.
-        // In real app, contract would have dealer_id or user selects dealer.
+        int dealerId = 2; // Fallback mock ID
+
+        // Fetch contract to get dynamic dealer_id if available
+        if (widget.contractId != null) {
+          try {
+            final contractData = await ApiService.getContract(
+              widget.contractId!,
+            );
+            if (contractData['dealer'] != null &&
+                contractData['dealer']['user_id'] != null) {
+              dealerId = contractData['dealer']['user_id'];
+            } else if (contractData['dealer_id'] != null) {
+              // Fallback just in case
+              dealerId = contractData['dealer_id'];
+            }
+          } catch (e) {
+            print("Could not fetch contract for dealer ID: $e");
+          }
+        }
+
         try {
           final success = await chatProv.createConversation(
             token,
-            2,
+            dealerId,
             contractId: int.tryParse(widget.contractId ?? ''),
             subject: "Contract Inquiry",
           );
@@ -72,6 +93,38 @@ class _DealerChatScreenState extends State<DealerChatScreen> {
     }
     setState(() => _initializing = false);
     _scrollToBottom();
+    _fetchCopilotSuggestions();
+  }
+
+  Future<void> _fetchCopilotSuggestions() async {
+    if (widget.contractId == null) return;
+
+    final authProv = Provider.of<AuthProvider>(context, listen: false);
+    // Only fetch for buyer
+    if (authProv.role != 'buyer') return;
+
+    if (mounted) setState(() => _loadingCopilot = true);
+
+    try {
+      final strategy = await ApiService.getNegotiationStrategy(
+        widget.contractId!,
+      );
+      if (mounted) {
+        setState(() {
+          final priorityActions = List<String>.from(
+            strategy['priority_actions'] ?? [],
+          );
+          final talkingPoints = List<String>.from(
+            strategy['talking_points'] ?? [],
+          );
+          _copilotSuggestions = [...priorityActions, ...talkingPoints];
+        });
+      }
+    } catch (e) {
+      print("Failed to load copilot suggestions: $e");
+    } finally {
+      if (mounted) setState(() => _loadingCopilot = false);
+    }
   }
 
   @override
@@ -142,7 +195,11 @@ class _DealerChatScreenState extends State<DealerChatScreen> {
                   },
                 ),
               ),
-              _buildInputArea(),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [_buildCopilotSuggestions(), _buildInputArea()],
+              ),
             ],
           ),
 
@@ -298,6 +355,68 @@ class _DealerChatScreenState extends State<DealerChatScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildCopilotSuggestions() {
+    final authProv = Provider.of<AuthProvider>(context, listen: false);
+    if (authProv.role != 'buyer') return const SizedBox.shrink();
+
+    if (_loadingCopilot) {
+      return Container(
+        height: 50,
+        alignment: Alignment.centerLeft,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          children: const [
+            SizedBox(
+              width: 16,
+              height: 16,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: AppTheme.accentOrange,
+              ),
+            ),
+            SizedBox(width: 8),
+            Text(
+              'AI Copilot analyzing...',
+              style: TextStyle(color: AppTheme.accentOrange, fontSize: 13),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (_copilotSuggestions.isEmpty) return const SizedBox.shrink();
+
+    return Container(
+      height: 40,
+      margin: const EdgeInsets.only(bottom: 8),
+      child: ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        scrollDirection: Axis.horizontal,
+        itemCount: _copilotSuggestions.length,
+        separatorBuilder: (context, index) => const SizedBox(width: 8),
+        itemBuilder: (context, index) {
+          final suggestion = _copilotSuggestions[index];
+          return ActionChip(
+            label: Text(
+              suggestion,
+              style: const TextStyle(
+                color: AppTheme.accentOrange,
+                fontSize: 13,
+              ),
+            ),
+            backgroundColor: AppTheme.accentOrange.withOpacity(0.1),
+            side: BorderSide(color: AppTheme.accentOrange.withOpacity(0.3)),
+            onPressed: () {
+              setState(() {
+                _messageController.text = suggestion;
+              });
+            },
+          );
+        },
       ),
     );
   }

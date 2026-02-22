@@ -81,6 +81,13 @@ class _DashboardScreenState extends State<DashboardScreen>
       // Animate in
       _fabController.forward();
       _listController.forward();
+    } on AuthExpiredException catch (_) {
+      if (mounted) {
+        Provider.of<AuthProvider>(
+          context,
+          listen: false,
+        ).handleAuthExpired(context);
+      }
     } catch (e) {
       setState(() {
         _error = e.toString();
@@ -130,7 +137,7 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   Widget _buildScrollReactiveAppBar() {
     return SliverAppBar(
-      expandedHeight: 120,
+      expandedHeight: 140,
       floating: false,
       pinned: true,
       backgroundColor: Colors.transparent,
@@ -210,7 +217,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                               ),
                             ],
                           ),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 8),
                           Opacity(
                             opacity: 1.0 - progress,
                             child: const Text(
@@ -464,109 +471,179 @@ class _DashboardScreenState extends State<DashboardScreen>
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
-      child: GestureDetector(
-        onLongPress: () => _toggleSelection(contract.id),
-        onTap: _isSelectionMode
-            ? () => _toggleSelection(contract.id)
-            : () => Navigator.pushNamed(context, '/contract/${contract.id}'),
-        child: Stack(
-          children: [
-            LiquidGlassContainer(
-              heroTag: 'contract_${contract.id}',
-              // Remove inner onTap to let GestureDetector handle it
-              // onTap: ... (removed)
-              padding: const EdgeInsets.all(16),
-              borderColor: isSelected ? AppTheme.accentBlue : null,
-              backgroundColor: isSelected
-                  ? AppTheme.accentBlue.withOpacity(0.1)
-                  : null,
-              child: Row(
-                children: [
-                  // PDF Icon
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          AppTheme.accentRed.withOpacity(0.2),
-                          AppTheme.accentRed.withOpacity(0.1),
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(
-                      Icons.picture_as_pdf,
-                      color: AppTheme.accentRed,
-                      size: 26,
+      child: Dismissible(
+        key: Key(contract.id),
+        direction: DismissDirection.endToStart,
+        background: Container(
+          alignment: Alignment.centerRight,
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          decoration: BoxDecoration(
+            color: AppTheme.accentRed.withOpacity(0.8),
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: const Icon(
+            Icons.delete_outline,
+            color: Colors.white,
+            size: 30,
+          ),
+        ),
+        confirmDismiss: (direction) async {
+          return await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                backgroundColor: AppTheme.surface,
+                title: const Text(
+                  'Delete Contract',
+                  style: TextStyle(color: AppTheme.textPrimary),
+                ),
+                content: const Text(
+                  'Are you sure you want to delete this contract?',
+                  style: TextStyle(color: AppTheme.textSecondary),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: const Text('Cancel'),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(true),
+                    child: const Text(
+                      'Delete',
+                      style: TextStyle(color: AppTheme.accentRed),
                     ),
                   ),
-                  const SizedBox(width: 16),
-                  // Info
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          contract.title,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: AppTheme.textPrimary,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 2,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppTheme.glassBg,
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Text(
-                                contract.analysis?.contractType
-                                        ?.toUpperCase() ??
-                                    contract.status.toUpperCase(),
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  color: AppTheme.textMuted,
-                                  letterSpacing: 0.5,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
+                ],
+              );
+            },
+          );
+        },
+        onDismissed: (direction) async {
+          try {
+            await ApiService.deleteContract(contract.id);
+            if (mounted) {
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('Contract deleted')));
+              _loadContracts();
+            }
+          } catch (e) {
+            if (mounted) {
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text('Failed to delete: $e')));
+              _loadContracts(); // Reload to restore the item
+            }
+          }
+        },
+        child: GestureDetector(
+          onLongPress: () => _toggleSelection(contract.id),
+          onTap: _isSelectionMode
+              ? () => _toggleSelection(contract.id)
+              : () => Navigator.pushNamed(context, '/contract/${contract.id}'),
+          child: Stack(
+            children: [
+              LiquidGlassContainer(
+                heroTag: 'contract_${contract.id}',
+                // Remove inner onTap to let GestureDetector handle it
+                // onTap: ... (removed)
+                padding: const EdgeInsets.all(16),
+                borderColor: isSelected ? AppTheme.accentBlue : null,
+                backgroundColor: isSelected
+                    ? AppTheme.accentBlue.withOpacity(0.1)
+                    : null,
+                child: Row(
+                  children: [
+                    // PDF Icon
+                    Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            AppTheme.accentRed.withOpacity(0.2),
+                            AppTheme.accentRed.withOpacity(0.1),
                           ],
                         ),
-                      ],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(
+                        Icons.picture_as_pdf,
+                        color: AppTheme.accentRed,
+                        size: 26,
+                      ),
                     ),
-                  ),
-                  // Animated Score Ring
-                  if (contract.analysis != null)
-                    _buildAnimatedScoreRing(score, scoreColor),
-                ],
-              ),
-            ),
-            if (isSelected)
-              Positioned(
-                right: 8,
-                top: 8,
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: AppTheme.accentBlue,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(Icons.check, size: 16, color: Colors.white),
+                    const SizedBox(width: 16),
+                    // Info
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            contract.title,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: AppTheme.textPrimary,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 4),
+                          Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppTheme.glassBg,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  contract.analysis?.contractType
+                                          ?.toUpperCase() ??
+                                      contract.status.toUpperCase(),
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: AppTheme.textMuted,
+                                    letterSpacing: 0.5,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Animated Score Ring
+                    if (contract.analysis != null)
+                      _buildAnimatedScoreRing(score, scoreColor),
+                  ],
                 ),
               ),
-          ],
+              if (isSelected)
+                Positioned(
+                  right: 8,
+                  top: 8,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: AppTheme.accentBlue,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.check,
+                      size: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

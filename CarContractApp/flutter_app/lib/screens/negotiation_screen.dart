@@ -20,6 +20,14 @@ class _NegotiationScreenState extends State<NegotiationScreen>
   bool _isTyping = false;
 
   late AnimationController _typingController;
+  late TabController _tabController;
+
+  // New states for Advanced Features
+  bool _isLoadingStrategy = false;
+  Map<String, dynamic>? _strategyData;
+  bool _isLoadingTips = false;
+  List<dynamic> _tipsData = [];
+  bool _isDraftingEmail = false;
 
   @override
   void initState() {
@@ -29,12 +37,77 @@ class _NegotiationScreenState extends State<NegotiationScreen>
       vsync: this,
     )..repeat();
 
+    _tabController = TabController(length: 3, vsync: this);
+
+    // Initial load
+    _loadTabsData();
+
     // Welcome message
     _messages.add({
       'role': 'assistant',
       'content':
-          'Hello! I\'m your AI negotiation assistant. I can help you:\n\n• Understand your contract terms\n• Prepare negotiation points\n• Draft messages to dealers\n\nHow can I help you today?',
+          'Hello! I\'m your AI negotiation assistant. I can help you with:\n\n• Understanding terms\n• Preparing negotiation points\n• Drafting emails to dealers\n\nHow can I help you today?',
     });
+  }
+
+  Future<void> _loadTabsData() async {
+    if (widget.contractId != null) {
+      _loadStrategy();
+    }
+    _loadTips();
+  }
+
+  Future<void> _loadStrategy() async {
+    setState(() => _isLoadingStrategy = true);
+    try {
+      final strategy = await ApiService.getNegotiationStrategy(
+        widget.contractId!,
+      );
+      if (mounted) setState(() => _strategyData = strategy);
+    } catch (e) {
+      // ignore
+    } finally {
+      if (mounted) setState(() => _isLoadingStrategy = false);
+    }
+  }
+
+  Future<void> _loadTips() async {
+    setState(() => _isLoadingTips = true);
+    try {
+      final tips = await ApiService.getNegotiationTips();
+      if (mounted) setState(() => _tipsData = tips);
+    } catch (e) {
+      // ignore
+    } finally {
+      if (mounted) setState(() => _isLoadingTips = false);
+    }
+  }
+
+  Future<void> _draftCounterOffer() async {
+    if (widget.contractId == null) return;
+    setState(() => _isDraftingEmail = true);
+    try {
+      final response = await ApiService.generateCounterOfferEmail(
+        widget.contractId!,
+      );
+
+      // Add email to chat and switch to chat tab
+      setState(() {
+        _messages.add({
+          'role': 'assistant',
+          'content':
+              'Here is a draft counter-offer email you can use:\n\n${response['email_body']}',
+        });
+      });
+      _tabController.animateTo(0);
+      _scrollToBottom();
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to draft email: $e')));
+    } finally {
+      if (mounted) setState(() => _isDraftingEmail = false);
+    }
   }
 
   @override
@@ -42,6 +115,7 @@ class _NegotiationScreenState extends State<NegotiationScreen>
     _messageController.dispose();
     _scrollController.dispose();
     _typingController.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -99,73 +173,225 @@ class _NegotiationScreenState extends State<NegotiationScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
+      body: Column(
         children: [
-          Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  controller: _scrollController,
-                  padding: const EdgeInsets.fromLTRB(16, 120, 16, 20),
-                  itemCount: _messages.length + (_isTyping ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    if (index == _messages.length && _isTyping) {
-                      return _buildTypingIndicator();
-                    }
-                    return _buildMessageBubble(_messages[index], index);
-                  },
-                ),
-              ),
-              _buildInputArea(),
-            ],
-          ),
-
-          // Scroll-reactive Header
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: ScrollReactiveGlassHeader(
-              scrollController: _scrollController,
-              height: 90,
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(
-                          Icons.arrow_back_ios,
-                          color: AppTheme.textPrimary,
-                        ),
-                        onPressed: () => Navigator.pop(context),
+          // Header with Tabs
+          Container(
+            padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+            decoration: BoxDecoration(
+              color: AppTheme.surface.withOpacity(0.9),
+              border: Border(bottom: BorderSide(color: AppTheme.glassBorder)),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back_ios,
+                        color: AppTheme.textPrimary,
                       ),
-                      const Spacer(),
-                      const Text(
-                        'AI Negotiation',
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    const Expanded(
+                      child: Text(
+                        'AI Negotiation Hub',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 17,
+                          fontSize: 18,
                           fontWeight: FontWeight.w600,
                           color: AppTheme.textPrimary,
                         ),
                       ),
-                      const Spacer(),
-                      // Invisible icon for balance
-                      const Opacity(
-                        opacity: 0,
-                        child: IconButton(
-                          icon: Icon(Icons.arrow_back_ios),
-                          onPressed: null,
+                    ),
+                    const SizedBox(width: 48), // balance
+                  ],
+                ),
+                TabBar(
+                  controller: _tabController,
+                  indicatorColor: AppTheme.accentGreen,
+                  labelColor: AppTheme.accentGreen,
+                  unselectedLabelColor: AppTheme.textMuted,
+                  tabs: const [
+                    Tab(text: "Chat"),
+                    Tab(text: "Strategy"),
+                    Tab(text: "Tips"),
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          // Tab Content
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [_buildChatTab(), _buildStrategyTab(), _buildTipsTab()],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChatTab() {
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            controller: _scrollController,
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
+            itemCount: _messages.length + (_isTyping ? 1 : 0),
+            itemBuilder: (context, index) {
+              if (index == _messages.length && _isTyping) {
+                return _buildTypingIndicator();
+              }
+              return _buildMessageBubble(_messages[index], index);
+            },
+          ),
+        ),
+        _buildInputArea(),
+      ],
+    );
+  }
+
+  Widget _buildStrategyTab() {
+    if (widget.contractId == null) {
+      return const Center(child: Text("Strategy requires a saved contract."));
+    }
+    if (_isLoadingStrategy) {
+      return const Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation(AppTheme.accentGreen),
+        ),
+      );
+    }
+    if (_strategyData == null) {
+      return const Center(child: Text("Strategy could not be loaded."));
+    }
+
+    final tactics = _strategyData!['tactics'] as List<dynamic>? ?? [];
+
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        LiquidGlassContainer(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "AI Negotiation Plan",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.accentOrange,
+                ),
+              ),
+              const SizedBox(height: 16),
+              ...tactics.map(
+                (t) => Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Icon(
+                        Icons.check_circle_outline,
+                        color: AppTheme.accentGreen,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          t.toString(),
+                          style: const TextStyle(color: AppTheme.textPrimary),
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 24),
+        GlowRippleButton(
+          onTap: _isDraftingEmail ? null : _draftCounterOffer,
+          glowColor: AppTheme.accentBlue,
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [AppTheme.accentBlue, Color(0xFF0055DD)],
+              ),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Center(
+              child: _isDraftingEmail
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : const Text(
+                      "Generate Counter-Offer Email",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTipsTab() {
+    if (_isLoadingTips) {
+      return const Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation(AppTheme.accentGreen),
+        ),
+      );
+    }
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: _tipsData.length,
+      itemBuilder: (context, index) {
+        final tip = _tipsData[index];
+        return Container(
+          margin: const EdgeInsets.only(bottom: 16),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppTheme.glassBg,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppTheme.glassBorder),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                tip['title'] ?? 'Tip',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.textPrimary,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                tip['description'] ?? '',
+                style: const TextStyle(color: AppTheme.textSecondary),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -271,6 +497,8 @@ class _NegotiationScreenState extends State<NegotiationScreen>
             border: Border(top: BorderSide(color: AppTheme.glassBorder)),
           ),
           child: SafeArea(
+            bottom: true,
+            top: false,
             child: Row(
               children: [
                 Expanded(

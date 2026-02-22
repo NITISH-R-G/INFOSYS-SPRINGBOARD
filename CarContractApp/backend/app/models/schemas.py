@@ -2,7 +2,7 @@
 Pydantic Schemas for API Request/Response validation
 """
 from datetime import datetime
-from typing import Optional, List, Any, Union
+from typing import Optional, List, Any, Union, Dict
 from pydantic import BaseModel, EmailStr, Field
 
 
@@ -116,6 +116,13 @@ class ReviewRisk(BaseModel):
     clause: str
     reason: str
 
+class SectionDealerInformation(BaseModel):
+    """Extracted shadow profile data for the dealer"""
+    dealer_name: str = "Not Mentioned"
+    contact_email: str = "Not Mentioned"
+    contact_phone: str = "Not Mentioned"
+    risk_flags: List[ReviewRisk] = []
+
 class SectionVehicleDetails(BaseModel):
     make: str = "Not Mentioned"
     model: str = "Not Mentioned"
@@ -199,6 +206,7 @@ class SectionEndOfLease(BaseModel):
 class DetailedAnalysis(BaseModel):
     """Comprehensive 12-section analysis result"""
     vehicle_details: SectionVehicleDetails
+    dealer_information: Optional[SectionDealerInformation] = None
     lease_payment_terms: SectionLeasePayments
     lease_duration: SectionLeaseDuration
     mileage_usage_limits: SectionMileage
@@ -235,6 +243,7 @@ class ContractAnalysisResult(BaseModel):
     confidence_score: int = Field(..., ge=0, le=100, description="Analysis confidence 0-100")
     contract_type: Optional[str] = Field(None, description="lease or loan")
     detailed_analysis: Optional[DetailedAnalysis] = None  # Sprint 9: Nested 12-section analysis
+    risk_assessment: Optional[Dict[str, Any]] = None  # Gap 5: Structured risk assessment
 
 
 class ContractUploadResponse(BaseModel):
@@ -246,6 +255,19 @@ class ContractUploadResponse(BaseModel):
     message: str
 
 
+class DealerResponse(BaseModel):
+    """Dealer response schema"""
+    id: int
+    name: str
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    user_id: Optional[int] = None
+    is_claimed: bool
+    
+    class Config:
+        from_attributes = True
+
+
 class ContractResponse(BaseModel):
     """Full contract response with analysis"""
     id: int
@@ -253,8 +275,11 @@ class ContractResponse(BaseModel):
     contract_type: Optional[str]
     status: str
     raw_text: Optional[str]
+    dealer_id: Optional[int]
+    dealer: Optional[DealerResponse] = None
     sla_data: Optional[dict]
     detailed_analysis: Optional[DetailedAnalysis] = None  # Sprint 9 addition
+    risk_assessment: Optional[dict] = None  # Gap 5: Structured risk report
     fairness_score: Optional[int]
     fairness_explanation: Optional[str]
     red_flags: Optional[List[Union[dict, str]]]
@@ -387,3 +412,71 @@ class QuickAnalysisResponse(BaseModel):
     fairness_explanation: str
     red_flags: List[str]
     confidence_score: int
+
+
+# ==================== Risk Assessment Schemas (Gap 5) ====================
+
+class RiskItem(BaseModel):
+    """Individual risk item with benchmark comparison"""
+    category: str = Field(..., description="Risk category, e.g. 'Interest Rate (APR)'")
+    severity: str = Field(..., description="high, medium, or low")
+    benchmark: str = Field(..., description="Industry benchmark for comparison")
+    actual_value: str = Field(..., description="Actual value from the contract")
+    impact_points: int = Field(..., description="Score impact in points")
+    mitigation: str = Field(..., description="Actionable advice to mitigate the risk")
+
+
+class RiskAssessmentResult(BaseModel):
+    """Structured risk assessment report"""
+    overall_risk_level: str = Field(..., description="high, medium, or low")
+    risk_items: List[RiskItem] = Field(default_factory=list)
+    total_impact_points: int = Field(0, description="Total score impact")
+    summary: str = Field(..., description="Human-readable risk summary")
+
+
+# ==================== Audit Trail Schemas (Gap 9) ====================
+
+class AuditLogResponse(BaseModel):
+    """Audit log entry response"""
+    id: int
+    user_id: Optional[int]
+    action: str
+    entity_type: Optional[str]
+    entity_id: Optional[int]
+    details: Optional[dict]
+    ip_address: Optional[str]
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+# ==================== Price Recommendation Schemas (Gap 3) ====================
+
+class PriceRecommendationResponse(BaseModel):
+    """Structured price recommendation with fair price range"""
+    fair_price_low: float
+    fair_price_high: float
+    msrp: Optional[float] = None
+    estimated_avg: float
+    basis: str = Field(..., description="Data basis, e.g. 'Algorithmic estimate based on depreciation, mileage, and segment'")
+    methodology: str = Field(..., description="Explanation of how the range was calculated")
+    confidence: str
+    vehicle_summary: str
+
+
+# ==================== Negotiation Strategy Schemas (Gap 13 & 15) ====================
+
+class StatusUpdateRequest(BaseModel):
+    """Request to update contract workflow status"""
+    status: str = Field(..., pattern="^(review|analysis|counter_offer|finalized)$")
+
+
+class NegotiationStrategyResponse(BaseModel):
+    """Structured negotiation strategy from AI"""
+    priority_actions: List[str] = Field(default_factory=list, description="Top priority negotiation actions")
+    counter_offer_points: List[dict] = Field(default_factory=list, description="Specific counter-offer suggestions")
+    talking_points: List[str] = Field(default_factory=list, description="Key talking points for the dealer")
+    what_if_scenarios: List[dict] = Field(default_factory=list, description="What-if scenario analyses")
+    overall_strategy: str = Field(..., description="Summary of recommended negotiation approach")
+

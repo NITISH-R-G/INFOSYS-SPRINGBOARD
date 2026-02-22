@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/auth_service.dart';
+import '../services/api_service.dart';
 
+/// Authentication provider with proper JWT lifecycle management.
+///
+/// Features:
+/// - Stores JWT in SharedPreferences
+/// - Validates token on app start via /api/auth/me
+/// - Exposes getToken() for other services
+/// - Handles 401 responses by triggering logout
 class AuthProvider with ChangeNotifier {
   final AuthService _authService = AuthService();
 
@@ -14,6 +22,7 @@ class AuthProvider with ChangeNotifier {
   String? _email;
   String? _fullName;
   String? _role;
+  String? _token;
 
   bool get isAuthenticated => _isAuthenticated;
   bool get isLoading => _isLoading;
@@ -24,8 +33,18 @@ class AuthProvider with ChangeNotifier {
   String? get email => _email;
   String? get userId => _userId;
 
+  /// Public getter for the JWT token — used by ApiService and other providers
+  String? get token => _token;
+
   AuthProvider() {
     _loadUser();
+  }
+
+  /// Get the stored token (async version)
+  Future<String?> getToken() async {
+    if (_token != null) return _token;
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('auth_token');
   }
 
   Future<void> _loadUser() async {
@@ -33,19 +52,21 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
 
     final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('auth_token');
+    final storedToken = prefs.getString('auth_token');
 
-    if (token != null && token.isNotEmpty) {
+    if (storedToken != null && storedToken.isNotEmpty) {
       try {
-        final userData = await _authService.getCurrentUser(token);
+        final userData = await _authService.getCurrentUser(storedToken);
         _isAuthenticated = true;
+        _token = storedToken;
         _userId = userData['id'].toString();
         _email = userData['email'];
         _fullName = userData['full_name'];
         _role = userData['role'];
       } catch (e) {
-        // Token invalid or expired
+        // Token invalid or expired — clear it
         _isAuthenticated = false;
+        _token = null;
         await prefs.remove('auth_token');
       }
     }
@@ -65,6 +86,7 @@ class AuthProvider with ChangeNotifier {
       if (response != null && response.containsKey('access_token')) {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('auth_token', response['access_token']);
+        _token = response['access_token'];
 
         // Load user details
         await _loadUser();
@@ -117,16 +139,38 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+  /// Handle 401 responses from the API — triggers logout
+  void handleAuthExpired(BuildContext? context) {
+    logout();
+    if (context != null) {
+      // Navigate to login screen
+      Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Session expired. Please log in again.'),
+          backgroundColor: Color(0xFFEF5350),
+        ),
+      );
+    }
+  }
+
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth_token');
 
     _isAuthenticated = false;
+    _token = null;
     _userId = null;
     _email = null;
     _fullName = null;
     _role = null;
 
+    notifyListeners();
+  }
+
+  /// Clear any displayed errors
+  void clearError() {
+    _error = null;
     notifyListeners();
   }
 }

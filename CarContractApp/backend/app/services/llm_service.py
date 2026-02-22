@@ -4,10 +4,13 @@ Handles AI-powered contract analysis using Google Gemini
 """
 import json
 import re
+import logging
 from typing import Optional, Dict, Any
 import google.generativeai as genai
 from ..config import settings
 from ..models.schemas import SLAData, ContractAnalysisResult, RedFlag
+
+logger = logging.getLogger(__name__)
 
 
 class LLMService:
@@ -15,15 +18,14 @@ class LLMService:
     
     def __init__(self):
         if settings.GEMINI_API_KEY:
-            key = settings.GEMINI_API_KEY
-            print(f"DEBUGGING: LLM Service using API Key: {key[:10]}...{key[-5:] if key else 'None'}")
+            logger.info("LLM Service: Gemini API key configured.")
             genai.configure(api_key=settings.GEMINI_API_KEY)
             self.model = genai.GenerativeModel(
                 'gemini-flash-latest',
                 generation_config={"response_mime_type": "application/json"}
             )
         else:
-            print("DEBUGGING: No API Key found in settings!")
+            logger.warning("LLM Service: No Gemini API key found in settings.")
             self.model = None
     
     def _ensure_model(self):
@@ -39,9 +41,7 @@ class LLMService:
         """
         self._ensure_model()
         
-        # DEBUG: Print the key being used (masked)
-        key = settings.GEMINI_API_KEY
-        print(f"DEBUG: analyze_contract using key: {key[:10]}...{key[-5:] if key else 'None'}")
+        logger.info("Starting contract analysis via Gemini...")
         
         prompt = self._build_analysis_prompt(contract_text, contract_type)
         
@@ -60,7 +60,7 @@ class LLMService:
                 if "429" in error_str or "quota" in error_str or "resource exhausted" in error_str:
                     if attempt < max_retries - 1:
                         wait_time = base_delay * (2 ** attempt)  # 5s, 10s, 20s
-                        print(f"Rate limit hit. Retrying in {wait_time} seconds...")
+                        logger.warning(f"Rate limit hit. Retrying in {wait_time} seconds...")
                         import asyncio
                         await asyncio.sleep(wait_time)
                         continue
@@ -108,6 +108,11 @@ EXAMPLE OUTPUT (Relevant Fields):
 Extract and organize the information into the following structured JSON format.
 
 --------------------------------------------
+
+0. Dealer Information (Key: dealer_information)
+- Dealer Name (e.g., City Auto Group)
+- Contact Email (e.g., sales@cityauto.com)
+- Contact Phone (e.g., 555-0123)
 
 1. Vehicle Details (Key: vehicle_details)
 - Make
@@ -191,9 +196,15 @@ Risk Flag Format:
 "risk_flags": [
   {{
     "clause": "Extracted clause text",
+    "risk_level": "high | medium | low",
     "reason": "Why this clause may be risky for the user"
   }}
 ]
+
+Risk Level Guidelines (use automotive benchmarks):
+- "high": APR above 14%, excessive fees (>$750 doc fee), mileage under 10k/yr, no early termination option, unfair repossession terms
+- "medium": APR 7-14%, fees above $500, mileage 10-12k/yr, restrictive modification clauses
+- "low": Minor concerns, standard industry terms that slightly favor the dealer/lender
 
 Also include a top-level "missing_sections" list and a "summary" (summarize main terms like Price, Vehicle, Parties).
 
@@ -220,6 +231,17 @@ CONTRACT TEXT:
             
             data = json.loads(clean_text)
             
+            # Check for Dealer Information 
+            if "dealer_information" in data:
+                dealer_info = data["dealer_information"]
+                if isinstance(dealer_info, dict):
+                    data["dealer_information"] = {
+                        "dealer_name": str(dealer_info.get("Dealer Name", dealer_info.get("dealer_name", "Not Mentioned"))),
+                        "contact_email": str(dealer_info.get("Contact Email", dealer_info.get("contact_email", "Not Mentioned"))),
+                        "contact_phone": str(dealer_info.get("Contact Phone", dealer_info.get("contact_phone", "Not Mentioned"))),
+                        "risk_flags": dealer_info.get("risk_flags", [])
+                    }
+
             # Map Detailed Analysis to Pydantic Model
             detailed = DetailedAnalysis(**data)
             
@@ -275,10 +297,18 @@ CONTRACT TEXT:
                     clause = risk.get("clause", "Unknown") if isinstance(risk, dict) else risk.clause
                     reason = risk.get("reason", "Potential issue") if isinstance(risk, dict) else risk.reason
                     
+                    # Use LLM-provided risk_level, fallback to "medium"
+                    llm_risk_level = (
+                        risk.get("risk_level", "medium") if isinstance(risk, dict)
+                        else getattr(risk, 'risk_level', 'medium')
+                    )
+                    if llm_risk_level not in ("high", "medium", "low"):
+                        llm_risk_level = "medium"
+
                     rf_obj = RedFlag(
                         clause_text=clause,
                         title=f"Risk in {section.replace('_', ' ').title()}",
-                        risk_level="medium",
+                        risk_level=llm_risk_level,
                         why_flag=reason,
                         risks=reason,
                         plain_explanation=reason,
@@ -458,6 +488,90 @@ Respond in JSON format:
             return json.loads(clean_text)
         except Exception as e:
             raise LLMException(f"Email generation failed: {str(e)}")
+
+    async def generate_negotiation_strategy(
+        self,
+        sla_data: Dict[str, Any],
+        risk_assessment: Optional[Dict[str, Any]] = None,
+        market_data: Optional[Dict[str, Any]] = None,
+        contract_type: str = "lease"
+    ) -> Dict[str, Any]:
+        """
+        Generate a structured negotiation strategy based on contract SLA,
+        risk assessment, and market pricing data (Gap 13).
+
+        Returns dict matching NegotiationStrategyResponse schema.
+        """
+        self._ensure_model()
+
+        context_parts = [f"CONTRACT TYPE: {contract_type}"]
+
+        context_parts.append(f"\nCONTRACT SLA TERMS:\n{json.dumps(sla_data, indent=2)}")
+
+        if risk_assessment:
+            context_parts.append(f"\nRISK ASSESSMENT:\n{json.dumps(risk_assessment, indent=2)}")
+
+        if market_data:
+            context_parts.append(f"\nMARKET DATA:\n{json.dumps(market_data, indent=2)}")
+
+        context_str = "\n".join(context_parts)
+
+        prompt = f"""You are an expert automotive negotiation strategist helping a consumer get the best deal.
+
+{context_str}
+
+Based on the contract terms, risk assessment, and market data above, generate a comprehensive negotiation strategy.
+
+Respond in JSON format:
+{{
+    "priority_actions": [
+        "Most important action to take first",
+        "Second most important action",
+        "..."
+    ],
+    "counter_offer_points": [
+        {{
+            "term": "APR",
+            "current_value": "current value from contract",
+            "suggested_value": "what to counter-offer",
+            "justification": "why this counter is reasonable",
+            "savings_estimate": "estimated savings in dollars"
+        }}
+    ],
+    "talking_points": [
+        "Key point to bring up during negotiation",
+        "..."
+    ],
+    "what_if_scenarios": [
+        {{
+            "scenario": "Description of the scenario",
+            "outcome": "Expected outcome",
+            "recommendation": "What to do in this case"
+        }}
+    ],
+    "overall_strategy": "Summary of the recommended negotiation approach"
+}}
+
+Be specific, data-driven, and reference actual numbers from the contract. Focus on realistic, achievable improvements."""
+
+        try:
+            response = self.model.generate_content(prompt)
+            clean_text = response.text.strip()
+            if clean_text.startswith("```"):
+                clean_text = re.sub(r'^```\w*\n?', '', clean_text)
+                clean_text = re.sub(r'\n?```$', '', clean_text)
+
+            result = json.loads(clean_text)
+            # Ensure all expected keys exist
+            return {
+                "priority_actions": result.get("priority_actions", []),
+                "counter_offer_points": result.get("counter_offer_points", []),
+                "talking_points": result.get("talking_points", []),
+                "what_if_scenarios": result.get("what_if_scenarios", []),
+                "overall_strategy": result.get("overall_strategy", "Review the contract terms carefully before signing.")
+            }
+        except Exception as e:
+            raise LLMException(f"Strategy generation failed: {str(e)}")
 
 
 class LLMException(Exception):

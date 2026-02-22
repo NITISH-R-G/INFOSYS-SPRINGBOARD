@@ -8,23 +8,21 @@ import 'screens/contract_detail_screen.dart';
 import 'screens/vin_lookup_screen.dart';
 import 'screens/negotiation_screen.dart';
 import 'screens/comparison_screen.dart';
+import 'screens/comparison_dashboard_screen.dart';
 import 'screens/dealer_dashboard_screen.dart';
 import 'screens/offer_builder_screen.dart';
 import 'screens/dealer_chat_screen.dart';
+import 'screens/login_screen.dart';
+import 'screens/signup_screen.dart';
+import 'screens/audit_screen.dart';
 
-import 'dart:io';
-import 'package:sqflite/sqflite.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:provider/provider.dart';
 import 'providers/auth_provider.dart';
 import 'providers/chat_provider.dart';
 
 void main() async {
-  if (Platform.isWindows || Platform.isLinux) {
-    sqfliteFfiInit();
-    databaseFactory = databaseFactoryFfi;
-  }
   WidgetsFlutterBinding.ensureInitialized();
+
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -55,13 +53,17 @@ class ContractAIApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const LandingScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/signup': (context) => const SignupScreen(),
         '/dashboard': (context) => const DashboardScreen(),
         '/upload': (context) => const UploadScreen(),
         '/vin-lookup': (context) => const VinLookupScreen(),
         '/negotiate': (context) => const NegotiationScreen(),
         '/dealer_chat': (context) => const DealerChatScreen(),
+        '/comparison-dashboard': (context) => const ComparisonDashboardScreen(),
         '/dealer/dashboard': (context) => const DealerDashboardScreen(),
         '/dealer/offer-builder': (context) => const OfferBuilderScreen(),
+        '/audit': (context) => const AuditScreen(),
       },
       onGenerateRoute: (settings) {
         // Handle dynamic routes like /contract/:id

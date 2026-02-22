@@ -8,17 +8,16 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from ..database import get_db, Contract, Negotiation
+from ..database import get_db, Contract, ContractSLA, Negotiation, User
 from ..models.schemas import (
     NegotiationChatRequest, NegotiationChatResponse,
-    GenerateEmailRequest, GenerateEmailResponse
+    GenerateEmailRequest, GenerateEmailResponse,
+    NegotiationStrategyResponse
 )
 from ..services.llm_service import llm_service, LLMException
+from ..services.auth_service import get_current_active_user
 
 router = APIRouter(prefix="/negotiate", tags=["Negotiation"])
-
-# Default user ID for non-authenticated usage
-DEFAULT_USER_ID = 1
 
 
 @router.post("/chat", response_model=NegotiationChatResponse)
@@ -43,13 +42,38 @@ async def negotiation_chat(
             Contract.id == request.contract_id
         ).first()
         
-        if contract and contract.sla_data:
+        if contract:
+            # Build richer context from contract_sla table (Gap 13)
+            sla_context = {}
+            if contract.sla:
+                sla_context = {
+                    "apr": contract.sla.apr,
+                    "term_months": contract.sla.term_months,
+                    "monthly_payment": contract.sla.monthly_payment,
+                    "down_payment": contract.sla.down_payment,
+                    "mileage_limit": contract.sla.mileage_limit,
+                    "buyout_price": contract.sla.buyout_price,
+                    "market_value": contract.sla.market_value,
+                    "market_value_low": contract.sla.market_value_low,
+                    "market_value_high": contract.sla.market_value_high,
+                    "residual_value": contract.sla.residual_value,
+                    "early_termination_fee": contract.sla.early_termination_fee,
+                }
+            
             context["contract"] = {
-                "sla_data": contract.sla_data,
+                "sla_data": sla_context,
                 "fairness_score": contract.fairness_score,
+                "fairness_explanation": contract.fairness_explanation,
                 "red_flags": contract.red_flags,
-                "contract_type": contract.contract_type
+                "contract_type": contract.contract_type,
+                "status": contract.status
             }
+            
+            # Include risk assessment if available
+            if contract.detailed_analysis and isinstance(contract.detailed_analysis, dict):
+                risk_assess = contract.detailed_analysis.get("risk_assessment")
+                if risk_assess:
+                    context["risk_assessment"] = risk_assess
     
     # Get conversation history if session exists
     negotiation = db.query(Negotiation).filter(
@@ -80,7 +104,7 @@ async def negotiation_chat(
             negotiation.updated_at = datetime.utcnow()
         else:
             negotiation = Negotiation(
-                user_id=DEFAULT_USER_ID,
+                user_id=current_user.id if hasattr(current_user, 'id') else 1,
                 contract_id=request.contract_id,
                 session_id=session_id,
                 messages=new_messages,
@@ -230,3 +254,84 @@ async def get_negotiation_tips(
     }
     
     return tips
+
+
+@router.get("/strategy/{contract_id}", response_model=NegotiationStrategyResponse)
+async def get_negotiation_strategy(
+    contract_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
+):
+    """
+    Generate a structured negotiation strategy for a contract (Gap 13).
+    
+    Uses contract SLA terms, risk assessment, and market data to produce
+    tactical negotiation points, counter-offer suggestions, and what-if scenarios.
+    """
+    contract = db.query(Contract).filter(
+        Contract.id == contract_id,
+        Contract.user_id == current_user.id
+    ).first()
+    
+    if not contract:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Contract not found"
+        )
+    
+    if contract.status != "analyzed":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Contract must be analyzed before generating a strategy."
+        )
+    
+    # Build SLA context from contract_sla table
+    sla_context = {}
+    if contract.sla:
+        sla_context = {
+            "apr": contract.sla.apr,
+            "term_months": contract.sla.term_months,
+            "monthly_payment": contract.sla.monthly_payment,
+            "down_payment": contract.sla.down_payment,
+            "mileage_limit": contract.sla.mileage_limit,
+            "mileage_overage_fee": contract.sla.mileage_overage_fee,
+            "buyout_price": contract.sla.buyout_price,
+            "residual_value": contract.sla.residual_value,
+            "early_termination_fee": contract.sla.early_termination_fee,
+            "market_value": contract.sla.market_value,
+            "market_value_low": contract.sla.market_value_low,
+            "market_value_high": contract.sla.market_value_high,
+            "fairness_score": contract.sla.fairness_score,
+        }
+    
+    # Get risk assessment
+    risk_assessment = None
+    if contract.detailed_analysis and isinstance(contract.detailed_analysis, dict):
+        risk_assessment = contract.detailed_analysis.get("risk_assessment")
+    
+    # Get market data
+    market_data = None
+    if contract.sla and contract.sla.market_value:
+        market_data = {
+            "estimated_value": contract.sla.market_value,
+            "value_range_low": contract.sla.market_value_low,
+            "value_range_high": contract.sla.market_value_high,
+            "confidence": contract.sla.market_confidence,
+        }
+    
+    try:
+        strategy = await llm_service.generate_negotiation_strategy(
+            sla_data=sla_context,
+            risk_assessment=risk_assessment,
+            market_data=market_data,
+            contract_type=contract.contract_type or "lease"
+        )
+        
+        return NegotiationStrategyResponse(**strategy)
+        
+    except LLMException as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Strategy generation failed: {str(e)}"
+        )
+

@@ -17,6 +17,7 @@ import 'negotiation_screen.dart';
 import 'dealer_chat_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
+import '../widgets/dealer_forwarding_dialog.dart';
 
 class ContractDetailScreen extends StatefulWidget {
   final String contractId;
@@ -167,40 +168,18 @@ class _ContractDetailScreenState extends State<ContractDetailScreen>
     final isDealer = authProvider.role?.toString().contains('dealer') == true;
 
     return Scaffold(
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          // AI Assistant is mostly useful for clients, but dealers could use it too
-          if (!isDealer)
-            FloatingActionButton.extended(
-              heroTag: 'fab_ai',
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      NegotiationScreen(contractId: widget.contractId),
-                ),
-              ),
-              backgroundColor: AppTheme.accentOrange,
-              icon: const Icon(Icons.auto_awesome),
-              label: const Text('Ask AI Assistant'),
-            ),
-          const SizedBox(height: 12),
-          FloatingActionButton.extended(
-            heroTag: 'fab_dealer',
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    DealerChatScreen(contractId: widget.contractId),
-              ),
-            ),
-            backgroundColor: AppTheme.accentBlue,
-            icon: const Icon(Icons.chat_bubble_outline),
-            label: Text(isDealer ? 'Message Client' : 'Message Dealer'),
+      floatingActionButton: FloatingActionButton.extended(
+        heroTag: 'fab_dealer',
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                DealerChatScreen(contractId: widget.contractId),
           ),
-        ],
+        ),
+        backgroundColor: AppTheme.accentBlue,
+        icon: const Icon(Icons.chat_bubble_outline),
+        label: Text(isDealer ? 'Message Client' : 'Message Dealer'),
       ),
       body: Stack(
         children: [
@@ -236,6 +215,66 @@ class _ContractDetailScreenState extends State<ContractDetailScreen>
         onPressed: () => Navigator.pop(context),
       ),
       actions: [
+        if (_contract != null)
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.more_vert),
+            onSelected: (String result) async {
+              if (result == 'forward') {
+                DealerForwardingDialog.show(context, widget.contractId);
+                return;
+              }
+              try {
+                await ApiService.updateContractStatus(
+                  widget.contractId,
+                  result,
+                );
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Status updated to $result')),
+                  );
+                  _loadContract();
+                }
+              } catch (e) {
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Failed to update status: $e')),
+                  );
+                }
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'review',
+                child: Text('Mark as In Review'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'counter_offer',
+                child: Text('Mark as Counter Offer Made'),
+              ),
+              const PopupMenuItem<String>(
+                value: 'finalized',
+                child: Text('Mark as Finalized'),
+              ),
+              const PopupMenuDivider(),
+              const PopupMenuItem<String>(
+                value: 'forward',
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.forward_to_inbox,
+                      size: 18,
+                      color: AppTheme.glowPurple,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      'Forward to Dealer',
+                      style: TextStyle(color: AppTheme.glowPurple),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         IconButton(
           icon: const Icon(Icons.chat_bubble_outline),
           onPressed: () => Navigator.push(

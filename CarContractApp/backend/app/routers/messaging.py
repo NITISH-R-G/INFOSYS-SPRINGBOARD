@@ -5,10 +5,16 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
+import logging
+from jose import jwt
+from datetime import datetime, timedelta
 
-from ..database import get_db, User, Conversation, Message, Contract
+from ..database import get_db, User, Conversation, Message, Contract, Dealer
+from ..config import settings
 from ..models import schemas
 from ..services.auth_service import get_current_active_user
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/messaging", tags=["Messaging"])
 
@@ -129,6 +135,34 @@ def post_message(
     conversation.updated_at = datetime.datetime.utcnow()
     
     db.add(new_message)
+    
+    # --- Gap 9: Magic Link Routing ---
+    # Check if the recipient is an unclaimed dealer
+    recipient_id = conversation.dealer_id if current_user.id == conversation.buyer_id else conversation.buyer_id
+    recipient_user = db.query(User).filter(User.id == recipient_id).first()
+    
+    if recipient_user and recipient_user.role == "dealer":
+        dealer_profile = db.query(Dealer).filter(Dealer.user_id == recipient_user.id).first()
+        if dealer_profile and not dealer_profile.is_claimed:
+            # Generate Magic Link JWT
+            expiration = datetime.utcnow() + timedelta(days=7)  # Link valid for 7 days
+            payload = {
+                "sub": str(recipient_user.id),
+                "email": recipient_user.email,
+                "role": "dealer",
+                "conv_id": conversation_id,
+                "exp": expiration
+            }
+            magic_token = jwt.encode(payload, settings.SECRET_KEY, algorithm="HS256")
+            magic_link = f"http://localhost:3000/claim-account?token={magic_token}"
+            
+            # Mock External Service Email/SMS
+            logger.warning("=====================================================")
+            logger.warning(f"MOCK EMAIL DISPATCH TO {recipient_user.email}")
+            logger.warning(f"A customer has a question about a recent contract.")
+            logger.warning(f"Click here to securely reply: {magic_link}")
+            logger.warning("=====================================================")
+
     db.commit()
     db.refresh(new_message)
     
