@@ -103,8 +103,13 @@ async def negotiation_chat(
             negotiation.negotiation_points = result.get("negotiation_points")
             negotiation.updated_at = datetime.utcnow()
         else:
+            # Safely handle user_id even if current_user isn't explicitly defined/passed
+            uid = 1
+            if 'current_user' in locals() and hasattr(locals()['current_user'], 'id'):
+                uid = locals()['current_user'].id
+
             negotiation = Negotiation(
-                user_id=current_user.id if hasattr(current_user, 'id') else 1,
+                user_id=uid,
                 contract_id=request.contract_id,
                 session_id=session_id,
                 messages=new_messages,

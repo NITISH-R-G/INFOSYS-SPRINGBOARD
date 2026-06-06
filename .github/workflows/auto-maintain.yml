@@ -1,0 +1,62 @@
+name: Auto-Maintain Repository
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  release:
+    types: [published]
+  schedule:
+    - cron: '0 0 * * 0' # Weekly on Sundays
+
+jobs:
+  auto-document:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Run Repository Analyzer
+        run: |
+          python scripts/repo_analyzer.py
+
+      - name: Generate Diagrams
+        run: |
+          python scripts/diagram_generator.py
+
+      - name: Update README
+        run: |
+          python scripts/readme_generator.py
+
+      - name: Run AI Documentation Agent
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          python scripts/ai_agent.py
+
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action Bot"
+          # Get current branch or fallback to HEAD for detached state
+          CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          if [ "$CURRENT_BRANCH" = "HEAD" ]; then
+            # We are in detached head (e.g. PR check run), commit but don't push
+            git add -f README.md repo_knowledge_graph.json architecture_diagram.md module_relationships.md CHANGELOG.md
+            git diff --quiet && git diff --staged --quiet || git commit -m "docs: auto-update repository documentation and graphs"
+          else
+            # We are on a branch, commit and push
+            git add -f README.md repo_knowledge_graph.json architecture_diagram.md module_relationships.md CHANGELOG.md
+            git diff --quiet && git diff --staged --quiet || (git commit -m "docs: auto-update repository documentation and graphs" && git push origin HEAD:$CURRENT_BRANCH)
+          fi
