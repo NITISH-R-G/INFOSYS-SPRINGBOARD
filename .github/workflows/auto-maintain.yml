@@ -49,5 +49,14 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action Bot"
-          git add -f README.md repo_knowledge_graph.json architecture_diagram.md module_relationships.md CHANGELOG.md
-          git diff --quiet && git diff --staged --quiet || (git commit -m "docs: auto-update repository documentation and graphs" && git push)
+          # Get current branch or fallback to HEAD for detached state
+          CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          if [ "$CURRENT_BRANCH" = "HEAD" ]; then
+            # We are in detached head (e.g. PR check run), commit but don't push
+            git add -f README.md repo_knowledge_graph.json architecture_diagram.md module_relationships.md CHANGELOG.md
+            git diff --quiet && git diff --staged --quiet || git commit -m "docs: auto-update repository documentation and graphs"
+          else
+            # We are on a branch, commit and push
+            git add -f README.md repo_knowledge_graph.json architecture_diagram.md module_relationships.md CHANGELOG.md
+            git diff --quiet && git diff --staged --quiet || (git commit -m "docs: auto-update repository documentation and graphs" && git push origin HEAD:$CURRENT_BRANCH)
+          fi
