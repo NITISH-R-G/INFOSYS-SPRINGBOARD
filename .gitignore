@@ -13,3 +13,7 @@ env/
 # OS generated files
 .DS_Store
 Thumbs.db
+CHANGELOG.md
+repo_knowledge_graph.json
+architecture_diagram.md
+module_relationships.md
