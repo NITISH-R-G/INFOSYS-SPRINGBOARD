@@ -2,9 +2,13 @@
   "structure": {
     "main.py": "file",
     ".gitignore": "file",
+    "architecture_diagram.md": "file",
+    "CHANGELOG.md": "file",
+    "module_relationships.md": "file",
     "OnePageContract_page-0001.jpg": "file",
     "README.md": "file",
     "Gap Analysis": "file",
+    "repo_knowledge_graph.json": "file",
     "CarContractApp": {
       "start_flutter.bat": "file",
       "start_app.bat": "file",

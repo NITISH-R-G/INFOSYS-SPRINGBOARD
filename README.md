@@ -210,9 +210,13 @@ graph LR
 ```text
 ├── main.py
 ├── .gitignore
+├── architecture_diagram.md
+├── CHANGELOG.md
+├── module_relationships.md
 ├── OnePageContract_page-0001.jpg
 ├── README.md
 ├── Gap Analysis
+├── repo_knowledge_graph.json
 ├── CarContractApp/
 │   ├── start_flutter.bat
 │   ├── start_app.bat
@@ -234,10 +238,6 @@ graph LR
 │   │   │   ├── Runner.xcodeproj/
 │   │   │   │   ├── project.pbxproj
 │   │   │   │   ├── project.xcworkspace/
-│   │   │   │   │   ├── contents.xcworkspacedata
-│   │   │   │   │   └── xcshareddata/
-│   │   │   │   │       ├── IDEWorkspaceChecks.plist
-│   │   │   │   │       └── WorkspaceSettings.xcsettings
 ... (truncated for brevity)
 ```
 
