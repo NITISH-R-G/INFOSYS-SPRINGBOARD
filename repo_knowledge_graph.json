@@ -1,52 +1,377 @@
 {
   "structure": {
+    "repo_knowledge_graph.json": "file",
+    ".gitignore": "file",
+    "main.py": "file",
     "README.md": "file",
     "Gap Analysis": "file",
-    "repo_knowledge_graph.json": "file",
-    "OnePageContract_page-0001.jpg": "file",
-    "module_relationships.md": "file",
     "CHANGELOG.md": "file",
-    "main.py": "file",
-    ".gitignore": "file",
+    "OnePageContract_page-0001.jpg": "file",
     "architecture_diagram.md": "file",
-    "Gemini_File_QA": {
-      "run_app.bat": "file",
-      "requirements.txt": "file",
-      "sample.txt": "file",
-      "main.py": "file"
-    },
+    "module_relationships.md": "file",
     "CarContractApp": {
+      "start_backend.bat": "file",
       "README.md": "file",
       "verify_auth_e2e.py": "file",
-      "contract_app.db": "file",
-      "start_backend.bat": "file",
-      "start_flutter.bat": "file",
       "docker-compose.yml": "file",
+      "start_flutter.bat": "file",
       "start_app.bat": "file",
+      "contract_app.db": "file",
+      "frontend": {
+        "index.html": "file",
+        "package.json": "file",
+        "vite.config.js": "file",
+        "package-lock.json": "file",
+        "src": {
+          "main.jsx": "file",
+          "App.jsx": "file",
+          "services": {
+            "api.js": "file"
+          },
+          "pages": {
+            "Negotiate.jsx": "file",
+            "Upload.css": "file",
+            "Dashboard.css": "file",
+            "VINLookup.css": "file",
+            "Negotiate.css": "file",
+            "ContractDetail.css": "file",
+            "ContractDetail.jsx": "file",
+            "Landing.css": "file",
+            "VINLookup.jsx": "file",
+            "Landing.jsx": "file",
+            "Upload.jsx": "file",
+            "Dashboard.jsx": "file"
+          },
+          "utils": {
+            "localization.js": "file"
+          },
+          "styles": {
+            "index.css": "file"
+          },
+          "components": {
+            "Navbar.css": "file",
+            "PDFViewer.css": "file",
+            "Navbar.jsx": "file",
+            "PDFViewer.jsx": "file",
+            "ErrorBoundary.jsx": "file",
+            "intelligence": {
+              "DetailedAnalysisPanel.jsx": "file",
+              "ContractInsightsPanel.jsx": "file",
+              "DealIntelligenceBar.jsx": "file",
+              "ScenarioFAB.jsx": "file",
+              "AlternativeCarsStrip.jsx": "file",
+              "KeyTermsPanel.jsx": "file",
+              "Intelligence.css": "file",
+              "VehicleRiskPanel.jsx": "file",
+              "NegotiationSheet.jsx": "file"
+            }
+          }
+        }
+      },
+      "backend": {
+        "run_backend.bat": "file",
+        ".env.example": "file",
+        "verify_key.py": "file",
+        "verify_backend_e2e.py": "file",
+        "requirements.txt": "file",
+        "test_llm_direct.py": "file",
+        "test_llm.py": "file",
+        "Dockerfile": "file",
+        "migrate_db.py": "file",
+        "alembic.ini": "file",
+        "test_analyze.py": "file",
+        "contract_app.db": "file",
+        "alembic": {
+          "script.py.mako": "file",
+          "env.py": "file",
+          "versions": {
+            "001_initial_schema.py": "file"
+          }
+        },
+        "uploads": {
+          "8fa9e31b-34a5-4e47-91bb-96418174fd41.pdf": "file",
+          "1e85d1ee-c489-4c5c-b288-9781ffe350c1.pdf": "file",
+          "b6dacf9c-41f8-4588-81ec-d03e44020bf4.pdf": "file",
+          "fc7d8403-5b22-42aa-9b6a-59d73c9978ef.pdf": "file",
+          "14538012-cf3d-43d8-9563-1555d821909a.pdf": "file",
+          "34bfd24b-b85e-46a6-8235-62a8841364a4.pdf": "file",
+          "6185f131-5675-480a-931d-0619b89d2523.pdf": "file",
+          "a22cbdd8-7a35-41e9-a4e8-bd2e976f2cef.pdf": "file",
+          "c2520a54-db32-407b-bf2e-97f7baa4c0d2.pdf": "file",
+          "bf783c1f-26d5-4cbc-a990-98f8212d613d.pdf": "file",
+          "81d6ab98-5ed3-4aa2-9dfa-4edf996e00f8.pdf": "file",
+          "53b889ba-6bf6-4ead-bf10-3ca432e644c6.pdf": "file",
+          "41206299-9e5c-4e02-b15c-6445a98d4653.pdf": "file",
+          "961c8af4-0738-4f75-b7f8-6e0b9ea43dda.pdf": "file",
+          "57ed4ef1-822e-4384-823e-728507e21047.pdf": "file",
+          "2d6db534-4a43-42e2-9bde-5d1ecbaca730.pdf": "file",
+          "eb4057e5-4f57-4746-a7ab-bad20f27225b.pdf": "file",
+          "ee77b521-44ec-4101-bddc-790c4d7daf11.pdf": "file",
+          "d9169216-0cbd-461b-87f5-5d776cc8bafe.pdf": "file",
+          "7c6642e5-8590-419b-9638-549edf701bc6.pdf": "file",
+          "a614ea18-5935-4b09-98dd-89ebc17125e9.pdf": "file",
+          "2d3630ac-86dc-4c05-bf8b-d82f7528c27c.pdf": "file",
+          "55a0263c-8897-4c6a-9770-d4026b64e919.pdf": "file",
+          "f9580bc4-6554-4916-94cf-90c31dc8b5a1.png": "file",
+          "5db5931d-7535-4e32-9f38-55a9e5d6847f.pdf": "file",
+          "b35b0498-ee54-4d69-bf93-3f68e80db5d0.pdf": "file",
+          "f46dbccc-859c-47a5-b0a9-37862122633f.pdf": "file",
+          "a6981913-31a5-45eb-a7e4-c6e8ddd23be2.pdf": "file",
+          "ac69008f-becb-44c6-b134-f6256f377f18.pdf": "file",
+          "7ee87b7e-84a0-4bc7-a7d9-e1310aa201e5.pdf": "file",
+          "a99033b7-cc0c-4e94-abad-f299048e52a8.pdf": "file",
+          "35f062bf-c64e-44f7-b4be-3f6029bfdd75.pdf": "file",
+          "439647f3-e264-4b80-a684-08a7be830760.pdf": "file",
+          "addc29e2-cb76-4244-9dce-9b589c7d8310.pdf": "file",
+          "0459368a-bb9e-4789-92f5-473ac8ee171e.pdf": "file",
+          "f0473541-a5b4-4616-9aca-3eec224b296a.pdf": "file",
+          "caf3c5c2-ff89-4bfd-9f4d-01c74962fd72.pdf": "file",
+          "d2e15c92-f1c7-446b-81c8-37144d23d431.pdf": "file",
+          "d670c00e-a489-4777-92ff-05d53cf0801a.pdf": "file",
+          "682d4038-0ec4-435c-b1c1-6dd69bf09d10.pdf": "file",
+          "e23235aa-8a88-45cb-a8ed-852a6914dac7.pdf": "file",
+          "75f8046f-2d38-4f3b-8ef7-55e983d122ef.pdf": "file",
+          "9bda634d-90e1-4907-a8bc-549ca39125a7.pdf": "file",
+          "d4f15600-16d0-40e6-9133-acfc0f11c28e.pdf": "file",
+          "d4b5b79c-b41c-4da7-b6b6-073f7b4af9d2.pdf": "file",
+          "9a75dd0a-36ea-40f1-9e59-9337490dc071.pdf": "file",
+          "f3c825f9-2ad6-417d-8099-b41b8d9942a7.pdf": "file",
+          "b4cb4a20-0afa-41e3-894c-fb8ec4107010.pdf": "file",
+          "e0d3a863-af0b-48e2-b949-af9256f53e9c.pdf": "file",
+          "347a8c0a-7916-4571-9175-9cbcd8122d1e.pdf": "file",
+          "aea4478f-22cd-40a5-9d05-06c822cde2f9.pdf": "file",
+          "e1f166e4-b3a8-4fed-9367-bed87d635d99.pdf": "file",
+          "a9cc5c8a-6a1c-47eb-a782-db10202cf032.pdf": "file",
+          "7ea40588-d297-45ba-b0eb-ac66ae2a8b62.pdf": "file",
+          "4774c456-1475-4639-abea-02d365211f95.pdf": "file",
+          "84e4de5a-5784-45a2-a2b7-f066933650f0.pdf": "file",
+          "00fdbaad-3208-4282-b1e7-011f6589902c.pdf": "file"
+        },
+        "tests": {
+          "test_pricing.py": "file",
+          "test_scoring.py": "file",
+          "test_audit.py": "file"
+        },
+        "app": {
+          "main.py": "file",
+          "tasks.py": "file",
+          "celery_app.py": "file",
+          "config.py": "file",
+          "exceptions.py": "file",
+          "database.py": "file",
+          "__init__.py": "file",
+          "services": {
+            "scoring_engine.py": "file",
+            "audit_service.py": "file",
+            "pricing_adapters.py": "file",
+            "vin_service.py": "file",
+            "auth_service.py": "file",
+            "price_service.py": "file",
+            "llm_service.py": "file",
+            "ocr_service.py": "file",
+            "__init__.py": "file"
+          },
+          "models": {
+            "v1_api_schemas.py": "file",
+            "schemas.py": "file",
+            "__init__.py": "file"
+          },
+          "routers": {
+            "messaging.py": "file",
+            "contracts.py": "file",
+            "ws.py": "file",
+            "audit.py": "file",
+            "intake.py": "file",
+            "negotiations.py": "file",
+            "v1_api.py": "file",
+            "vehicles.py": "file",
+            "files.py": "file",
+            "magic_link.py": "file",
+            "auth.py": "file",
+            "__init__.py": "file"
+          }
+        }
+      },
       "flutter_app": {
-        "README.md": "file",
-        "pubspec.yaml": "file",
-        "pubspec.lock": "file",
-        "analysis_options.yaml": "file",
-        ".metadata": "file",
         ".gitignore": "file",
+        "pubspec.lock": "file",
+        "pubspec.yaml": "file",
+        "README.md": "file",
+        ".metadata": "file",
         "replace_currency.py": "file",
+        "analysis_options.yaml": "file",
+        "windows": {
+          ".gitignore": "file",
+          "CMakeLists.txt": "file",
+          "runner": {
+            "main.cpp": "file",
+            "flutter_window.cpp": "file",
+            "Runner.rc": "file",
+            "resource.h": "file",
+            "utils.cpp": "file",
+            "utils.h": "file",
+            "flutter_window.h": "file",
+            "win32_window.cpp": "file",
+            "CMakeLists.txt": "file",
+            "win32_window.h": "file",
+            "runner.exe.manifest": "file",
+            "resources": {
+              "app_icon.ico": "file"
+            }
+          },
+          "flutter": {
+            "generated_plugin_registrant.h": "file",
+            "generated_plugin_registrant.cc": "file",
+            "CMakeLists.txt": "file",
+            "generated_plugins.cmake": "file"
+          }
+        },
+        "test": {
+          "widget_test.dart": "file"
+        },
+        "ios": {
+          ".gitignore": "file",
+          "RunnerTests": {
+            "RunnerTests.swift": "file"
+          },
+          "Flutter": {
+            "Debug.xcconfig": "file",
+            "Release.xcconfig": "file",
+            "AppFrameworkInfo.plist": "file"
+          },
+          "Runner.xcworkspace": {
+            "contents.xcworkspacedata": "file",
+            "xcshareddata": {
+              "IDEWorkspaceChecks.plist": "file",
+              "WorkspaceSettings.xcsettings": "file"
+            }
+          },
+          "Runner.xcodeproj": {
+            "project.pbxproj": "file",
+            "xcshareddata": {
+              "xcschemes": {
+                "Runner.xcscheme": "file"
+              }
+            },
+            "project.xcworkspace": {
+              "contents.xcworkspacedata": "file",
+              "xcshareddata": {
+                "IDEWorkspaceChecks.plist": "file",
+                "WorkspaceSettings.xcsettings": "file"
+              }
+            }
+          },
+          "Runner": {
+            "AppDelegate.swift": "file",
+            "Info.plist": "file",
+            "Runner-Bridging-Header.h": "file",
+            "Base.lproj": {
+              "LaunchScreen.storyboard": "file",
+              "Main.storyboard": "file"
+            },
+            "Assets.xcassets": {
+              "AppIcon.appiconset": {
+                "Icon-App-29x29@1x.png": "file",
+                "Icon-App-83.5x83.5@2x.png": "file",
+                "Icon-App-40x40@2x.png": "file",
+                "Icon-App-29x29@2x.png": "file",
+                "Icon-App-20x20@3x.png": "file",
+                "Icon-App-60x60@2x.png": "file",
+                "Icon-App-76x76@1x.png": "file",
+                "Icon-App-40x40@1x.png": "file",
+                "Icon-App-76x76@2x.png": "file",
+                "Icon-App-20x20@1x.png": "file",
+                "Icon-App-1024x1024@1x.png": "file",
+                "Icon-App-40x40@3x.png": "file",
+                "Icon-App-60x60@3x.png": "file",
+                "Contents.json": "file",
+                "Icon-App-29x29@3x.png": "file",
+                "Icon-App-20x20@2x.png": "file"
+              },
+              "LaunchImage.imageset": {
+                "README.md": "file",
+                "LaunchImage@2x.png": "file",
+                "Contents.json": "file",
+                "LaunchImage@3x.png": "file",
+                "LaunchImage.png": "file"
+              }
+            }
+          }
+        },
         "web": {
           "index.html": "file",
           "favicon.png": "file",
           "manifest.json": "file",
           "icons": {
-            "Icon-512.png": "file",
             "Icon-maskable-512.png": "file",
             "Icon-maskable-192.png": "file",
-            "Icon-192.png": "file"
+            "Icon-192.png": "file",
+            "Icon-512.png": "file"
+          }
+        },
+        "macos": {
+          ".gitignore": "file",
+          "RunnerTests": {
+            "RunnerTests.swift": "file"
+          },
+          "Flutter": {
+            "Flutter-Debug.xcconfig": "file",
+            "Flutter-Release.xcconfig": "file",
+            "GeneratedPluginRegistrant.swift": "file"
+          },
+          "Runner.xcworkspace": {
+            "contents.xcworkspacedata": "file",
+            "xcshareddata": {
+              "IDEWorkspaceChecks.plist": "file"
+            }
+          },
+          "Runner.xcodeproj": {
+            "project.pbxproj": "file",
+            "xcshareddata": {
+              "xcschemes": {
+                "Runner.xcscheme": "file"
+              }
+            },
+            "project.xcworkspace": {
+              "xcshareddata": {
+                "IDEWorkspaceChecks.plist": "file"
+              }
+            }
+          },
+          "Runner": {
+            "AppDelegate.swift": "file",
+            "Info.plist": "file",
+            "DebugProfile.entitlements": "file",
+            "Release.entitlements": "file",
+            "MainFlutterWindow.swift": "file",
+            "Base.lproj": {
+              "MainMenu.xib": "file"
+            },
+            "Assets.xcassets": {
+              "AppIcon.appiconset": {
+                "app_icon_256.png": "file",
+                "app_icon_512.png": "file",
+                "app_icon_1024.png": "file",
+                "app_icon_16.png": "file",
+                "app_icon_32.png": "file",
+                "app_icon_128.png": "file",
+                "Contents.json": "file",
+                "app_icon_64.png": "file"
+              }
+            },
+            "Configs": {
+              "AppInfo.xcconfig": "file",
+              "Warnings.xcconfig": "file",
+              "Debug.xcconfig": "file",
+              "Release.xcconfig": "file"
+            }
           }
         },
         "android": {
-          "build.gradle.kts": "file",
-          "settings.gradle.kts": "file",
           ".gitignore": "file",
+          "build.gradle.kts": "file",
           "gradle.properties": "file",
+          "settings.gradle.kts": "file",
           "gradle": {
             "wrapper": {
               "gradle-wrapper.properties": "file"
@@ -57,6 +382,35 @@
             "src": {
               "main": {
                 "AndroidManifest.xml": "file",
+                "res": {
+                  "drawable": {
+                    "launch_background.xml": "file"
+                  },
+                  "mipmap-xhdpi": {
+                    "ic_launcher.png": "file"
+                  },
+                  "mipmap-hdpi": {
+                    "ic_launcher.png": "file"
+                  },
+                  "values": {
+                    "styles.xml": "file"
+                  },
+                  "values-night": {
+                    "styles.xml": "file"
+                  },
+                  "drawable-v21": {
+                    "launch_background.xml": "file"
+                  },
+                  "mipmap-mdpi": {
+                    "ic_launcher.png": "file"
+                  },
+                  "mipmap-xxxhdpi": {
+                    "ic_launcher.png": "file"
+                  },
+                  "mipmap-xxhdpi": {
+                    "ic_launcher.png": "file"
+                  }
+                },
                 "kotlin": {
                   "com": {
                     "contractai": {
@@ -64,35 +418,6 @@
                         "MainActivity.kt": "file"
                       }
                     }
-                  }
-                },
-                "res": {
-                  "mipmap-xhdpi": {
-                    "ic_launcher.png": "file"
-                  },
-                  "mipmap-mdpi": {
-                    "ic_launcher.png": "file"
-                  },
-                  "drawable": {
-                    "launch_background.xml": "file"
-                  },
-                  "values-night": {
-                    "styles.xml": "file"
-                  },
-                  "mipmap-hdpi": {
-                    "ic_launcher.png": "file"
-                  },
-                  "mipmap-xxhdpi": {
-                    "ic_launcher.png": "file"
-                  },
-                  "values": {
-                    "styles.xml": "file"
-                  },
-                  "mipmap-xxxhdpi": {
-                    "ic_launcher.png": "file"
-                  },
-                  "drawable-v21": {
-                    "launch_background.xml": "file"
                   }
                 }
               },
@@ -105,422 +430,97 @@
             }
           }
         },
-        "test": {
-          "widget_test.dart": "file"
-        },
-        "ios": {
-          ".gitignore": "file",
-          "Runner": {
-            "AppDelegate.swift": "file",
-            "Info.plist": "file",
-            "Runner-Bridging-Header.h": "file",
-            "Assets.xcassets": {
-              "AppIcon.appiconset": {
-                "Icon-App-40x40@2x.png": "file",
-                "Icon-App-29x29@3x.png": "file",
-                "Icon-App-76x76@2x.png": "file",
-                "Icon-App-83.5x83.5@2x.png": "file",
-                "Icon-App-20x20@1x.png": "file",
-                "Icon-App-60x60@2x.png": "file",
-                "Icon-App-20x20@3x.png": "file",
-                "Contents.json": "file",
-                "Icon-App-1024x1024@1x.png": "file",
-                "Icon-App-20x20@2x.png": "file",
-                "Icon-App-29x29@1x.png": "file",
-                "Icon-App-60x60@3x.png": "file",
-                "Icon-App-76x76@1x.png": "file",
-                "Icon-App-40x40@3x.png": "file",
-                "Icon-App-29x29@2x.png": "file",
-                "Icon-App-40x40@1x.png": "file"
-              },
-              "LaunchImage.imageset": {
-                "README.md": "file",
-                "Contents.json": "file",
-                "LaunchImage@3x.png": "file",
-                "LaunchImage.png": "file",
-                "LaunchImage@2x.png": "file"
-              }
-            },
-            "Base.lproj": {
-              "Main.storyboard": "file",
-              "LaunchScreen.storyboard": "file"
-            }
-          },
-          "Runner.xcworkspace": {
-            "contents.xcworkspacedata": "file",
-            "xcshareddata": {
-              "WorkspaceSettings.xcsettings": "file",
-              "IDEWorkspaceChecks.plist": "file"
-            }
-          },
-          "RunnerTests": {
-            "RunnerTests.swift": "file"
-          },
-          "Runner.xcodeproj": {
-            "project.pbxproj": "file",
-            "xcshareddata": {
-              "xcschemes": {
-                "Runner.xcscheme": "file"
-              }
-            },
-            "project.xcworkspace": {
-              "contents.xcworkspacedata": "file",
-              "xcshareddata": {
-                "WorkspaceSettings.xcsettings": "file",
-                "IDEWorkspaceChecks.plist": "file"
-              }
-            }
-          },
-          "Flutter": {
-            "AppFrameworkInfo.plist": "file",
-            "Release.xcconfig": "file",
-            "Debug.xcconfig": "file"
-          }
-        },
         "lib": {
           "main.dart": "file",
-          "platform_init_native.dart": "file",
           "platform_init_stub.dart": "file",
-          "screens": {
-            "macos_dashboard_screen.dart": "file",
-            "risk_strategy_screen.dart": "file",
-            "dealer_chat_screen.dart": "file",
-            "dealer_dashboard_screen.dart": "file",
-            "login_screen.dart": "file",
-            "signup_screen.dart": "file",
-            "comparison_screen.dart": "file",
-            "vin_lookup_screen.dart": "file",
-            "contract_detail_screen.dart": "file",
-            "offer_builder_screen.dart": "file",
-            "dashboard_screen.dart": "file",
-            "comparison_dashboard_screen.dart": "file",
-            "upload_screen.dart": "file",
-            "audit_screen.dart": "file",
-            "landing_screen.dart": "file"
-          },
-          "providers": {
-            "chat_provider.dart": "file",
-            "auth_provider.dart": "file",
-            "analysis_provider.dart": "file"
+          "platform_init_native.dart": "file",
+          "services": {
+            "messaging_service.dart": "file",
+            "auth_service.dart": "file",
+            "api_service.dart": "file"
           },
           "models": {
-            "app_user.dart": "file",
-            "contract.dart": "file",
             "fairness_model.dart": "file",
             "user_role.dart": "file",
-            "valuation_model.dart": "file"
+            "valuation_model.dart": "file",
+            "contract.dart": "file",
+            "app_user.dart": "file"
+          },
+          "animations": {
+            "staggered_animations.dart": "file",
+            "liquid_glass_container.dart": "file",
+            "animations.dart": "file",
+            "animation_config.dart": "file",
+            "page_transitions.dart": "file",
+            "physics_animations.dart": "file"
           },
           "theme": {
             "app_theme.dart": "file"
           },
-          "animations": {
-            "liquid_glass_container.dart": "file",
-            "staggered_animations.dart": "file",
-            "physics_animations.dart": "file",
-            "animations.dart": "file",
-            "page_transitions.dart": "file",
-            "animation_config.dart": "file"
+          "widgets": {
+            "fairness_ring.dart": "file",
+            "market_value_card.dart": "file",
+            "fair_price_card.dart": "file",
+            "task_status_overlay.dart": "file",
+            "manual_input_sheet.dart": "file",
+            "vin_info_card.dart": "file",
+            "liquid_progress_indicator.dart": "file",
+            "fairness_score_card.dart": "file",
+            "glassmorphism_cards.dart": "file",
+            "analysis_section_card.dart": "file",
+            "glass_card.dart": "file",
+            "dealer_forwarding_dialog.dart": "file",
+            "sla_summary_card.dart": "file"
+          },
+          "providers": {
+            "auth_provider.dart": "file",
+            "analysis_provider.dart": "file",
+            "chat_provider.dart": "file"
+          },
+          "screens": {
+            "signup_screen.dart": "file",
+            "comparison_screen.dart": "file",
+            "upload_screen.dart": "file",
+            "macos_dashboard_screen.dart": "file",
+            "landing_screen.dart": "file",
+            "risk_strategy_screen.dart": "file",
+            "login_screen.dart": "file",
+            "comparison_dashboard_screen.dart": "file",
+            "dashboard_screen.dart": "file",
+            "contract_detail_screen.dart": "file",
+            "vin_lookup_screen.dart": "file",
+            "dealer_dashboard_screen.dart": "file",
+            "audit_screen.dart": "file",
+            "offer_builder_screen.dart": "file",
+            "dealer_chat_screen.dart": "file"
           },
           "data": {
             "database_helper.dart": "file"
-          },
-          "services": {
-            "messaging_service.dart": "file",
-            "api_service.dart": "file",
-            "auth_service.dart": "file"
-          },
-          "widgets": {
-            "task_status_overlay.dart": "file",
-            "analysis_section_card.dart": "file",
-            "fairness_score_card.dart": "file",
-            "vin_info_card.dart": "file",
-            "fairness_ring.dart": "file",
-            "fair_price_card.dart": "file",
-            "glass_card.dart": "file",
-            "sla_summary_card.dart": "file",
-            "dealer_forwarding_dialog.dart": "file",
-            "market_value_card.dart": "file",
-            "manual_input_sheet.dart": "file",
-            "liquid_progress_indicator.dart": "file",
-            "glassmorphism_cards.dart": "file"
           }
         },
         "linux": {
           ".gitignore": "file",
           "CMakeLists.txt": "file",
-          "flutter": {
-            "generated_plugin_registrant.cc": "file",
-            "generated_plugin_registrant.h": "file",
-            "generated_plugins.cmake": "file",
-            "CMakeLists.txt": "file"
-          },
           "runner": {
-            "my_application.h": "file",
-            "main.cc": "file",
             "my_application.cc": "file",
-            "CMakeLists.txt": "file"
-          }
-        },
-        "windows": {
-          ".gitignore": "file",
-          "CMakeLists.txt": "file",
-          "flutter": {
-            "generated_plugin_registrant.cc": "file",
-            "generated_plugin_registrant.h": "file",
-            "generated_plugins.cmake": "file",
-            "CMakeLists.txt": "file"
-          },
-          "runner": {
-            "runner.exe.manifest": "file",
-            "flutter_window.h": "file",
-            "win32_window.cpp": "file",
-            "flutter_window.cpp": "file",
-            "resource.h": "file",
-            "utils.cpp": "file",
-            "main.cpp": "file",
-            "win32_window.h": "file",
+            "my_application.h": "file",
             "CMakeLists.txt": "file",
-            "utils.h": "file",
-            "Runner.rc": "file",
-            "resources": {
-              "app_icon.ico": "file"
-            }
-          }
-        },
-        "macos": {
-          ".gitignore": "file",
-          "Runner": {
-            "AppDelegate.swift": "file",
-            "Release.entitlements": "file",
-            "Info.plist": "file",
-            "DebugProfile.entitlements": "file",
-            "MainFlutterWindow.swift": "file",
-            "Assets.xcassets": {
-              "AppIcon.appiconset": {
-                "app_icon_32.png": "file",
-                "app_icon_512.png": "file",
-                "app_icon_1024.png": "file",
-                "Contents.json": "file",
-                "app_icon_16.png": "file",
-                "app_icon_256.png": "file",
-                "app_icon_128.png": "file",
-                "app_icon_64.png": "file"
-              }
-            },
-            "Configs": {
-              "Warnings.xcconfig": "file",
-              "AppInfo.xcconfig": "file",
-              "Release.xcconfig": "file",
-              "Debug.xcconfig": "file"
-            },
-            "Base.lproj": {
-              "MainMenu.xib": "file"
-            }
+            "main.cc": "file"
           },
-          "Runner.xcworkspace": {
-            "contents.xcworkspacedata": "file",
-            "xcshareddata": {
-              "IDEWorkspaceChecks.plist": "file"
-            }
-          },
-          "RunnerTests": {
-            "RunnerTests.swift": "file"
-          },
-          "Runner.xcodeproj": {
-            "project.pbxproj": "file",
-            "xcshareddata": {
-              "xcschemes": {
-                "Runner.xcscheme": "file"
-              }
-            },
-            "project.xcworkspace": {
-              "xcshareddata": {
-                "IDEWorkspaceChecks.plist": "file"
-              }
-            }
-          },
-          "Flutter": {
-            "Flutter-Debug.xcconfig": "file",
-            "Flutter-Release.xcconfig": "file",
-            "GeneratedPluginRegistrant.swift": "file"
-          }
-        }
-      },
-      "frontend": {
-        "vite.config.js": "file",
-        "package-lock.json": "file",
-        "index.html": "file",
-        "package.json": "file",
-        "src": {
-          "main.jsx": "file",
-          "App.jsx": "file",
-          "utils": {
-            "localization.js": "file"
-          },
-          "components": {
-            "Navbar.css": "file",
-            "ErrorBoundary.jsx": "file",
-            "Navbar.jsx": "file",
-            "PDFViewer.jsx": "file",
-            "PDFViewer.css": "file",
-            "intelligence": {
-              "NegotiationSheet.jsx": "file",
-              "ScenarioFAB.jsx": "file",
-              "AlternativeCarsStrip.jsx": "file",
-              "KeyTermsPanel.jsx": "file",
-              "ContractInsightsPanel.jsx": "file",
-              "VehicleRiskPanel.jsx": "file",
-              "DetailedAnalysisPanel.jsx": "file",
-              "DealIntelligenceBar.jsx": "file",
-              "Intelligence.css": "file"
-            }
-          },
-          "pages": {
-            "VINLookup.css": "file",
-            "Dashboard.jsx": "file",
-            "Negotiate.css": "file",
-            "Landing.css": "file",
-            "Landing.jsx": "file",
-            "Upload.css": "file",
-            "VINLookup.jsx": "file",
-            "Upload.jsx": "file",
-            "ContractDetail.jsx": "file",
-            "Dashboard.css": "file",
-            "Negotiate.jsx": "file",
-            "ContractDetail.css": "file"
-          },
-          "services": {
-            "api.js": "file"
-          },
-          "styles": {
-            "index.css": "file"
-          }
-        }
-      },
-      "backend": {
-        "test_llm_direct.py": "file",
-        "run_backend.bat": "file",
-        "verify_backend_e2e.py": "file",
-        "test_analyze.py": "file",
-        "Dockerfile": "file",
-        "test_llm.py": "file",
-        "requirements.txt": "file",
-        "verify_key.py": "file",
-        "contract_app.db": "file",
-        "alembic.ini": "file",
-        ".env.example": "file",
-        "migrate_db.py": "file",
-        "alembic": {
-          "script.py.mako": "file",
-          "env.py": "file",
-          "versions": {
-            "001_initial_schema.py": "file"
-          }
-        },
-        "uploads": {
-          "7ea40588-d297-45ba-b0eb-ac66ae2a8b62.pdf": "file",
-          "b6dacf9c-41f8-4588-81ec-d03e44020bf4.pdf": "file",
-          "f0473541-a5b4-4616-9aca-3eec224b296a.pdf": "file",
-          "a6981913-31a5-45eb-a7e4-c6e8ddd23be2.pdf": "file",
-          "d4f15600-16d0-40e6-9133-acfc0f11c28e.pdf": "file",
-          "a22cbdd8-7a35-41e9-a4e8-bd2e976f2cef.pdf": "file",
-          "53b889ba-6bf6-4ead-bf10-3ca432e644c6.pdf": "file",
-          "9a75dd0a-36ea-40f1-9e59-9337490dc071.pdf": "file",
-          "addc29e2-cb76-4244-9dce-9b589c7d8310.pdf": "file",
-          "2d3630ac-86dc-4c05-bf8b-d82f7528c27c.pdf": "file",
-          "e0d3a863-af0b-48e2-b949-af9256f53e9c.pdf": "file",
-          "75f8046f-2d38-4f3b-8ef7-55e983d122ef.pdf": "file",
-          "caf3c5c2-ff89-4bfd-9f4d-01c74962fd72.pdf": "file",
-          "c2520a54-db32-407b-bf2e-97f7baa4c0d2.pdf": "file",
-          "e23235aa-8a88-45cb-a8ed-852a6914dac7.pdf": "file",
-          "682d4038-0ec4-435c-b1c1-6dd69bf09d10.pdf": "file",
-          "84e4de5a-5784-45a2-a2b7-f066933650f0.pdf": "file",
-          "b35b0498-ee54-4d69-bf93-3f68e80db5d0.pdf": "file",
-          "fc7d8403-5b22-42aa-9b6a-59d73c9978ef.pdf": "file",
-          "9bda634d-90e1-4907-a8bc-549ca39125a7.pdf": "file",
-          "41206299-9e5c-4e02-b15c-6445a98d4653.pdf": "file",
-          "d4b5b79c-b41c-4da7-b6b6-073f7b4af9d2.pdf": "file",
-          "0459368a-bb9e-4789-92f5-473ac8ee171e.pdf": "file",
-          "55a0263c-8897-4c6a-9770-d4026b64e919.pdf": "file",
-          "b4cb4a20-0afa-41e3-894c-fb8ec4107010.pdf": "file",
-          "6185f131-5675-480a-931d-0619b89d2523.pdf": "file",
-          "e1f166e4-b3a8-4fed-9367-bed87d635d99.pdf": "file",
-          "ac69008f-becb-44c6-b134-f6256f377f18.pdf": "file",
-          "7c6642e5-8590-419b-9638-549edf701bc6.pdf": "file",
-          "4774c456-1475-4639-abea-02d365211f95.pdf": "file",
-          "439647f3-e264-4b80-a684-08a7be830760.pdf": "file",
-          "5db5931d-7535-4e32-9f38-55a9e5d6847f.pdf": "file",
-          "00fdbaad-3208-4282-b1e7-011f6589902c.pdf": "file",
-          "f46dbccc-859c-47a5-b0a9-37862122633f.pdf": "file",
-          "8fa9e31b-34a5-4e47-91bb-96418174fd41.pdf": "file",
-          "34bfd24b-b85e-46a6-8235-62a8841364a4.pdf": "file",
-          "eb4057e5-4f57-4746-a7ab-bad20f27225b.pdf": "file",
-          "14538012-cf3d-43d8-9563-1555d821909a.pdf": "file",
-          "aea4478f-22cd-40a5-9d05-06c822cde2f9.pdf": "file",
-          "f3c825f9-2ad6-417d-8099-b41b8d9942a7.pdf": "file",
-          "d670c00e-a489-4777-92ff-05d53cf0801a.pdf": "file",
-          "35f062bf-c64e-44f7-b4be-3f6029bfdd75.pdf": "file",
-          "d9169216-0cbd-461b-87f5-5d776cc8bafe.pdf": "file",
-          "a614ea18-5935-4b09-98dd-89ebc17125e9.pdf": "file",
-          "81d6ab98-5ed3-4aa2-9dfa-4edf996e00f8.pdf": "file",
-          "f9580bc4-6554-4916-94cf-90c31dc8b5a1.png": "file",
-          "961c8af4-0738-4f75-b7f8-6e0b9ea43dda.pdf": "file",
-          "347a8c0a-7916-4571-9175-9cbcd8122d1e.pdf": "file",
-          "a9cc5c8a-6a1c-47eb-a782-db10202cf032.pdf": "file",
-          "7ee87b7e-84a0-4bc7-a7d9-e1310aa201e5.pdf": "file",
-          "1e85d1ee-c489-4c5c-b288-9781ffe350c1.pdf": "file",
-          "a99033b7-cc0c-4e94-abad-f299048e52a8.pdf": "file",
-          "bf783c1f-26d5-4cbc-a990-98f8212d613d.pdf": "file",
-          "57ed4ef1-822e-4384-823e-728507e21047.pdf": "file",
-          "ee77b521-44ec-4101-bddc-790c4d7daf11.pdf": "file",
-          "2d6db534-4a43-42e2-9bde-5d1ecbaca730.pdf": "file",
-          "d2e15c92-f1c7-446b-81c8-37144d23d431.pdf": "file"
-        },
-        "tests": {
-          "test_pricing.py": "file",
-          "test_audit.py": "file",
-          "test_scoring.py": "file"
-        },
-        "app": {
-          "__init__.py": "file",
-          "exceptions.py": "file",
-          "config.py": "file",
-          "celery_app.py": "file",
-          "main.py": "file",
-          "database.py": "file",
-          "tasks.py": "file",
-          "models": {
-            "v1_api_schemas.py": "file",
-            "schemas.py": "file",
-            "__init__.py": "file"
-          },
-          "services": {
-            "llm_service.py": "file",
-            "audit_service.py": "file",
-            "__init__.py": "file",
-            "scoring_engine.py": "file",
-            "ocr_service.py": "file",
-            "auth_service.py": "file",
-            "pricing_adapters.py": "file",
-            "vin_service.py": "file",
-            "price_service.py": "file"
-          },
-          "routers": {
-            "intake.py": "file",
-            "__init__.py": "file",
-            "messaging.py": "file",
-            "vehicles.py": "file",
-            "negotiations.py": "file",
-            "auth.py": "file",
-            "audit.py": "file",
-            "files.py": "file",
-            "v1_api.py": "file",
-            "ws.py": "file",
-            "magic_link.py": "file",
-            "contracts.py": "file"
+          "flutter": {
+            "generated_plugin_registrant.h": "file",
+            "generated_plugin_registrant.cc": "file",
+            "CMakeLists.txt": "file",
+            "generated_plugins.cmake": "file"
           }
         }
       }
+    },
+    "Gemini_File_QA": {
+      "run_app.bat": "file",
+      "main.py": "file",
+      "requirements.txt": "file",
+      "sample.txt": "file"
     }
   },
   "frameworks": [
@@ -537,24 +537,10 @@
       "PIL",
       "os"
     ],
-    "Gemini_File_QA/requirements.txt": [
-      "google-generativeai",
-      "python-dotenv"
-    ],
-    "Gemini_File_QA/main.py": [
-      "os",
-      "google.generativeai",
-      "dotenv",
-      "pathlib"
-    ],
     "CarContractApp/verify_auth_e2e.py": [
       "requests",
       "json",
       "os"
-    ],
-    "CarContractApp/flutter_app/replace_currency.py": [
-      "os",
-      "re"
     ],
     "CarContractApp/frontend/package.json": [
       "pdfjs-dist",
@@ -568,10 +554,10 @@
       "@vitejs/plugin-react",
       "vite"
     ],
-    "CarContractApp/backend/test_llm_direct.py": [
-      "asyncio",
-      "app.services.llm_service",
-      "traceback"
+    "CarContractApp/backend/verify_key.py": [
+      "os",
+      "google.generativeai",
+      "dotenv"
     ],
     "CarContractApp/backend/verify_backend_e2e.py": [
       "os",
@@ -582,15 +568,6 @@
       "app.services.ocr_service",
       "app.services.llm_service",
       "app.config"
-    ],
-    "CarContractApp/backend/test_analyze.py": [
-      "urllib.request",
-      "urllib.error",
-      "json"
-    ],
-    "CarContractApp/backend/test_llm.py": [
-      "asyncio",
-      "app.services.llm_service"
     ],
     "CarContractApp/backend/requirements.txt": [
       "fastapi",
@@ -615,14 +592,23 @@
       "redis",
       "websockets"
     ],
-    "CarContractApp/backend/verify_key.py": [
-      "os",
-      "google.generativeai",
-      "dotenv"
+    "CarContractApp/backend/test_llm_direct.py": [
+      "asyncio",
+      "app.services.llm_service",
+      "traceback"
+    ],
+    "CarContractApp/backend/test_llm.py": [
+      "asyncio",
+      "app.services.llm_service"
     ],
     "CarContractApp/backend/migrate_db.py": [
       "sqlite3",
       "os"
+    ],
+    "CarContractApp/backend/test_analyze.py": [
+      "urllib.request",
+      "urllib.error",
+      "json"
     ],
     "CarContractApp/backend/alembic/env.py": [
       "sys",
@@ -645,6 +631,13 @@
       "app.services.pricing_adapters",
       "app.services.price_service"
     ],
+    "CarContractApp/backend/tests/test_scoring.py": [
+      "sys",
+      "os",
+      "unittest",
+      "app.services.scoring_engine",
+      "app.models.schemas"
+    ],
     "CarContractApp/backend/tests/test_audit.py": [
       "sys",
       "os",
@@ -654,29 +647,6 @@
       "sqlalchemy.orm",
       "app.database",
       "app.services.audit_service"
-    ],
-    "CarContractApp/backend/tests/test_scoring.py": [
-      "sys",
-      "os",
-      "unittest",
-      "app.services.scoring_engine",
-      "app.models.schemas"
-    ],
-    "CarContractApp/backend/app/exceptions.py": [
-      "uuid",
-      "logging",
-      "fastapi",
-      "fastapi.responses"
-    ],
-    "CarContractApp/backend/app/config.py": [
-      "os",
-      "pathlib",
-      "dotenv",
-      "pydantic_settings"
-    ],
-    "CarContractApp/backend/app/celery_app.py": [
-      "celery",
-      "config"
     ],
     "CarContractApp/backend/app/main.py": [
       "logging",
@@ -688,14 +658,6 @@
       "routers",
       "exceptions",
       "uvicorn"
-    ],
-    "CarContractApp/backend/app/database.py": [
-      "datetime",
-      "typing",
-      "sqlalchemy",
-      "sqlalchemy.orm",
-      "config",
-      "enum"
     ],
     "CarContractApp/backend/app/tasks.py": [
       "os",
@@ -709,27 +671,34 @@
       "asyncio",
       "services.llm_service"
     ],
-    "CarContractApp/backend/app/models/v1_api_schemas.py": [
-      "typing",
-      "pydantic",
-      "datetime"
+    "CarContractApp/backend/app/celery_app.py": [
+      "celery",
+      "config"
     ],
-    "CarContractApp/backend/app/models/schemas.py": [
+    "CarContractApp/backend/app/config.py": [
+      "os",
+      "pathlib",
+      "dotenv",
+      "pydantic_settings"
+    ],
+    "CarContractApp/backend/app/exceptions.py": [
+      "uuid",
+      "logging",
+      "fastapi",
+      "fastapi.responses"
+    ],
+    "CarContractApp/backend/app/database.py": [
       "datetime",
       "typing",
-      "pydantic"
-    ],
-    "CarContractApp/backend/app/services/llm_service.py": [
-      "json",
-      "re",
-      "logging",
-      "typing",
-      "google.generativeai",
+      "sqlalchemy",
+      "sqlalchemy.orm",
       "config",
+      "enum"
+    ],
+    "CarContractApp/backend/app/services/scoring_engine.py": [
       "models.schemas",
-      "scoring_engine",
-      "models.schemas",
-      "asyncio"
+      "typing",
+      "math"
     ],
     "CarContractApp/backend/app/services/audit_service.py": [
       "logging",
@@ -737,34 +706,6 @@
       "typing",
       "sqlalchemy.orm",
       "database"
-    ],
-    "CarContractApp/backend/app/services/scoring_engine.py": [
-      "models.schemas",
-      "typing",
-      "math"
-    ],
-    "CarContractApp/backend/app/services/ocr_service.py": [
-      "io",
-      "pathlib",
-      "typing",
-      "PIL",
-      "pytesseract",
-      "config",
-      "fitz"
-    ],
-    "CarContractApp/backend/app/services/auth_service.py": [
-      "datetime",
-      "typing",
-      "jose",
-      "passlib.context",
-      "fastapi",
-      "fastapi.security",
-      "sqlalchemy.orm",
-      "config",
-      "database",
-      "models.schemas",
-      "bcrypt",
-      "bcrypt"
     ],
     "CarContractApp/backend/app/services/pricing_adapters.py": [
       "abc",
@@ -783,6 +724,20 @@
       "typing",
       "config"
     ],
+    "CarContractApp/backend/app/services/auth_service.py": [
+      "datetime",
+      "typing",
+      "jose",
+      "passlib.context",
+      "fastapi",
+      "fastapi.security",
+      "sqlalchemy.orm",
+      "config",
+      "database",
+      "models.schemas",
+      "bcrypt",
+      "bcrypt"
+    ],
     "CarContractApp/backend/app/services/price_service.py": [
       "httpx",
       "asyncio",
@@ -790,20 +745,36 @@
       "config",
       "pricing_adapters"
     ],
-    "CarContractApp/backend/app/routers/intake.py": [
-      "os",
-      "uuid",
+    "CarContractApp/backend/app/services/llm_service.py": [
+      "json",
+      "re",
       "logging",
-      "datetime",
-      "fastapi",
-      "pydantic",
       "typing",
-      "sqlalchemy.orm",
-      "database",
-      "services.auth_service",
+      "google.generativeai",
       "config",
-      "exceptions",
-      "tasks"
+      "models.schemas",
+      "scoring_engine",
+      "models.schemas",
+      "asyncio"
+    ],
+    "CarContractApp/backend/app/services/ocr_service.py": [
+      "io",
+      "pathlib",
+      "typing",
+      "PIL",
+      "pytesseract",
+      "config",
+      "fitz"
+    ],
+    "CarContractApp/backend/app/models/v1_api_schemas.py": [
+      "typing",
+      "pydantic",
+      "datetime"
+    ],
+    "CarContractApp/backend/app/models/schemas.py": [
+      "datetime",
+      "typing",
+      "pydantic"
     ],
     "CarContractApp/backend/app/routers/messaging.py": [
       "typing",
@@ -818,81 +789,6 @@
       "models",
       "services.auth_service",
       "datetime"
-    ],
-    "CarContractApp/backend/app/routers/vehicles.py": [
-      "fastapi",
-      "sqlalchemy.orm",
-      "database",
-      "models.schemas",
-      "services.vin_service",
-      "services.price_service"
-    ],
-    "CarContractApp/backend/app/routers/negotiations.py": [
-      "uuid",
-      "datetime",
-      "typing",
-      "fastapi",
-      "sqlalchemy.orm",
-      "database",
-      "models.schemas",
-      "services.llm_service",
-      "services.auth_service"
-    ],
-    "CarContractApp/backend/app/routers/auth.py": [
-      "datetime",
-      "fastapi",
-      "fastapi.security",
-      "sqlalchemy.orm",
-      "database",
-      "models",
-      "services.auth_service",
-      "config"
-    ],
-    "CarContractApp/backend/app/routers/audit.py": [
-      "logging",
-      "typing",
-      "fastapi",
-      "sqlalchemy.orm",
-      "database",
-      "services.auth_service",
-      "models.schemas"
-    ],
-    "CarContractApp/backend/app/routers/files.py": [
-      "os",
-      "fastapi",
-      "fastapi.responses",
-      "sqlalchemy.orm",
-      "database"
-    ],
-    "CarContractApp/backend/app/routers/v1_api.py": [
-      "logging",
-      "fastapi",
-      "sqlalchemy.orm",
-      "hashlib",
-      "json",
-      "database",
-      "services.auth_service",
-      "models.v1_api_schemas",
-      "services.llm_service",
-      "services.vin_service",
-      "services.price_service",
-      "services.scoring_engine"
-    ],
-    "CarContractApp/backend/app/routers/ws.py": [
-      "asyncio",
-      "json",
-      "logging",
-      "fastapi",
-      "celery_app"
-    ],
-    "CarContractApp/backend/app/routers/magic_link.py": [
-      "fastapi",
-      "sqlalchemy.orm",
-      "jose",
-      "pydantic",
-      "database",
-      "config",
-      "services.auth_service"
     ],
     "CarContractApp/backend/app/routers/contracts.py": [
       "shutil",
@@ -916,6 +812,110 @@
       "exceptions",
       "services.audit_service",
       "models.schemas"
+    ],
+    "CarContractApp/backend/app/routers/ws.py": [
+      "asyncio",
+      "json",
+      "logging",
+      "fastapi",
+      "celery_app"
+    ],
+    "CarContractApp/backend/app/routers/audit.py": [
+      "logging",
+      "typing",
+      "fastapi",
+      "sqlalchemy.orm",
+      "database",
+      "services.auth_service",
+      "models.schemas"
+    ],
+    "CarContractApp/backend/app/routers/intake.py": [
+      "os",
+      "uuid",
+      "logging",
+      "datetime",
+      "fastapi",
+      "pydantic",
+      "typing",
+      "sqlalchemy.orm",
+      "database",
+      "services.auth_service",
+      "config",
+      "exceptions",
+      "tasks"
+    ],
+    "CarContractApp/backend/app/routers/negotiations.py": [
+      "uuid",
+      "datetime",
+      "typing",
+      "fastapi",
+      "sqlalchemy.orm",
+      "database",
+      "models.schemas",
+      "services.llm_service",
+      "services.auth_service"
+    ],
+    "CarContractApp/backend/app/routers/v1_api.py": [
+      "logging",
+      "fastapi",
+      "sqlalchemy.orm",
+      "hashlib",
+      "json",
+      "database",
+      "services.auth_service",
+      "models.v1_api_schemas",
+      "services.llm_service",
+      "services.vin_service",
+      "services.price_service",
+      "services.scoring_engine"
+    ],
+    "CarContractApp/backend/app/routers/vehicles.py": [
+      "fastapi",
+      "sqlalchemy.orm",
+      "database",
+      "models.schemas",
+      "services.vin_service",
+      "services.price_service"
+    ],
+    "CarContractApp/backend/app/routers/files.py": [
+      "os",
+      "fastapi",
+      "fastapi.responses",
+      "sqlalchemy.orm",
+      "database"
+    ],
+    "CarContractApp/backend/app/routers/magic_link.py": [
+      "fastapi",
+      "sqlalchemy.orm",
+      "jose",
+      "pydantic",
+      "database",
+      "config",
+      "services.auth_service"
+    ],
+    "CarContractApp/backend/app/routers/auth.py": [
+      "datetime",
+      "fastapi",
+      "fastapi.security",
+      "sqlalchemy.orm",
+      "database",
+      "models",
+      "services.auth_service",
+      "config"
+    ],
+    "CarContractApp/flutter_app/replace_currency.py": [
+      "os",
+      "re"
+    ],
+    "Gemini_File_QA/main.py": [
+      "os",
+      "google.generativeai",
+      "dotenv",
+      "pathlib"
+    ],
+    "Gemini_File_QA/requirements.txt": [
+      "google-generativeai",
+      "python-dotenv"
     ]
   },
   "services": [],
@@ -943,26 +943,6 @@
       "type": "import"
     },
     {
-      "source": "Gemini_File_QA/main.py",
-      "target": "os",
-      "type": "import"
-    },
-    {
-      "source": "Gemini_File_QA/main.py",
-      "target": "google.generativeai",
-      "type": "import"
-    },
-    {
-      "source": "Gemini_File_QA/main.py",
-      "target": "dotenv",
-      "type": "import"
-    },
-    {
-      "source": "Gemini_File_QA/main.py",
-      "target": "pathlib",
-      "type": "import"
-    },
-    {
       "source": "CarContractApp/verify_auth_e2e.py",
       "target": "requests",
       "type": "import"
@@ -978,28 +958,18 @@
       "type": "import"
     },
     {
-      "source": "CarContractApp/flutter_app/replace_currency.py",
+      "source": "CarContractApp/backend/verify_key.py",
       "target": "os",
       "type": "import"
     },
     {
-      "source": "CarContractApp/flutter_app/replace_currency.py",
-      "target": "re",
+      "source": "CarContractApp/backend/verify_key.py",
+      "target": "google.generativeai",
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/test_llm_direct.py",
-      "target": "asyncio",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/test_llm_direct.py",
-      "target": "app.services.llm_service",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/test_llm_direct.py",
-      "target": "traceback",
+      "source": "CarContractApp/backend/verify_key.py",
+      "target": "dotenv",
       "type": "import"
     },
     {
@@ -1043,18 +1013,18 @@
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/test_analyze.py",
-      "target": "urllib.request",
+      "source": "CarContractApp/backend/test_llm_direct.py",
+      "target": "asyncio",
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/test_analyze.py",
-      "target": "urllib.error",
+      "source": "CarContractApp/backend/test_llm_direct.py",
+      "target": "app.services.llm_service",
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/test_analyze.py",
-      "target": "json",
+      "source": "CarContractApp/backend/test_llm_direct.py",
+      "target": "traceback",
       "type": "import"
     },
     {
@@ -1068,21 +1038,6 @@
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/verify_key.py",
-      "target": "os",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/verify_key.py",
-      "target": "google.generativeai",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/verify_key.py",
-      "target": "dotenv",
-      "type": "import"
-    },
-    {
       "source": "CarContractApp/backend/migrate_db.py",
       "target": "sqlite3",
       "type": "import"
@@ -1090,6 +1045,21 @@
     {
       "source": "CarContractApp/backend/migrate_db.py",
       "target": "os",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/test_analyze.py",
+      "target": "urllib.request",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/test_analyze.py",
+      "target": "urllib.error",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/test_analyze.py",
+      "target": "json",
       "type": "import"
     },
     {
@@ -1168,6 +1138,31 @@
       "type": "import"
     },
     {
+      "source": "CarContractApp/backend/tests/test_scoring.py",
+      "target": "sys",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/tests/test_scoring.py",
+      "target": "os",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/tests/test_scoring.py",
+      "target": "unittest",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/tests/test_scoring.py",
+      "target": "app.services.scoring_engine",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/tests/test_scoring.py",
+      "target": "app.models.schemas",
+      "type": "import"
+    },
+    {
       "source": "CarContractApp/backend/tests/test_audit.py",
       "target": "sys",
       "type": "import"
@@ -1205,81 +1200,6 @@
     {
       "source": "CarContractApp/backend/tests/test_audit.py",
       "target": "app.services.audit_service",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/tests/test_scoring.py",
-      "target": "sys",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/tests/test_scoring.py",
-      "target": "os",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/tests/test_scoring.py",
-      "target": "unittest",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/tests/test_scoring.py",
-      "target": "app.services.scoring_engine",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/tests/test_scoring.py",
-      "target": "app.models.schemas",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/exceptions.py",
-      "target": "uuid",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/exceptions.py",
-      "target": "logging",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/exceptions.py",
-      "target": "fastapi",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/exceptions.py",
-      "target": "fastapi.responses",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/config.py",
-      "target": "os",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/config.py",
-      "target": "pathlib",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/config.py",
-      "target": "dotenv",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/config.py",
-      "target": "pydantic_settings",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/celery_app.py",
-      "target": "celery",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/celery_app.py",
-      "target": "config",
       "type": "import"
     },
     {
@@ -1325,36 +1245,6 @@
     {
       "source": "CarContractApp/backend/app/main.py",
       "target": "uvicorn",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/database.py",
-      "target": "datetime",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/database.py",
-      "target": "typing",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/database.py",
-      "target": "sqlalchemy",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/database.py",
-      "target": "sqlalchemy.orm",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/database.py",
-      "target": "config",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/database.py",
-      "target": "enum",
       "type": "import"
     },
     {
@@ -1408,108 +1298,83 @@
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/app/models/v1_api_schemas.py",
-      "target": "typing",
+      "source": "CarContractApp/backend/app/celery_app.py",
+      "target": "celery",
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/app/models/v1_api_schemas.py",
-      "target": "pydantic",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/models/v1_api_schemas.py",
-      "target": "datetime",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/models/schemas.py",
-      "target": "datetime",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/models/schemas.py",
-      "target": "typing",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/models/schemas.py",
-      "target": "pydantic",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/services/llm_service.py",
-      "target": "json",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/services/llm_service.py",
-      "target": "re",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/services/llm_service.py",
-      "target": "logging",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/services/llm_service.py",
-      "target": "typing",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/services/llm_service.py",
-      "target": "google.generativeai",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/services/llm_service.py",
+      "source": "CarContractApp/backend/app/celery_app.py",
       "target": "config",
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/app/services/llm_service.py",
-      "target": "models.schemas",
+      "source": "CarContractApp/backend/app/config.py",
+      "target": "os",
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/app/services/llm_service.py",
-      "target": "scoring_engine",
+      "source": "CarContractApp/backend/app/config.py",
+      "target": "pathlib",
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/app/services/llm_service.py",
-      "target": "models.schemas",
+      "source": "CarContractApp/backend/app/config.py",
+      "target": "dotenv",
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/app/services/llm_service.py",
-      "target": "asyncio",
+      "source": "CarContractApp/backend/app/config.py",
+      "target": "pydantic_settings",
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/app/services/audit_service.py",
+      "source": "CarContractApp/backend/app/exceptions.py",
+      "target": "uuid",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/exceptions.py",
       "target": "logging",
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/app/services/audit_service.py",
+      "source": "CarContractApp/backend/app/exceptions.py",
+      "target": "fastapi",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/exceptions.py",
+      "target": "fastapi.responses",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/database.py",
       "target": "datetime",
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/app/services/audit_service.py",
+      "source": "CarContractApp/backend/app/database.py",
       "target": "typing",
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/app/services/audit_service.py",
+      "source": "CarContractApp/backend/app/database.py",
+      "target": "sqlalchemy",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/database.py",
       "target": "sqlalchemy.orm",
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/app/services/audit_service.py",
-      "target": "database",
+      "source": "CarContractApp/backend/app/database.py",
+      "target": "config",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/database.py",
+      "target": "enum",
       "type": "import"
     },
     {
@@ -1528,98 +1393,28 @@
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/app/services/ocr_service.py",
-      "target": "io",
+      "source": "CarContractApp/backend/app/services/audit_service.py",
+      "target": "logging",
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/app/services/ocr_service.py",
-      "target": "pathlib",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/services/ocr_service.py",
-      "target": "typing",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/services/ocr_service.py",
-      "target": "PIL",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/services/ocr_service.py",
-      "target": "pytesseract",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/services/ocr_service.py",
-      "target": "config",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/services/ocr_service.py",
-      "target": "fitz",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/services/auth_service.py",
+      "source": "CarContractApp/backend/app/services/audit_service.py",
       "target": "datetime",
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/app/services/auth_service.py",
+      "source": "CarContractApp/backend/app/services/audit_service.py",
       "target": "typing",
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/app/services/auth_service.py",
-      "target": "jose",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/services/auth_service.py",
-      "target": "passlib.context",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/services/auth_service.py",
-      "target": "fastapi",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/services/auth_service.py",
-      "target": "fastapi.security",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/services/auth_service.py",
+      "source": "CarContractApp/backend/app/services/audit_service.py",
       "target": "sqlalchemy.orm",
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/app/services/auth_service.py",
-      "target": "config",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/services/auth_service.py",
+      "source": "CarContractApp/backend/app/services/audit_service.py",
       "target": "database",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/services/auth_service.py",
-      "target": "models.schemas",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/services/auth_service.py",
-      "target": "bcrypt",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/services/auth_service.py",
-      "target": "bcrypt",
       "type": "import"
     },
     {
@@ -1688,6 +1483,66 @@
       "type": "import"
     },
     {
+      "source": "CarContractApp/backend/app/services/auth_service.py",
+      "target": "datetime",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/services/auth_service.py",
+      "target": "typing",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/services/auth_service.py",
+      "target": "jose",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/services/auth_service.py",
+      "target": "passlib.context",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/services/auth_service.py",
+      "target": "fastapi",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/services/auth_service.py",
+      "target": "fastapi.security",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/services/auth_service.py",
+      "target": "sqlalchemy.orm",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/services/auth_service.py",
+      "target": "config",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/services/auth_service.py",
+      "target": "database",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/services/auth_service.py",
+      "target": "models.schemas",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/services/auth_service.py",
+      "target": "bcrypt",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/services/auth_service.py",
+      "target": "bcrypt",
+      "type": "import"
+    },
+    {
       "source": "CarContractApp/backend/app/services/price_service.py",
       "target": "httpx",
       "type": "import"
@@ -1713,68 +1568,118 @@
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/app/routers/intake.py",
-      "target": "os",
+      "source": "CarContractApp/backend/app/services/llm_service.py",
+      "target": "json",
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/app/routers/intake.py",
-      "target": "uuid",
+      "source": "CarContractApp/backend/app/services/llm_service.py",
+      "target": "re",
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/app/routers/intake.py",
+      "source": "CarContractApp/backend/app/services/llm_service.py",
       "target": "logging",
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/app/routers/intake.py",
-      "target": "datetime",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/intake.py",
-      "target": "fastapi",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/intake.py",
-      "target": "pydantic",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/intake.py",
+      "source": "CarContractApp/backend/app/services/llm_service.py",
       "target": "typing",
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/app/routers/intake.py",
-      "target": "sqlalchemy.orm",
+      "source": "CarContractApp/backend/app/services/llm_service.py",
+      "target": "google.generativeai",
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/app/routers/intake.py",
-      "target": "database",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/intake.py",
-      "target": "services.auth_service",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/intake.py",
+      "source": "CarContractApp/backend/app/services/llm_service.py",
       "target": "config",
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/app/routers/intake.py",
-      "target": "exceptions",
+      "source": "CarContractApp/backend/app/services/llm_service.py",
+      "target": "models.schemas",
       "type": "import"
     },
     {
-      "source": "CarContractApp/backend/app/routers/intake.py",
-      "target": "tasks",
+      "source": "CarContractApp/backend/app/services/llm_service.py",
+      "target": "scoring_engine",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/services/llm_service.py",
+      "target": "models.schemas",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/services/llm_service.py",
+      "target": "asyncio",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/services/ocr_service.py",
+      "target": "io",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/services/ocr_service.py",
+      "target": "pathlib",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/services/ocr_service.py",
+      "target": "typing",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/services/ocr_service.py",
+      "target": "PIL",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/services/ocr_service.py",
+      "target": "pytesseract",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/services/ocr_service.py",
+      "target": "config",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/services/ocr_service.py",
+      "target": "fitz",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/models/v1_api_schemas.py",
+      "target": "typing",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/models/v1_api_schemas.py",
+      "target": "pydantic",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/models/v1_api_schemas.py",
+      "target": "datetime",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/models/schemas.py",
+      "target": "datetime",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/models/schemas.py",
+      "target": "typing",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/models/schemas.py",
+      "target": "pydantic",
       "type": "import"
     },
     {
@@ -1835,301 +1740,6 @@
     {
       "source": "CarContractApp/backend/app/routers/messaging.py",
       "target": "datetime",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/vehicles.py",
-      "target": "fastapi",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/vehicles.py",
-      "target": "sqlalchemy.orm",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/vehicles.py",
-      "target": "database",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/vehicles.py",
-      "target": "models.schemas",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/vehicles.py",
-      "target": "services.vin_service",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/vehicles.py",
-      "target": "services.price_service",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/negotiations.py",
-      "target": "uuid",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/negotiations.py",
-      "target": "datetime",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/negotiations.py",
-      "target": "typing",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/negotiations.py",
-      "target": "fastapi",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/negotiations.py",
-      "target": "sqlalchemy.orm",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/negotiations.py",
-      "target": "database",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/negotiations.py",
-      "target": "models.schemas",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/negotiations.py",
-      "target": "services.llm_service",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/negotiations.py",
-      "target": "services.auth_service",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/auth.py",
-      "target": "datetime",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/auth.py",
-      "target": "fastapi",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/auth.py",
-      "target": "fastapi.security",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/auth.py",
-      "target": "sqlalchemy.orm",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/auth.py",
-      "target": "database",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/auth.py",
-      "target": "models",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/auth.py",
-      "target": "services.auth_service",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/auth.py",
-      "target": "config",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/audit.py",
-      "target": "logging",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/audit.py",
-      "target": "typing",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/audit.py",
-      "target": "fastapi",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/audit.py",
-      "target": "sqlalchemy.orm",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/audit.py",
-      "target": "database",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/audit.py",
-      "target": "services.auth_service",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/audit.py",
-      "target": "models.schemas",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/files.py",
-      "target": "os",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/files.py",
-      "target": "fastapi",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/files.py",
-      "target": "fastapi.responses",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/files.py",
-      "target": "sqlalchemy.orm",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/files.py",
-      "target": "database",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/v1_api.py",
-      "target": "logging",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/v1_api.py",
-      "target": "fastapi",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/v1_api.py",
-      "target": "sqlalchemy.orm",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/v1_api.py",
-      "target": "hashlib",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/v1_api.py",
-      "target": "json",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/v1_api.py",
-      "target": "database",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/v1_api.py",
-      "target": "services.auth_service",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/v1_api.py",
-      "target": "models.v1_api_schemas",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/v1_api.py",
-      "target": "services.llm_service",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/v1_api.py",
-      "target": "services.vin_service",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/v1_api.py",
-      "target": "services.price_service",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/v1_api.py",
-      "target": "services.scoring_engine",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/ws.py",
-      "target": "asyncio",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/ws.py",
-      "target": "json",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/ws.py",
-      "target": "logging",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/ws.py",
-      "target": "fastapi",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/ws.py",
-      "target": "celery_app",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/magic_link.py",
-      "target": "fastapi",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/magic_link.py",
-      "target": "sqlalchemy.orm",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/magic_link.py",
-      "target": "jose",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/magic_link.py",
-      "target": "pydantic",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/magic_link.py",
-      "target": "database",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/magic_link.py",
-      "target": "config",
-      "type": "import"
-    },
-    {
-      "source": "CarContractApp/backend/app/routers/magic_link.py",
-      "target": "services.auth_service",
       "type": "import"
     },
     {
@@ -2235,6 +1845,396 @@
     {
       "source": "CarContractApp/backend/app/routers/contracts.py",
       "target": "models.schemas",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/ws.py",
+      "target": "asyncio",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/ws.py",
+      "target": "json",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/ws.py",
+      "target": "logging",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/ws.py",
+      "target": "fastapi",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/ws.py",
+      "target": "celery_app",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/audit.py",
+      "target": "logging",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/audit.py",
+      "target": "typing",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/audit.py",
+      "target": "fastapi",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/audit.py",
+      "target": "sqlalchemy.orm",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/audit.py",
+      "target": "database",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/audit.py",
+      "target": "services.auth_service",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/audit.py",
+      "target": "models.schemas",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/intake.py",
+      "target": "os",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/intake.py",
+      "target": "uuid",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/intake.py",
+      "target": "logging",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/intake.py",
+      "target": "datetime",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/intake.py",
+      "target": "fastapi",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/intake.py",
+      "target": "pydantic",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/intake.py",
+      "target": "typing",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/intake.py",
+      "target": "sqlalchemy.orm",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/intake.py",
+      "target": "database",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/intake.py",
+      "target": "services.auth_service",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/intake.py",
+      "target": "config",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/intake.py",
+      "target": "exceptions",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/intake.py",
+      "target": "tasks",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/negotiations.py",
+      "target": "uuid",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/negotiations.py",
+      "target": "datetime",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/negotiations.py",
+      "target": "typing",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/negotiations.py",
+      "target": "fastapi",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/negotiations.py",
+      "target": "sqlalchemy.orm",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/negotiations.py",
+      "target": "database",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/negotiations.py",
+      "target": "models.schemas",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/negotiations.py",
+      "target": "services.llm_service",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/negotiations.py",
+      "target": "services.auth_service",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/v1_api.py",
+      "target": "logging",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/v1_api.py",
+      "target": "fastapi",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/v1_api.py",
+      "target": "sqlalchemy.orm",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/v1_api.py",
+      "target": "hashlib",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/v1_api.py",
+      "target": "json",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/v1_api.py",
+      "target": "database",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/v1_api.py",
+      "target": "services.auth_service",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/v1_api.py",
+      "target": "models.v1_api_schemas",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/v1_api.py",
+      "target": "services.llm_service",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/v1_api.py",
+      "target": "services.vin_service",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/v1_api.py",
+      "target": "services.price_service",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/v1_api.py",
+      "target": "services.scoring_engine",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/vehicles.py",
+      "target": "fastapi",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/vehicles.py",
+      "target": "sqlalchemy.orm",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/vehicles.py",
+      "target": "database",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/vehicles.py",
+      "target": "models.schemas",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/vehicles.py",
+      "target": "services.vin_service",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/vehicles.py",
+      "target": "services.price_service",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/files.py",
+      "target": "os",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/files.py",
+      "target": "fastapi",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/files.py",
+      "target": "fastapi.responses",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/files.py",
+      "target": "sqlalchemy.orm",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/files.py",
+      "target": "database",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/magic_link.py",
+      "target": "fastapi",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/magic_link.py",
+      "target": "sqlalchemy.orm",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/magic_link.py",
+      "target": "jose",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/magic_link.py",
+      "target": "pydantic",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/magic_link.py",
+      "target": "database",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/magic_link.py",
+      "target": "config",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/magic_link.py",
+      "target": "services.auth_service",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/auth.py",
+      "target": "datetime",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/auth.py",
+      "target": "fastapi",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/auth.py",
+      "target": "fastapi.security",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/auth.py",
+      "target": "sqlalchemy.orm",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/auth.py",
+      "target": "database",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/auth.py",
+      "target": "models",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/auth.py",
+      "target": "services.auth_service",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/backend/app/routers/auth.py",
+      "target": "config",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/flutter_app/replace_currency.py",
+      "target": "os",
+      "type": "import"
+    },
+    {
+      "source": "CarContractApp/flutter_app/replace_currency.py",
+      "target": "re",
+      "type": "import"
+    },
+    {
+      "source": "Gemini_File_QA/main.py",
+      "target": "os",
+      "type": "import"
+    },
+    {
+      "source": "Gemini_File_QA/main.py",
+      "target": "google.generativeai",
+      "type": "import"
+    },
+    {
+      "source": "Gemini_File_QA/main.py",
+      "target": "dotenv",
+      "type": "import"
+    },
+    {
+      "source": "Gemini_File_QA/main.py",
+      "target": "pathlib",
       "type": "import"
     }
   ]
