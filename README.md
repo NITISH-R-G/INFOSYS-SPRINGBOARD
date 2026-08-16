@@ -7,11 +7,11 @@ This repository is fully autonomous and self-documenting. Documentation, archite
 
 ## Technology Stack
 ### Languages
-- JavaScript
 - Python
+- JavaScript
 ### Frameworks & Libraries
-- react
 - fastapi
+- react
 ### Databases
 - sqlalchemy
 
@@ -21,15 +21,15 @@ This repository is fully autonomous and self-documenting. Documentation, archite
 graph TD
     subgraph Repository Architecture
         subgraph Frameworks
-            F0[react]
-            F1[fastapi]
+            F0[fastapi]
+            F1[react]
         end
         subgraph Databases
             D0[(sqlalchemy)]
         end
         subgraph Languages
-            L0(JavaScript)
-            L1(Python)
+            L0(Python)
+            L1(JavaScript)
         end
     end
 ```
@@ -46,198 +46,198 @@ graph LR
     N0[main.py]
     N3[os]
     N0 --> N3
-    N0[main.py]
-    N4[google.generativeai]
-    N0 --> N4
-    N0[main.py]
-    N5[dotenv]
-    N0 --> N5
-    N0[main.py]
-    N6[pathlib]
-    N0 --> N6
-    N7[verify_auth_e2e.py]
-    N8[requests]
-    N7 --> N8
-    N7[verify_auth_e2e.py]
-    N9[json]
-    N7 --> N9
-    N7[verify_auth_e2e.py]
+    N4[verify_auth_e2e.py]
+    N5[requests]
+    N4 --> N5
+    N4[verify_auth_e2e.py]
+    N6[json]
+    N4 --> N6
+    N4[verify_auth_e2e.py]
+    N3[os]
+    N4 --> N3
+    N7[replace_currency.py]
     N3[os]
     N7 --> N3
-    N10[replace_currency.py]
+    N7[replace_currency.py]
+    N8[re]
+    N7 --> N8
+    N9[verify_key.py]
     N3[os]
-    N10 --> N3
-    N10[replace_currency.py]
-    N11[re]
-    N10 --> N11
+    N9 --> N3
+    N9[verify_key.py]
+    N10[google.generativeai]
+    N9 --> N10
+    N9[verify_key.py]
+    N11[dotenv]
+    N9 --> N11
     N12[migrate_db.py]
     N13[sqlite3]
     N12 --> N13
     N12[migrate_db.py]
     N3[os]
     N12 --> N3
-    N14[verify_backend_e2e.py]
-    N3[os]
-    N14 --> N3
-    N14[verify_backend_e2e.py]
-    N15[sys]
+    N14[test_analyze.py]
+    N15[urllib.request]
     N14 --> N15
-    N14[verify_backend_e2e.py]
-    N16[asyncio]
+    N14[test_analyze.py]
+    N16[urllib.error]
     N14 --> N16
-    N14[verify_backend_e2e.py]
-    N9[json]
-    N14 --> N9
-    N14[verify_backend_e2e.py]
-    N17[fitz]
-    N14 --> N17
-    N14[verify_backend_e2e.py]
-    N18[app.services.ocr_service]
-    N14 --> N18
-    N14[verify_backend_e2e.py]
+    N14[test_analyze.py]
+    N6[json]
+    N14 --> N6
+    N17[test_llm.py]
+    N18[asyncio]
+    N17 --> N18
+    N17[test_llm.py]
     N19[app.services.llm_service]
-    N14 --> N19
-    N14[verify_backend_e2e.py]
-    N20[app.config]
-    N14 --> N20
-    N21[test_llm.py]
-    N16[asyncio]
-    N21 --> N16
-    N21[test_llm.py]
+    N17 --> N19
+    N20[verify_backend_e2e.py]
+    N3[os]
+    N20 --> N3
+    N20[verify_backend_e2e.py]
+    N21[sys]
+    N20 --> N21
+    N20[verify_backend_e2e.py]
+    N18[asyncio]
+    N20 --> N18
+    N20[verify_backend_e2e.py]
+    N6[json]
+    N20 --> N6
+    N20[verify_backend_e2e.py]
+    N22[fitz]
+    N20 --> N22
+    N20[verify_backend_e2e.py]
+    N23[app.services.ocr_service]
+    N20 --> N23
+    N20[verify_backend_e2e.py]
     N19[app.services.llm_service]
-    N21 --> N19
-    N22[test_llm_direct.py]
-    N16[asyncio]
-    N22 --> N16
-    N22[test_llm_direct.py]
+    N20 --> N19
+    N20[verify_backend_e2e.py]
+    N24[app.config]
+    N20 --> N24
+    N25[test_llm_direct.py]
+    N18[asyncio]
+    N25 --> N18
+    N25[test_llm_direct.py]
     N19[app.services.llm_service]
-    N22 --> N19
-    N22[test_llm_direct.py]
-    N23[traceback]
-    N22 --> N23
-    N24[test_analyze.py]
-    N25[urllib.request]
-    N24 --> N25
-    N24[test_analyze.py]
-    N26[urllib.error]
-    N24 --> N26
-    N24[test_analyze.py]
-    N9[json]
-    N24 --> N9
-    N27[verify_key.py]
-    N3[os]
-    N27 --> N3
-    N27[verify_key.py]
-    N4[google.generativeai]
-    N27 --> N4
-    N27[verify_key.py]
-    N5[dotenv]
-    N27 --> N5
-    N28[env.py]
-    N15[sys]
-    N28 --> N15
-    N28[env.py]
-    N3[os]
-    N28 --> N3
-    N28[env.py]
-    N29[logging.config]
-    N28 --> N29
-    N28[env.py]
-    N30[sqlalchemy]
-    N28 --> N30
-    N28[env.py]
-    N31[alembic]
-    N28 --> N31
-    N28[env.py]
-    N20[app.config]
-    N28 --> N20
-    N28[env.py]
-    N32[app.database]
-    N28 --> N32
-    N33[001_initial_schema.py]
-    N34[typing]
-    N33 --> N34
-    N33[001_initial_schema.py]
-    N31[alembic]
-    N33 --> N31
-    N33[001_initial_schema.py]
-    N30[sqlalchemy]
-    N33 --> N30
-    N35[test_scoring.py]
-    N15[sys]
-    N35 --> N15
-    N35[test_scoring.py]
-    N3[os]
-    N35 --> N3
-    N35[test_scoring.py]
-    N36[unittest]
-    N35 --> N36
-    N35[test_scoring.py]
-    N37[app.services.scoring_engine]
-    N35 --> N37
-    N35[test_scoring.py]
-    N38[app.models.schemas]
-    N35 --> N38
-    N39[test_audit.py]
-    N15[sys]
-    N39 --> N15
-    N39[test_audit.py]
+    N25 --> N19
+    N25[test_llm_direct.py]
+    N26[traceback]
+    N25 --> N26
+    N0[main.py]
+    N27[logging]
+    N0 --> N27
+    N0[main.py]
+    N28[fastapi]
+    N0 --> N28
+    N0[main.py]
+    N29[fastapi.middleware.cors]
+    N0 --> N29
+    N0[main.py]
+    N30[contextlib]
+    N0 --> N30
+    N0[main.py]
+    N31[config]
+    N0 --> N31
+    N0[main.py]
+    N32[database]
+    N0 --> N32
+    N0[main.py]
+    N33[routers]
+    N0 --> N33
+    N0[main.py]
+    N34[exceptions]
+    N0 --> N34
+    N0[main.py]
+    N35[uvicorn]
+    N0 --> N35
+    N36[exceptions.py]
+    N37[uuid]
+    N36 --> N37
+    N36[exceptions.py]
+    N27[logging]
+    N36 --> N27
+    N36[exceptions.py]
+    N28[fastapi]
+    N36 --> N28
+    N36[exceptions.py]
+    N38[fastapi.responses]
+    N36 --> N38
+    N39[config.py]
     N3[os]
     N39 --> N3
-    N39[test_audit.py]
-    N36[unittest]
-    N39 --> N36
-    N39[test_audit.py]
-    N40[datetime]
+    N39[config.py]
+    N40[pathlib]
     N39 --> N40
+    N39[config.py]
+    N11[dotenv]
+    N39 --> N11
+    N39[config.py]
+    N41[pydantic_settings]
+    N39 --> N41
+    N42[celery_app.py]
+    N43[celery]
+    N42 --> N43
+    N42[celery_app.py]
+    N31[config]
+    N42 --> N31
+    N44[database.py]
+    N45[datetime]
+    N44 --> N45
+    N44[database.py]
+    N46[typing]
+    N44 --> N46
+    N44[database.py]
+    N47[sqlalchemy]
+    N44 --> N47
     %% Graph truncated for readability
-    click N0 href "./Gemini_File_QA/main.py" "View source file"
-    click N7 href "./CarContractApp/verify_auth_e2e.py" "View source file"
-    click N10 href "./CarContractApp/flutter_app/replace_currency.py" "View source file"
+    click N0 href "./CarContractApp/backend/app/main.py" "View source file"
+    click N4 href "./CarContractApp/verify_auth_e2e.py" "View source file"
+    click N7 href "./CarContractApp/flutter_app/replace_currency.py" "View source file"
+    click N9 href "./CarContractApp/backend/verify_key.py" "View source file"
     click N12 href "./CarContractApp/backend/migrate_db.py" "View source file"
-    click N14 href "./CarContractApp/backend/verify_backend_e2e.py" "View source file"
-    click N21 href "./CarContractApp/backend/test_llm.py" "View source file"
-    click N22 href "./CarContractApp/backend/test_llm_direct.py" "View source file"
-    click N24 href "./CarContractApp/backend/test_analyze.py" "View source file"
-    click N27 href "./CarContractApp/backend/verify_key.py" "View source file"
-    click N28 href "./CarContractApp/backend/alembic/env.py" "View source file"
-    click N33 href "./CarContractApp/backend/alembic/versions/001_initial_schema.py" "View source file"
-    click N35 href "./CarContractApp/backend/tests/test_scoring.py" "View source file"
-    click N39 href "./CarContractApp/backend/tests/test_audit.py" "View source file"
+    click N14 href "./CarContractApp/backend/test_analyze.py" "View source file"
+    click N17 href "./CarContractApp/backend/test_llm.py" "View source file"
+    click N20 href "./CarContractApp/backend/verify_backend_e2e.py" "View source file"
+    click N25 href "./CarContractApp/backend/test_llm_direct.py" "View source file"
+    click N36 href "./CarContractApp/backend/app/exceptions.py" "View source file"
+    click N39 href "./CarContractApp/backend/app/config.py" "View source file"
+    click N42 href "./CarContractApp/backend/app/celery_app.py" "View source file"
+    click N44 href "./CarContractApp/backend/app/database.py" "View source file"
 ```
 
 ## Repository Structure
 ```text
-├── main.py
-├── CHANGELOG.md
-├── repo_knowledge_graph.json
-├── architecture_diagram.md
 ├── Gap Analysis
+├── architecture_diagram.md
+├── main.py
 ├── module_relationships.md
-├── README.md
 ├── .gitignore
+├── README.md
+├── repo_knowledge_graph.json
+├── CHANGELOG.md
 ├── OnePageContract_page-0001.jpg
-├── Gemini_File_QA/
-│   ├── requirements.txt
-│   ├── main.py
-│   ├── run_app.bat
-│   └── sample.txt
-└── CarContractApp/
-    ├── verify_auth_e2e.py
-    ├── docker-compose.yml
-    ├── start_backend.bat
-    ├── start_app.bat
-    ├── contract_app.db
-    ├── README.md
-    ├── start_flutter.bat
-    ├── frontend/
-    │   ├── package-lock.json
-    │   ├── index.html
-    │   ├── package.json
-    │   ├── vite.config.js
-    │   └── src/
-    │       ├── App.jsx
-    │       ├── main.jsx
+├── CarContractApp/
+│   ├── start_app.bat
+│   ├── start_backend.bat
+│   ├── start_flutter.bat
+│   ├── docker-compose.yml
+│   ├── README.md
+│   ├── verify_auth_e2e.py
+│   ├── contract_app.db
+│   ├── flutter_app/
+│   │   ├── replace_currency.py
+│   │   ├── .gitignore
+│   │   ├── analysis_options.yaml
+│   │   ├── .metadata
+│   │   ├── README.md
+│   │   ├── pubspec.yaml
+│   │   ├── pubspec.lock
+│   │   ├── web/
+│   │   │   ├── index.html
+│   │   │   ├── favicon.png
+│   │   │   ├── manifest.json
+│   │   │   └── icons/
 ... (truncated for brevity)
 ```
 
