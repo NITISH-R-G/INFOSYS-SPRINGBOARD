@@ -528,8 +528,8 @@
     "react"
   ],
   "languages": [
-    "Python",
-    "JavaScript"
+    "JavaScript",
+    "Python"
   ],
   "dependencies": {
     "main.py": [
