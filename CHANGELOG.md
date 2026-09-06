@@ -1,3 +1,14 @@
+## [2026-09-06] - Automated Update
+
+### Auto-Generated Change Summary
+
+The following files were modified in the recent update:
+- `CHANGELOG.md`
+
+*Note: This summary was generated automatically by the AI Documentation Agent fallback heuristic.*
+
+---
+
 ## [2026-08-30] - Automated Update
 
 ### Auto-Generated Change Summary
