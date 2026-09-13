@@ -9,8 +9,8 @@ graph TD
             D0[(sqlalchemy)]
         end
         subgraph Languages
-            L0(JavaScript)
-            L1(Python)
+            L0(Python)
+            L1(JavaScript)
         end
     end
 ```
