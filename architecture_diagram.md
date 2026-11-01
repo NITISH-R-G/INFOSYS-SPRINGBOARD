@@ -2,8 +2,8 @@
 graph TD
     subgraph Repository Architecture
         subgraph Frameworks
-            F0[fastapi]
-            F1[react]
+            F0[react]
+            F1[fastapi]
         end
         subgraph Databases
             D0[(sqlalchemy)]
