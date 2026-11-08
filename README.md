@@ -7,8 +7,8 @@ This repository is fully autonomous and self-documenting. Documentation, archite
 
 ## Technology Stack
 ### Languages
-- Python
 - JavaScript
+- Python
 ### Frameworks & Libraries
 - react
 - fastapi
@@ -28,8 +28,8 @@ graph TD
             D0[(sqlalchemy)]
         end
         subgraph Languages
-            L0(Python)
-            L1(JavaScript)
+            L0(JavaScript)
+            L1(Python)
         end
     end
 ```
@@ -67,176 +67,178 @@ graph LR
     N9[test_llm.py]
     N11[app.services.llm_service]
     N9 --> N11
-    N12[migrate_db.py]
-    N13[sqlite3]
-    N12 --> N13
-    N12[migrate_db.py]
+    N12[verify_key.py]
     N3[os]
     N12 --> N3
-    N14[verify_backend_e2e.py]
-    N3[os]
-    N14 --> N3
-    N14[verify_backend_e2e.py]
-    N15[sys]
-    N14 --> N15
-    N14[verify_backend_e2e.py]
+    N12[verify_key.py]
+    N13[google.generativeai]
+    N12 --> N13
+    N12[verify_key.py]
+    N14[dotenv]
+    N12 --> N14
+    N15[test_analyze.py]
+    N16[urllib.request]
+    N15 --> N16
+    N15[test_analyze.py]
+    N17[urllib.error]
+    N15 --> N17
+    N15[test_analyze.py]
+    N6[json]
+    N15 --> N6
+    N18[test_llm_direct.py]
     N10[asyncio]
-    N14 --> N10
-    N14[verify_backend_e2e.py]
-    N6[json]
-    N14 --> N6
-    N14[verify_backend_e2e.py]
-    N16[fitz]
-    N14 --> N16
-    N14[verify_backend_e2e.py]
-    N17[app.services.ocr_service]
-    N14 --> N17
-    N14[verify_backend_e2e.py]
+    N18 --> N10
+    N18[test_llm_direct.py]
     N11[app.services.llm_service]
-    N14 --> N11
-    N14[verify_backend_e2e.py]
-    N18[app.config]
-    N14 --> N18
-    N19[test_analyze.py]
-    N20[urllib.request]
-    N19 --> N20
-    N19[test_analyze.py]
-    N21[urllib.error]
-    N19 --> N21
-    N19[test_analyze.py]
-    N6[json]
-    N19 --> N6
-    N22[verify_key.py]
+    N18 --> N11
+    N18[test_llm_direct.py]
+    N19[traceback]
+    N18 --> N19
+    N20[migrate_db.py]
+    N21[sqlite3]
+    N20 --> N21
+    N20[migrate_db.py]
+    N3[os]
+    N20 --> N3
+    N22[verify_backend_e2e.py]
     N3[os]
     N22 --> N3
-    N22[verify_key.py]
-    N23[google.generativeai]
+    N22[verify_backend_e2e.py]
+    N23[sys]
     N22 --> N23
-    N22[verify_key.py]
-    N24[dotenv]
-    N22 --> N24
-    N25[test_llm_direct.py]
+    N22[verify_backend_e2e.py]
     N10[asyncio]
-    N25 --> N10
-    N25[test_llm_direct.py]
+    N22 --> N10
+    N22[verify_backend_e2e.py]
+    N6[json]
+    N22 --> N6
+    N22[verify_backend_e2e.py]
+    N24[fitz]
+    N22 --> N24
+    N22[verify_backend_e2e.py]
+    N25[app.services.ocr_service]
+    N22 --> N25
+    N22[verify_backend_e2e.py]
     N11[app.services.llm_service]
-    N25 --> N11
-    N25[test_llm_direct.py]
-    N26[traceback]
-    N25 --> N26
-    N27[exceptions.py]
-    N28[uuid]
-    N27 --> N28
-    N27[exceptions.py]
-    N29[logging]
-    N27 --> N29
-    N27[exceptions.py]
-    N30[fastapi]
-    N27 --> N30
-    N27[exceptions.py]
-    N31[fastapi.responses]
-    N27 --> N31
-    N32[config.py]
+    N22 --> N11
+    N22[verify_backend_e2e.py]
+    N26[app.config]
+    N22 --> N26
+    N27[env.py]
+    N23[sys]
+    N27 --> N23
+    N27[env.py]
     N3[os]
-    N32 --> N3
-    N32[config.py]
-    N33[pathlib]
+    N27 --> N3
+    N27[env.py]
+    N28[logging.config]
+    N27 --> N28
+    N27[env.py]
+    N29[sqlalchemy]
+    N27 --> N29
+    N27[env.py]
+    N30[alembic]
+    N27 --> N30
+    N27[env.py]
+    N26[app.config]
+    N27 --> N26
+    N27[env.py]
+    N31[app.database]
+    N27 --> N31
+    N32[001_initial_schema.py]
+    N33[typing]
     N32 --> N33
-    N32[config.py]
-    N24[dotenv]
-    N32 --> N24
-    N32[config.py]
-    N34[pydantic_settings]
-    N32 --> N34
-    N35[database.py]
-    N36[datetime]
-    N35 --> N36
-    N35[database.py]
-    N37[typing]
-    N35 --> N37
-    N35[database.py]
-    N38[sqlalchemy]
-    N35 --> N38
-    N35[database.py]
-    N39[sqlalchemy.orm]
-    N35 --> N39
-    N35[database.py]
-    N40[config]
-    N35 --> N40
-    N35[database.py]
-    N41[enum]
-    N35 --> N41
-    N0[main.py]
-    N29[logging]
-    N0 --> N29
-    N0[main.py]
-    N30[fastapi]
-    N0 --> N30
-    N0[main.py]
-    N42[fastapi.middleware.cors]
-    N0 --> N42
-    N0[main.py]
-    N43[contextlib]
-    N0 --> N43
-    N0[main.py]
-    N40[config]
-    N0 --> N40
-    N0[main.py]
-    N44[database]
-    N0 --> N44
-    N0[main.py]
-    N45[routers]
-    N0 --> N45
-    N0[main.py]
-    N46[exceptions]
-    N0 --> N46
+    N32[001_initial_schema.py]
+    N30[alembic]
+    N32 --> N30
+    N32[001_initial_schema.py]
+    N29[sqlalchemy]
+    N32 --> N29
+    N34[test_scoring.py]
+    N23[sys]
+    N34 --> N23
+    N34[test_scoring.py]
+    N3[os]
+    N34 --> N3
+    N34[test_scoring.py]
+    N35[unittest]
+    N34 --> N35
+    N34[test_scoring.py]
+    N36[app.services.scoring_engine]
+    N34 --> N36
+    N34[test_scoring.py]
+    N37[app.models.schemas]
+    N34 --> N37
+    N38[test_pricing.py]
+    N39[pytest]
+    N38 --> N39
+    N38[test_pricing.py]
+    N10[asyncio]
+    N38 --> N10
+    N38[test_pricing.py]
+    N40[unittest.mock]
+    N38 --> N40
+    N38[test_pricing.py]
+    N41[app.services.pricing_adapters]
+    N38 --> N41
+    N38[test_pricing.py]
+    N42[app.services.price_service]
+    N38 --> N42
+    N43[test_audit.py]
+    N23[sys]
+    N43 --> N23
+    N43[test_audit.py]
+    N3[os]
+    N43 --> N3
     %% Graph truncated for readability
-    click N0 href "./CarContractApp/backend/app/main.py" "View source file"
+    click N0 href "./main.py" "View source file"
     click N4 href "./CarContractApp/verify_auth_e2e.py" "View source file"
     click N7 href "./CarContractApp/flutter_app/replace_currency.py" "View source file"
     click N9 href "./CarContractApp/backend/test_llm.py" "View source file"
-    click N12 href "./CarContractApp/backend/migrate_db.py" "View source file"
-    click N14 href "./CarContractApp/backend/verify_backend_e2e.py" "View source file"
-    click N19 href "./CarContractApp/backend/test_analyze.py" "View source file"
-    click N22 href "./CarContractApp/backend/verify_key.py" "View source file"
-    click N25 href "./CarContractApp/backend/test_llm_direct.py" "View source file"
-    click N27 href "./CarContractApp/backend/app/exceptions.py" "View source file"
-    click N32 href "./CarContractApp/backend/app/config.py" "View source file"
-    click N35 href "./CarContractApp/backend/app/database.py" "View source file"
+    click N12 href "./CarContractApp/backend/verify_key.py" "View source file"
+    click N15 href "./CarContractApp/backend/test_analyze.py" "View source file"
+    click N18 href "./CarContractApp/backend/test_llm_direct.py" "View source file"
+    click N20 href "./CarContractApp/backend/migrate_db.py" "View source file"
+    click N22 href "./CarContractApp/backend/verify_backend_e2e.py" "View source file"
+    click N27 href "./CarContractApp/backend/alembic/env.py" "View source file"
+    click N32 href "./CarContractApp/backend/alembic/versions/001_initial_schema.py" "View source file"
+    click N34 href "./CarContractApp/backend/tests/test_scoring.py" "View source file"
+    click N38 href "./CarContractApp/backend/tests/test_pricing.py" "View source file"
+    click N43 href "./CarContractApp/backend/tests/test_audit.py" "View source file"
 ```
 
 ## Repository Structure
 ```text
-├── .gitignore
 ├── CHANGELOG.md
-├── OnePageContract_page-0001.jpg
-├── architecture_diagram.md
-├── Gap Analysis
-├── README.md
-├── main.py
 ├── module_relationships.md
+├── architecture_diagram.md
+├── README.md
+├── OnePageContract_page-0001.jpg
 ├── repo_knowledge_graph.json
+├── main.py
+├── .gitignore
+├── Gap Analysis
 ├── CarContractApp/
-│   ├── contract_app.db
 │   ├── start_backend.bat
-│   ├── verify_auth_e2e.py
 │   ├── README.md
-│   ├── start_app.bat
-│   ├── docker-compose.yml
+│   ├── contract_app.db
 │   ├── start_flutter.bat
+│   ├── verify_auth_e2e.py
+│   ├── docker-compose.yml
+│   ├── start_app.bat
 │   ├── flutter_app/
-│   │   ├── .metadata
-│   │   ├── pubspec.yaml
-│   │   ├── .gitignore
-│   │   ├── analysis_options.yaml
+│   │   ├── replace_currency.py
 │   │   ├── README.md
 │   │   ├── pubspec.lock
-│   │   ├── replace_currency.py
-│   │   ├── windows/
-│   │   │   ├── .gitignore
-│   │   │   ├── CMakeLists.txt
-│   │   │   ├── runner/
-│   │   │   │   ├── resource.h
+│   │   ├── .gitignore
+│   │   ├── .metadata
+│   │   ├── pubspec.yaml
+│   │   ├── analysis_options.yaml
+│   │   ├── lib/
+│   │   │   ├── platform_init_stub.dart
+│   │   │   ├── platform_init_native.dart
+│   │   │   ├── main.dart
+│   │   │   ├── screens/
 ... (truncated for brevity)
 ```
 
