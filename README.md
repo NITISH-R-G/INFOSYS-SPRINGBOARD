@@ -7,8 +7,8 @@ This repository is fully autonomous and self-documenting. Documentation, archite
 
 ## Technology Stack
 ### Languages
-- JavaScript
 - Python
+- JavaScript
 ### Frameworks & Libraries
 - react
 - fastapi
@@ -28,8 +28,8 @@ graph TD
             D0[(sqlalchemy)]
         end
         subgraph Languages
-            L0(JavaScript)
-            L1(Python)
+            L0(Python)
+            L1(JavaScript)
         end
     end
 ```
